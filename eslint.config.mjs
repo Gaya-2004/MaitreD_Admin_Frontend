@@ -1,0 +1,4 @@
+export default [
+  { ignores: ['node_modules/**', 'dist/**'] },
+  { languageOptions: { parserOptions: { ecmaFeatures: { jsx: true } } }, rules: {} }
+];

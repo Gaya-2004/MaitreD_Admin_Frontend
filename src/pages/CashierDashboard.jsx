@@ -1,0 +1,1103 @@
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import InvoiceModal from '../components/cashier/InvoiceModal';
+import FutureSaleModal from '../components/cashier/FutureSaleModal';
+import OrderHistoryModal from '../components/cashier/OrderHistoryModal';
+import VoiceWidget from '../components/VoiceWidget';
+
+import { useAuth } from '../context/AuthContext';
+import { menuService } from '../services/api';
+import api from '../services/api';
+import { toast } from '../components/Toast';
+import { LogOut } from 'lucide-react';
+import '../styles/cashier.css';
+
+function CashierDashboard() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+
+  const [menuItems, setMenuItems] = useState([]);
+  const [cart, setCart] = useState([]);
+  const [lastCart, setLastCart] = useState([]);
+  const [productCodeInput, setProductCodeInput] = useState('');
+  const [descriptionInput, setDescriptionInput] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState('All');
+  const [selectedRegion, setSelectedRegion] = useState('All');
+  const [selectedFilterIndex, setSelectedFilterIndex] = useState(-1);
+  const [billNo, setBillNo] = useState(101);
+  const [lastBillNo, setLastBillNo] = useState(0);
+  const [lastBillAmt, setLastBillAmt] = useState(0);
+  const [showInvoice, setShowInvoice] = useState(false);
+  const [showFutureSaleModal, setShowFutureSaleModal] = useState(false);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
+
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null);
+
+  // Payment Flow State
+  const [rightPanelState, setRightPanelState] = useState('CART'); // 'CART', 'PAYMENT', 'PROCESSING'
+  const [paymentMethod, setPaymentMethod] = useState('Cash');
+  const [cashTendered, setCashTendered] = useState('');
+  const [orderType, setOrderType] = useState('take-away');
+  const [futureSale, setFutureSale] = useState({ name: '', address: '', city: '', phone: '', deliveryDate: '' });
+  const [lastOrderType, setLastOrderType] = useState('take-away');
+  const [lastFutureSale, setLastFutureSale] = useState(null);
+  const [lastPaymentMethod, setLastPaymentMethod] = useState('');
+  const [restaurantData, setRestaurantData] = useState(null);
+
+  const searchInputRef = useRef(null);
+
+  const [cartWidth, setCartWidth] = useState(400);
+  const isResizing = useRef(false);
+
+  const startResizing = useCallback(() => {
+    isResizing.current = true;
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none'; // Prevent text selection
+  }, []);
+
+  const stopResizing = useCallback(() => {
+    if (isResizing.current) {
+      isResizing.current = false;
+      document.body.style.cursor = 'default';
+      document.body.style.userSelect = 'auto';
+    }
+  }, []);
+
+  const resize = useCallback((mouseMoveEvent) => {
+    if (isResizing.current) {
+      const newWidth = window.innerWidth - mouseMoveEvent.clientX;
+      if (newWidth > 300 && newWidth < window.innerWidth * 0.7) {
+        setCartWidth(newWidth);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('mousemove', resize);
+    window.addEventListener('mouseup', stopResizing);
+    return () => {
+      window.removeEventListener('mousemove', resize);
+      window.removeEventListener('mouseup', stopResizing);
+    };
+  }, [resize, stopResizing]);
+
+  const itemRefs = useRef([]);
+  const cartInputRefs = useRef([]);
+
+
+  const handlePrintReport = async (type, startDate, endDate) => {
+    try {
+      let data;
+      let params = `restaurant_id=${user?.restaurant_id || ''}`;
+      if (startDate && endDate) {
+          params += `&start_date=${startDate}&end_date=${endDate}`;
+      }
+      if (type === 'hourly') {
+        const res = await api.get(`/api/v1/reports/hourly?${params}`);
+        data = res.data;
+      } else {
+        const res = await api.get(`/api/v1/reports/items?${params}`);
+        data = res.data;
+      }
+
+      let tableRows = '';
+      if (type === 'hourly') {
+        tableRows = (data.timeline || []).filter(t => Math.round(t.sales) > 0).map(t => `
+          <div class="row">
+            <span>${t.time}</span>
+            <span>${Math.round(t.sales)}</span>
+          </div>
+        `).join('');
+      } else {
+        tableRows = (data.items || []).map(item => `
+          <div class="item-row">
+            <span class="item-name">${item.name}</span>
+            <span class="item-qty">${item.qty.toFixed(2)}</span>
+            <span class="item-amt">${item.amount.toFixed(2)}</span>
+          </div>
+        `).join('');
+      }
+
+      const itemHeader = type === 'hourly' ? '' : `
+        <div class="item-row" style="border-bottom: 1px dashed #000; border-top: 1px dashed #000; padding: 5px 0; margin-bottom: 5px; font-weight: bold;">
+          <span class="item-name">Item Name</span>
+          <span class="item-qty">Qty</span>
+          <span class="item-amt">Amount</span>
+        </div>
+      `;
+
+      const printContent = `
+        <html>
+          <head>
+            <title>Print Receipt</title>
+            <style>
+              @page { margin: 0; }
+              body { font-family: monospace; font-size: 12px; margin: 0; padding: 0 5px 0 10px; width: 100%; max-width: 68mm; box-sizing: border-box; color: #000; }
+              .header { text-align: center; margin-bottom: 10px; }
+              .header h1 { font-size: 16px; margin: 0 0 5px 0; text-transform: uppercase; }
+              .header p { margin: 0 0 4px 0; text-transform: uppercase; }
+              .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+              .item-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+              .item-name { flex: 2; word-break: break-word; padding-right: 5px; }
+              .item-qty { flex: 1; text-align: right; }
+              .item-amt { flex: 1; text-align: right; }
+              .total-row { border-top: 1px dashed #000; margin-top: 10px; padding-top: 10px; display: flex; justify-content: space-between; font-weight: bold; font-size: 14px; }
+            </style>
+          </head>
+          <body>
+            <div class="header">
+              <h1>${(data.restaurant && data.restaurant.name) || 'DATAUDIPI HOTEL'}</h1>
+              <p>${(data.restaurant && data.restaurant.address) || 'MUGALIVAKKAM, CHENNAI'}</p>
+              <p>PH:${(data.restaurant && data.restaurant.phone) || '9597066563'} GSTIN: ${(data.restaurant && data.restaurant.gstin) || '33ADLPV4810B3ZQ'}</p>
+              <h2 style="font-size: 14px; margin: 10px 0 5px 0;">${type === 'hourly' ? 'HOURLY REPORT' : 'ITEM WISE REPORT'}</h2>
+              <div style="text-align: left; margin-top: 10px;">
+                ${type === 'hourly' 
+                  ? `<p>Date: ${data.date}</p>` 
+                  : `<p>Print Date: ${data.date}</p><p>Bills From: ${data.date}</p><p>To: ${data.date}</p>`}
+                <p>Starting BillNo: ${(data.starting_bill && data.starting_bill.no) || '-'} - ${(data.starting_bill && data.starting_bill.time) || '-'}</p>
+                <p>Ending BillNo: ${(data.ending_bill && data.ending_bill.no) || '-'} - ${(data.ending_bill && data.ending_bill.time) || '-'}</p>
+              </div>
+            </div>
+            
+            ${itemHeader}
+            ${tableRows}
+            
+            <div class="total-row">
+              <span>TOTAL SALES</span>
+              <span>${data.total_sales ? data.total_sales.toFixed(2) : '0.00'}</span>
+            </div>
+          </body>
+        </html>
+      `;
+
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+      iframe.contentWindow.document.open();
+      iframe.contentWindow.document.write(printContent);
+      iframe.contentWindow.document.close();
+      iframe.contentWindow.focus();
+      setTimeout(() => {
+        iframe.contentWindow.print();
+        document.body.removeChild(iframe);
+      }, 500);
+    } catch (e) {
+      alert("Failed to print report.");
+    }
+  };
+
+  const handlePrintItemCodes = () => {
+    if (!menuItems || menuItems.length === 0) {
+      alert("No items in menu to print");
+      return;
+    }
+
+    const currentDate = new Date().toLocaleString('en-US', {
+      month: 'numeric', day: 'numeric', year: 'numeric',
+      hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+    });
+
+    const resName = restaurantData?.name || 'DATA UDIPI HOTEL';
+    const resAddr = restaurantData?.address || 'M G R Nagar, Chennai';
+    const resPhone = resName.toLowerCase().includes('mugalivakkam') ? '+91 95970 66563' : (restaurantData?.phone || '31595014');
+
+    const itemRows = menuItems.map(item => `
+      <div class="row">
+        <div class="item-name">${item.name || 'Unknown'}</div>
+        <div class="item-code">${item.item_code || ''}</div>
+      </div>
+    `).join('');
+
+    const html = `
+      <html>
+        <head>
+          <style>
+            @page { margin: 0; }
+            body { font-family: monospace; font-size: 12px; margin: 0; padding: 0 5px 0 10px; width: 100%; max-width: 68mm; box-sizing: border-box; color: #000; }
+            .center { text-align: center; }
+            h1 { font-size: 16px; margin: 5px 0; }
+            h2 { font-size: 14px; margin: 10px 0 5px 0; }
+            .divider { border-bottom: 1px dashed #000; margin: 5px 0; }
+            .row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+            .item-name { flex: 3; word-break: break-all; padding-right: 5px; text-transform: uppercase; }
+            .item-code { flex: 1; text-align: right; font-weight: bold; }
+            .bold { font-weight: bold; }
+            .footer { margin-top: 10px; font-size: 10px; }
+          </style>
+        </head>
+        <body>
+          <div class="center">
+            <h1>${resName}</h1>
+            <div style="font-size: 11px;">${resAddr.replace(/,/g, ',<br>')}</div>
+            <div style="font-size: 11px;">PH:${resPhone}</div>
+            <h2>MENU ITEM CODES</h2>
+          </div>
+          <div class="divider"></div>
+          <div class="row bold">
+            <span>PRINT DATE:</span>
+            <span>${currentDate.split(',')[0]}</span>
+          </div>
+          <div class="divider"></div>
+          <div class="row bold">
+            <div class="item-name">Item Name</div>
+            <div class="item-code">Code</div>
+          </div>
+          <div class="divider"></div>
+          ${itemRows}
+          <div class="divider"></div>
+          <div class="center footer">
+            Techwizard AI partners<br>hello@t-wi.com
+          </div>
+        </body>
+      </html>
+    `;
+
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(html);
+    iframe.contentWindow.document.close();
+    iframe.contentWindow.focus();
+    setTimeout(() => {
+      iframe.contentWindow.print();
+      document.body.removeChild(iframe);
+    }, 500);
+  };
+
+  const playBeep = () => {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, ctx.currentTime);
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + 0.1);
+      osc.stop(ctx.currentTime + 0.1);
+    } catch (e) {
+      console.warn("AudioContext not supported", e);
+    }
+  };
+
+  useEffect(() => {
+    if (!user || !user.restaurant_id) return;
+
+    api.get(`/api/v1/restaurants/${user.restaurant_id}`)
+      .then(res => setRestaurantData(res.data || res))
+      .catch(err => console.error('Failed to fetch restaurant', err));
+
+    // Fetch menu items from backend
+    menuService.getItems({ restaurant_id: user.restaurant_id })
+      .then(data => {
+        if (Array.isArray(data)) {
+          setMenuItems(data);
+        }
+      })
+      .catch(err => console.error("Error fetching items:", err));
+
+    // Fetch categories
+    menuService.getCategories({ restaurant_id: user.restaurant_id })
+      .then(data => {
+        if (Array.isArray(data)) {
+          // Remove duplicates based on category name
+          const uniqueCategories = data.reduce((acc, current) => {
+            const x = acc.find(item => item.name === current.name);
+            if (!x) {
+              return acc.concat([current]);
+            }
+            return acc;
+          }, []);
+
+          // Sort alphabetically ascending
+          uniqueCategories.sort((a, b) => {
+            const nameA = a.name ? a.name.toLowerCase() : '';
+            const nameB = b.name ? b.name.toLowerCase() : '';
+            if (nameA < nameB) return -1;
+            if (nameA > nameB) return 1;
+            return 0;
+          });
+
+          setCategories(uniqueCategories);
+        }
+      })
+      .catch(err => console.error("Error fetching categories:", err));
+  }, [user]);
+
+  const submitBill = useCallback(() => {
+    if (cart.length === 0) return;
+    const totalAmt = cart.reduce((sum, item) => sum + item.amount, 0);
+
+    const payload = {
+      table_number: orderType === 'take-away' ? 'takeaway' : orderType === 'delivery' ? 'N/A' : '1', // Default to 1 for dine-in if not provided
+      order_type: orderType === 'take-away' ? 'Takeaway' : orderType === 'delivery' ? 'Delivery' : 'Dine-in',
+      payment_method: paymentMethod,
+      cart: cart.map(c => ({ id: c.id, quantity: c.qty, price: c.rate })),
+      subtotal: totalAmt,
+      gst: 0,
+      service_charge: 0,
+      total_amount: totalAmt,
+      bill_no: billNo
+    };
+
+    api.post(`/api/v1/orders?restaurant_id=${user?.restaurant_id}`, payload)
+      .then(res => {
+        toast.success(`Order placed successfully! ID: ${res.data.orderId || 'Unknown'}`);
+        // 0-SECOND INSTANT KDS SYNC BROADCAST
+        try {
+          const syncPing = {
+            type: 'ORDER_PLACED',
+            orderId: res.data.orderId,
+            billNo: res.data.bill_no || billNo,
+            restaurantId: user?.restaurant_id,
+            timestamp: Date.now()
+          };
+          if (typeof BroadcastChannel !== 'undefined') {
+            const bc = new BroadcastChannel('udipi_kds_sync_channel');
+            bc.postMessage(syncPing);
+            bc.close();
+          }
+          localStorage.setItem('kds_instant_sync_ping', JSON.stringify(syncPing));
+        } catch (syncErr) {
+          console.warn('KDS broadcast sync error:', syncErr);
+        }
+      })
+      .catch(err => {
+        console.error('Error placing order:', err);
+        toast.error('Failed to place order to the server.');
+      });
+
+    setLastBillNo(billNo);
+    setLastBillAmt(totalAmt); // Save the pre-tax total
+    setBillNo(prev => prev + 1);
+    setLastCart([...cart]);
+    setCart([]);
+    setSelectedItemIndex(null);
+    setLastOrderType(orderType);
+    setLastPaymentMethod(paymentMethod);
+    setLastFutureSale({ ...futureSale });
+    setFutureSale({ name: '', address: '', city: '', phone: '', deliveryDate: '' });
+  }, [cart, billNo, orderType, paymentMethod, futureSale, user]);
+
+  const handleVoiceCommand = (toolName, toolResult) => {
+    if (toolName === 'add_to_cart_cashier' && toolResult?.items) {
+      setCart(prevCart => {
+        let newCart = [...prevCart];
+        toolResult.items.forEach(voiceItem => {
+          const menuMatch = menuItems.find(m => 
+            m.name.toLowerCase() === voiceItem.name.toLowerCase() || 
+            m.name.toLowerCase().includes(voiceItem.name.toLowerCase())
+          );
+          if (menuMatch) {
+            const existing = newCart.find(c => c.id === menuMatch.id);
+            if (existing) {
+              existing.qty = parseFloat(existing.qty) + voiceItem.quantity;
+              existing.amount = existing.qty * existing.rate;
+            } else {
+              const price = parseFloat(menuMatch.price) || 0;
+              newCart.push({
+                id: menuMatch.id,
+                product_code: menuMatch.item_code || menuMatch.id,
+                description: menuMatch.name || menuMatch.description || 'Unknown Item',
+                rate: price,
+                qty: voiceItem.quantity,
+                amount: price * voiceItem.quantity,
+                pref: ''
+              });
+            }
+          } else {
+            toast.error(`Item "${voiceItem.name}" not found in menu.`);
+          }
+        });
+        return newCart;
+      });
+    } else if (toolName === 'print_cashier_bill') {
+      handleCheckout();
+    } else if (toolName === 'print_future_bill') {
+      setFutureSale({ name: 'Future Order', address: '', city: '', phone: '', deliveryDate: '' });
+      setShowFutureSaleModal(true);
+    }
+  };
+
+  const handleCheckout = () => {
+    submitBill();
+    setShowInvoice(true);
+    setRightPanelState('CART');
+    
+    const currentDate = new Date().toLocaleString('en-US', {
+      month: 'numeric', day: 'numeric', year: 'numeric',
+      hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+    });
+    
+    const totalAmt = cart.reduce((sum, item) => sum + item.amount, 0);
+    
+    const itemRows = cart.map(item => `
+      <div class="row">
+        <div class="item-name">${item.description}</div>
+        <div class="item-qty">${item.qty}</div>
+        <div class="item-amt">${item.amount.toFixed(2)}</div>
+      </div>
+    `).join('');
+
+    const resName = restaurantData?.name || 'DATA UDIPI HOTEL';
+    const resAddr = restaurantData?.address || 'M G R Nagar, Chennai';
+    const resPhone = restaurantData?.phone || '31595014';
+
+    const html = `
+      <html>
+        <head>
+          <style>
+            @page { margin: 0; }
+            body { font-family: monospace; font-size: 12px; margin: 0; padding: 5px; width: 72mm; color: #000; }
+            .center { text-align: center; }
+            h1 { font-size: 16px; margin: 5px 0; }
+            .divider { border-bottom: 1px dashed #000; margin: 5px 0; }
+            .row { display: flex; justify-content: space-between; }
+            .item-name { flex: 2; word-break: break-all; padding-right: 5px; }
+            .item-qty { width: 30px; text-align: right; }
+            .item-amt { width: 60px; text-align: right; }
+            .bold { font-weight: bold; }
+          </style>
+        </head>
+        <body>
+          <div class="center">
+            <h1>${resName}</h1>
+            <div>${resAddr}</div>
+            <div>Phone: ${resPhone}</div>
+            <div class="bold" style="margin-top: 5px;">COUNTER POS</div>
+          </div>
+          <div class="divider"></div>
+          <div class="row">
+            <span class="bold">Bill No: ${billNo}</span>
+            <span>${currentDate}</span>
+          </div>
+          <div>
+            <span class="bold">Mode: </span>${orderType === 'take-away' ? 'Take Away' : orderType === 'delivery' ? 'Delivery' : 'Dine In'} | 
+            <span class="bold">Pay: </span>${paymentMethod || 'Cash'}
+          </div>
+          ${futureSale.name ? `<div>Future Sale: ${futureSale.name}</div>` : ''}
+          <div class="divider"></div>
+          <div class="row bold">
+            <div class="item-name">Item</div>
+            <div class="item-qty">Qty</div>
+            <div class="item-amt">Amt</div>
+          </div>
+          <div class="divider"></div>
+          ${itemRows}
+          <div class="divider"></div>
+          <div class="row bold" style="font-size: 14px;">
+            <span>TOTAL</span>
+            <span>₹${totalAmt.toFixed(2)}</span>
+          </div>
+          <div class="divider"></div>
+          <div class="center" style="margin-top: 10px;">Thank you! Visit again.</div>
+          <div class="center" style="margin-top: 10px; font-size: 10px;">Techwizard AI partners<br/>hello@t-wi.com</div>
+        </body>
+      </html>
+    `;
+
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
+    iframe.contentWindow.document.open();
+    iframe.contentWindow.document.write(html);
+    iframe.contentWindow.document.close();
+    iframe.contentWindow.focus();
+    setTimeout(() => {
+      iframe.contentWindow.print();
+      document.body.removeChild(iframe);
+      setShowInvoice(false);
+    }, 500);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  useEffect(() => {
+    const handleGlobalKeyDown = (e) => {
+      const isInputFocused = e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA';
+      const isProductCodeInput = e.target.id === 'product-code-input';
+
+      // Order Type Shortcuts (Alt+7 / Alt+4 / Alt+8)
+      if (e.key === '7' && e.altKey) {
+        e.preventDefault();
+        setOrderType('take-away');
+      } else if (e.key === '4' && e.altKey) {
+        e.preventDefault();
+        setOrderType('dine-in');
+      } else if (e.key === '8' && e.altKey) {
+        e.preventDefault();
+        setOrderType('delivery');
+      }
+
+      // Submit bill on Space (even in product code or empty search) or Enter (if no input focused)
+      const isSearchInput = searchInputRef.current && e.target === searchInputRef.current;
+      const isSearchEmpty = isSearchInput && e.target.value === '';
+      const canSpaceCheckout = !isInputFocused || isProductCodeInput || isSearchEmpty;
+
+      if (e.key === ' ' && canSpaceCheckout) {
+        e.preventDefault();
+        if (cart.length > 0 && rightPanelState === 'CART') {
+          handleCheckout();
+        }
+      } else if (e.key === 'Enter' && !isInputFocused) {
+        e.preventDefault();
+        if (cart.length > 0 && rightPanelState === 'CART') {
+          handleCheckout();
+        }
+      }
+
+      // Delete item on Backspace if no input is focused, OR if product code input is empty
+      if (!isInputFocused || (isProductCodeInput && e.target.value === '')) {
+        if (e.key === 'Backspace') {
+          e.preventDefault();
+          setSelectedItemIndex(prevIndex => {
+            if (prevIndex !== null) {
+              setCart(prevCart => prevCart.filter((_, idx) => idx !== prevIndex));
+              return null;
+            }
+            return prevIndex;
+          });
+        }
+      }
+
+      if (e.key === 'ArrowDown') {
+        if (rightPanelState !== 'PAYMENT' && !isInputFocused) {
+          e.preventDefault();
+          // Global ArrowDown focuses the top input
+          document.getElementById('product-code-input')?.focus();
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (rightPanelState !== 'PAYMENT' && !isInputFocused) {
+          e.preventDefault();
+          document.getElementById('product-code-input')?.focus();
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (rightPanelState !== 'PAYMENT' && (!isInputFocused || (e.target.tagName === 'INPUT' && e.target.selectionStart === e.target.value.length))) {
+          if (cart.length > 0) {
+            e.preventDefault();
+            const indexToFocus = selectedItemIndex !== null ? selectedItemIndex : cart.length - 1;
+            setSelectedItemIndex(indexToFocus);
+            setTimeout(() => cartInputRefs.current[indexToFocus]?.focus(), 0);
+          }
+        }
+      }
+
+      if (rightPanelState === 'PAYMENT' && !isInputFocused) {
+        const methods = ['Cash', 'Split', 'UPI', 'Card'];
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          setPaymentMethod(prev => {
+            const idx = methods.indexOf(prev);
+            return methods[(idx + 1) % methods.length];
+          });
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          setPaymentMethod(prev => {
+            const idx = methods.indexOf(prev);
+            return methods[(idx - 1 + methods.length) % methods.length];
+          });
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          handleCheckout();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+  }, [cart, billNo, handleCheckout, rightPanelState]);
+
+  const addItemToCart = (item) => {
+    setCart(prevCart => {
+      const existing = prevCart.find(c => c.id === item.id);
+      if (existing) {
+        return prevCart.map(c =>
+          c.id === item.id
+            ? { ...c, qty: (parseFloat(c.qty) || 0) + 1, amount: ((parseFloat(c.qty) || 0) + 1) * c.rate }
+            : c
+        );
+      } else {
+        const price = parseFloat(item.price) || 0;
+        return [...prevCart, {
+          id: item.id,
+          product_code: item.item_code || item.id,
+          description: item.name || item.description || 'Unknown Item',
+          rate: price,
+          qty: 1,
+          amount: price,
+          pref: ''
+        }];
+      }
+    });
+  };
+
+  const addProductToCart = () => {
+    const code = productCodeInput.trim().toLowerCase();
+
+    if (code !== '') {
+      const item = menuItems.find(i =>
+        i.item_code && String(i.item_code).toLowerCase() === code
+      );
+
+      if (item) {
+        addItemToCart(item);
+        setProductCodeInput('');
+      } else {
+        const inputEl = document.getElementById('product-code-input');
+        if (inputEl) {
+          inputEl.style.border = '2px solid red';
+          inputEl.style.backgroundColor = '#fee2e2'; // Light red background
+          setTimeout(() => {
+            if (inputEl) {
+              inputEl.style.border = '1px solid #d1d5db';
+              inputEl.style.backgroundColor = 'var(--bg-surface)';
+            }
+          }, 400);
+        }
+      }
+    } else {
+      // Empty input + Enter -> Go to Payment
+      if (cart.length > 0) {
+        handleCheckout();
+        if (document.activeElement) document.activeElement.blur();
+      }
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescriptionInput(e.target.value);
+    setSelectedFilterIndex(-1);
+  };
+
+  const filteredItems = menuItems.filter(item => {
+    if (selectedCategoryId !== 'All' && item.category_id !== selectedCategoryId) return false;
+    
+    if (selectedRegion !== 'All') {
+      const categoryObj = categories.find(c => c.id === item.category_id);
+      if (!categoryObj || categoryObj.description !== selectedRegion) return false;
+    }
+
+    const search = descriptionInput.trim().toLowerCase();
+    if (search) {
+      const matchName = item.name && item.name.toLowerCase().includes(search);
+      const matchCode = item.item_code && String(item.item_code).toLowerCase().includes(search);
+      if (!matchName && !matchCode) return false;
+    }
+    return true;
+  });
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedFilterIndex(prev => {
+        const next = prev < filteredItems.length - 1 ? prev + 1 : prev;
+        itemRefs.current[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        return next;
+      });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedFilterIndex(prev => {
+        if (prev <= 0) {
+          // If at the top of the menu items or not selected, go back up to Product Code
+          document.getElementById('product-code-input')?.focus();
+          return -1;
+        }
+        const next = prev - 1;
+        itemRefs.current[next]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        return next;
+      });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (selectedFilterIndex >= 0 && selectedFilterIndex < filteredItems.length) {
+        addItemToCart(filteredItems[selectedFilterIndex]);
+        setDescriptionInput('');
+        setSelectedFilterIndex(-1);
+        playBeep();
+        setTimeout(() => searchInputRef.current?.focus(), 0);
+      } else if (filteredItems.length === 1) {
+        addItemToCart(filteredItems[0]);
+        setDescriptionInput('');
+        setSelectedFilterIndex(-1);
+        playBeep();
+        setTimeout(() => searchInputRef.current?.focus(), 0);
+      } else if (descriptionInput.trim() === '' && cart.length > 0) {
+        // If search is empty and cart has items, Enter goes to charge
+        handleCheckout();
+        if (document.activeElement) document.activeElement.blur();
+      }
+    }
+  };
+
+  const handleProductCodeKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      addProductToCart();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      searchInputRef.current?.focus();
+    }
+  };
+
+  const totalAmount = cart.reduce((sum, item) => sum + item.amount, 0);
+
+
+
+  return (
+    <div className="app-container cashier-dashboard">
+      {/* Header */}
+      <header className="header">
+        <div className="header-left" style={{ flex: 1 }}>
+          <div className="logo-box">DU</div>
+          <div className="header-title-container">
+            <div className="header-title">Data Udipi Restaurant</div>
+            <div className="header-subtitle">Counter POS-Cashier</div>
+          </div>
+        </div>
+
+        <div className="header-center" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ fontSize: '26px', fontWeight: '800', color: 'var(--text-main)', letterSpacing: '1px' }}>
+            Bill No: {billNo}
+          </div>
+        </div>
+
+        <div className="header-right" style={{ flex: 1, justifyContent: 'flex-end', gap: '16px', display: 'flex', alignItems: 'center' }}>
+          <div className="status-item">{new Date().toLocaleDateString()} &middot; Items in cart: {cart.length}</div>
+          <button onClick={handleLogout} className="logout-btn" style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: '#fee2e2', color: '#ef4444', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>
+            <LogOut size={16} /> Logout
+          </button>
+        </div>
+      </header>
+
+      <div className="main-layout">
+        {/* LEFT PANEL - PRODUCTS */}
+        <div className="products-panel">
+<div className="order-type-selector" style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <select
+              value={orderType}
+              onChange={(e) => setOrderType(e.target.value)}
+              style={{ width: '200px', padding: '10px 14px', fontSize: '15px', borderRadius: '6px', border: '1px solid #d1d5db', cursor: 'pointer', backgroundColor: 'var(--bg-surface)' }}
+            >
+              <option value="take-away">[7] Take Away</option>
+              <option value="dine-in">[4] Dine In</option>
+              <option value="delivery">[8] Delivery</option>
+            </select>
+            <button onClick={() => handlePrintReport('hourly')} style={{ padding: '8px 16px', background: '#f1f5f9', color: '#334155', border: '1px solid #e2e8f0', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>Hourly Report</button>
+            <button onClick={() => handlePrintReport('items')} style={{ padding: '8px 16px', background: '#f1f5f9', color: '#334155', border: '1px solid #e2e8f0', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>Item Report</button>
+            <button onClick={handlePrintItemCodes} style={{ padding: '8px 16px', background: '#f1f5f9', color: '#334155', border: '1px solid #e2e8f0', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>Item Code</button>
+            <button onClick={() => setShowOrderHistory(true)} style={{ padding: '8px 16px', background: '#f1f5f9', color: '#334155', border: '1px solid #e2e8f0', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>Orders</button>
+          </div>
+
+          <div className="form-group" style={{ flexDirection: 'row', gap: '12px' }}>
+            <input
+              id="product-code-input"
+              type="text"
+              className="input-field"
+              value={productCodeInput}
+              onChange={(e) => setProductCodeInput(e.target.value)}
+              onKeyDown={handleProductCodeKeyDown}
+              placeholder="Enter item code (e.g. C01)"
+              style={{ flex: 1 }}
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              ref={searchInputRef}
+              className="input-field"
+              placeholder="Search item..."
+              value={descriptionInput}
+              onChange={handleDescriptionChange}
+              onKeyDown={handleSearchKeyDown}
+            />
+          </div>
+
+          <div className="region-filters" style={{ display: 'flex', gap: '8px', marginBottom: '12px', overflowX: 'auto', paddingBottom: '4px' }}>
+            <button
+              className={`cat-btn ${selectedRegion === 'All' ? 'active' : ''}`}
+              onClick={() => setSelectedRegion('All')}
+              style={{ fontWeight: '600' }}
+            >
+              All Regions
+            </button>
+            <button
+              className={`cat-btn ${selectedRegion === 'South Indian' ? 'active' : ''}`}
+              onClick={() => setSelectedRegion('South Indian')}
+              style={{ fontWeight: '600' }}
+            >
+              South Indian
+            </button>
+            <button
+              className={`cat-btn ${selectedRegion === 'North Indian' ? 'active' : ''}`}
+              onClick={() => setSelectedRegion('North Indian')}
+              style={{ fontWeight: '600' }}
+            >
+              North Indian
+            </button>
+          </div>
+
+          <div className="category-filters">
+            <button
+              className={`cat-btn ${selectedCategoryId === 'All' ? 'active' : ''}`}
+              onClick={() => setSelectedCategoryId('All')}
+            >
+              All
+            </button>
+            {categories
+              .filter(cat => (selectedRegion === 'All' || cat.description === selectedRegion) && menuItems.some(item => item.category_id === cat.id))
+              .map(cat => (
+              <button
+                key={cat.id}
+                className={`cat-btn ${selectedCategoryId === cat.id ? 'active' : ''}`}
+                onClick={() => setSelectedCategoryId(cat.id)}
+              >
+                {cat.name}
+              </button>
+            ))}
+          </div>
+
+          <div className="menu-items-table-container">
+            <table className="menu-items-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '80px' }}>CODE</th>
+                  <th>ITEM</th>
+                  <th style={{ textAlign: 'right', width: '120px' }}>PRICE</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredItems.map((item, index) => (
+                  <tr
+                    key={item.id}
+                    ref={el => itemRefs.current[index] = el}
+                    className={selectedFilterIndex === index ? 'active-row' : ''}
+                    onClick={() => {
+                      addItemToCart(item);
+                      // Reset search to simulate fast checkout on click too
+                      setDescriptionInput('');
+                      setSelectedFilterIndex(-1);
+                      setTimeout(() => searchInputRef.current?.focus(), 0);
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <td className="item-code">{item.item_code}</td>
+                    <td className="item-name">{item.name}</td>
+                    <td className="item-price-cell">
+                      <span>₹{(item.price || 0).toFixed(2)}</span>
+                      <button className="add-btn" onClick={(e) => {
+                        e.stopPropagation();
+                        addItemToCart(item);
+                      }}>+</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+        {/* RESIZER */}
+        <div
+          onMouseDown={startResizing}
+          style={{
+            width: '6px',
+            cursor: 'col-resize',
+            backgroundColor: '#e5e7eb',
+            zIndex: 10,
+            display: window.innerWidth > 768 ? 'block' : 'none'
+          }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#d1d5db'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#e5e7eb'}
+        />
+
+        {/* RIGHT PANEL - CART / PAYMENT */}
+        <div className="cart-panel" style={{ width: window.innerWidth > 768 ? `${cartWidth}px` : '100%' }}>
+
+          {rightPanelState === 'CART' && (
+            <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <div className="cart-header" style={{ flexShrink: 0 }}>
+                <div className="cart-title">
+                  <h2>Current order</h2>
+                  <span className="cart-subtitle">{cart.length} lines &middot; {cart.reduce((sum, item) => sum + item.qty, 0)} items</span>
+                </div>
+                <button className="clear-btn" onClick={() => setCart([])}>Clear</button>
+              </div>
+
+              <div className="cart-items-list" style={{ flex: 1, overflowY: 'auto' }}>
+                {cart.map((item, index) => (
+                  <div className="cart-item" key={item.id}>
+                    <div className="cart-item-top">
+                      <span className="cart-item-name">{item.description}</span>
+                      <span className="cart-item-rate">₹{item.rate.toFixed(2)}</span>
+                    </div>
+                    <div className="cart-item-code">{item.product_code}</div>
+                    <div className="cart-item-actions">
+                      <div className="qty-controls">
+                        <button onClick={() => {
+                          setCart(prev => {
+                            const newCart = prev.map(c =>
+                              c.id === item.id ? { ...c, qty: c.qty - 1, amount: (c.qty - 1) * c.rate } : c
+                            );
+                            return newCart.filter(c => c.qty > 0);
+                          });
+                        }}>-</button>
+                        <input
+                          type="number"
+                          className="qty-input"
+                          ref={el => cartInputRefs.current[index] = el}
+                          value={item.qty}
+                          onFocus={() => setSelectedItemIndex(index)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'ArrowDown') {
+                              e.preventDefault();
+                              if (index < cart.length - 1) {
+                                setSelectedItemIndex(index + 1);
+                                cartInputRefs.current[index + 1]?.focus();
+                              }
+                            } else if (e.key === 'ArrowUp') {
+                              e.preventDefault();
+                              if (index > 0) {
+                                setSelectedItemIndex(index - 1);
+                                cartInputRefs.current[index - 1]?.focus();
+                              }
+                            } else if (e.key === 'ArrowLeft') {
+                              e.preventDefault();
+                              document.getElementById('product-code-input')?.focus();
+                              setSelectedItemIndex(null);
+                            } else if (e.key === 'Enter') {
+                              e.preventDefault();
+                              e.target.blur();
+                              document.getElementById('product-code-input')?.focus();
+                              setSelectedItemIndex(null);
+                            }
+                          }}
+                          onChange={(e) => {
+                            let val = e.target.value;
+                            if (val === '') {
+                              setCart(prev => prev.map(c =>
+                                c.id === item.id ? { ...c, qty: '', amount: 0 } : c
+                              ));
+                            } else {
+                              const num = parseInt(val, 10);
+                              if (!isNaN(num)) {
+                                if (num === 0) {
+                                  setCart(prev => prev.filter(c => c.id !== item.id));
+                                } else if (num > 0) {
+                                  setCart(prev => prev.map(c =>
+                                    c.id === item.id ? { ...c, qty: num, amount: num * c.rate } : c
+                                  ));
+                                }
+                              }
+                            }
+                          }}
+                          onBlur={() => {
+                            if (item.qty === '' || item.qty <= 0) {
+                              setCart(prev => prev.filter(c => c.id !== item.id));
+                            }
+                          }}
+                        />
+                        <button onClick={() => {
+                          setCart(prev => prev.map(c =>
+                            c.id === item.id ? { ...c, qty: (parseFloat(c.qty) || 0) + 1, amount: ((parseFloat(c.qty) || 0) + 1) * c.rate } : c
+                          ));
+                        }}>+</button>
+                      </div>
+                      <span className="cart-item-total">Total: ₹{item.amount.toFixed(2)}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* FIXED AT BOTTOM: Payment Summary */}
+              <div className="cart-footer" style={{ flexShrink: 0 }}>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                  <button
+                    className="btn-future-sale"
+                    onClick={() => setShowFutureSaleModal(true)}
+                    style={{ padding: '8px 24px', backgroundColor: '#e5e7eb', color: '#374151', borderRadius: '6px', fontWeight: 'bold', fontSize: '14px', width: '100%', transition: 'background-color 0.2s' }}
+                    onMouseOver={(e) => e.target.style.backgroundColor = '#d1d5db'}
+                    onMouseOut={(e) => e.target.style.backgroundColor = '#e5e7eb'}
+                  >
+                    + Future Sale
+                  </button>
+                </div>
+                <div className="cart-summary-row">
+                  <span className="summary-label">Subtotal</span>
+                  <span className="summary-value">₹{totalAmount.toFixed(2)}</span>
+                </div>
+                <div className="cart-total-row">
+                  <span className="total-label">Total</span>
+                  <span className="total-value">₹{totalAmount.toFixed(2)}</span>
+                </div>
+
+                <button
+                  className="charge-btn"
+                  onClick={() => {
+                    if (cart.length > 0) {
+                      handleCheckout();
+                    }
+                  }}
+                >
+                  Charge ₹{totalAmount.toFixed(2)}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <OrderHistoryModal 
+        show={showOrderHistory}
+        setShow={setShowOrderHistory}
+        api={api}
+        user={user}
+        onShowBill={(order) => {
+          // To show the bill, map to cart format and trigger print logic
+          // A simple print logic for reprinted bills:
+          const mappedCart = (order.items || []).map(item => ({
+            description: item.name,
+            qty: item.quantity,
+            amount: item.price
+          }));
+          setLastCart(mappedCart);
+          setLastBillAmt(order.total_amount);
+          setLastBillNo(order.order_id);
+          setLastOrderType(order.order_type);
+          setLastPaymentMethod(order.payment_method);
+          setShowInvoice(true);
+        }}
+      />
+      <InvoiceModal
+        show={showInvoice}
+        lastBillNo={lastBillNo}
+        lastOrderType={lastOrderType}
+        lastPaymentMethod={lastPaymentMethod}
+        lastFutureSale={lastFutureSale}
+        lastCart={lastCart}
+        lastBillAmt={lastBillAmt}
+        restaurantData={restaurantData}
+      />
+
+      <FutureSaleModal
+        show={showFutureSaleModal}
+        setShow={setShowFutureSaleModal}
+        futureSale={futureSale}
+        setFutureSale={setFutureSale}
+      />
+      <VoiceWidget onVoiceCommand={handleVoiceCommand} />
+    </div>
+  );
+}
+
+export default CashierDashboard;

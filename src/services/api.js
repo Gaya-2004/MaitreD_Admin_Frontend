@@ -1,0 +1,515 @@
+import axios from 'axios';
+import { toast } from '../components/Toast';
+
+// Empty string = same-origin (nginx proxies /api/ → backend), which avoids all CORS issues.
+// Falls back to the explicit API URL if provided (e.g. during local dev without nginx).
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+/**
+ * Rewrites image URLs that the backend returns as "http://localhost:8000/static/..."
+ * to same-origin "/static/..." so the browser can load them via the nginx proxy.
+ */
+export function rewriteImageUrl(url) {
+  if (!url) return url;
+  
+  // Remove any explicit localhost/127.0.0.1 references with any port
+  let cleanUrl = url.replace(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/, '');
+  
+  // If the url is just a filename (no slashes, no http), assume it's in /static/images/
+  if (!cleanUrl.includes('/') && !cleanUrl.startsWith('http')) {
+    cleanUrl = `/static/images/${cleanUrl}`;
+  }
+  
+  // If we have a base API URL and the path is relative, prefix it
+  const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+  if (API_BASE_URL && cleanUrl.startsWith('/')) {
+    return `${API_BASE_URL.replace(/\/$/, '')}${cleanUrl}`;
+  }
+  
+  return cleanUrl;
+}
+
+// Add token to requests if available
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('access_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  // Inject admin_selected_restaurant for super admin cross-hotel actions
+  const adminSelectedRestaurant = localStorage.getItem('admin_selected_restaurant');
+  if (adminSelectedRestaurant && !config._skipRestaurantInjection) {
+    if (config.method === 'get' || config.method === 'delete') {
+      config.params = { ...config.params, restaurant_id: adminSelectedRestaurant };
+    } else if (config.method === 'post' || config.method === 'patch' || config.method === 'put') {
+      if (config.data && typeof config.data === 'object' && !(config.data instanceof FormData)) {
+        config.data.restaurant_id = parseInt(adminSelectedRestaurant);
+      } else if (config.data instanceof FormData) {
+        config.data.append('restaurant_id', adminSelectedRestaurant);
+      }
+    }
+  }
+
+  return config;
+});
+
+// Response interceptor for global error handling and silent token refresh
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Prevent infinite loops on refresh failures
+    if (originalRequest.url === '/api/v1/auth/refresh') {
+      return Promise.reject(error);
+    }
+
+    // Handle 401 Unauthorized (Token Expiry)
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const refreshResponse = await api.post('/api/v1/auth/refresh');
+        if (refreshResponse.data.access_token) {
+          localStorage.setItem('access_token', refreshResponse.data.access_token);
+          localStorage.setItem('user', JSON.stringify(refreshResponse.data.user));
+          
+          // Update the authorization header for the retried request
+          originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access_token}`;
+          return api(originalRequest);
+        }
+      } catch (refreshError) {
+        // Refresh failed (user is totally logged out)
+        toast.info("Session expired. Please log in again.");
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        sessionStorage.removeItem('voice_chat_history');
+        window.location.href = '/';
+        return Promise.reject(refreshError);
+      }
+    }
+
+    // Handle global 500 Server Errors
+    if (error.response?.status >= 500) {
+      toast.error("Server error. We've been notified.");
+    } else if (error.response?.status === 403) {
+      toast.error("You don't have permission to do this.");
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export const authService = {
+  login: async (email, password, role = undefined) => {
+    const response = await api.post('/api/v1/auth/login', { email, password, role });
+    if (response.data.access_token) {
+      localStorage.setItem('access_token', response.data.access_token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+    }
+    return response.data;
+  },
+
+  signup: async (name, email, password, role = null, restaurantId = null) => {
+    try {
+      const response = await api.post('/api/v1/auth/signup', { name, email, password, role, restaurant_id: restaurantId });
+      return response.data;
+    } catch (error) {
+      // If signup endpoint doesn't exist, throw error to user
+      throw error;
+    }
+  },
+
+  logout: async () => {
+    try {
+      await api.post('/api/v1/auth/logout');
+    } finally {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+      sessionStorage.removeItem('voice_chat_history');
+    }
+  },
+
+  getCurrentUser: () => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  },
+
+  getToken: () => localStorage.getItem('access_token'),
+
+  isAuthenticated: () => {
+    return !!localStorage.getItem('access_token');
+  },
+};
+
+export const restaurantService = {
+  getPublicRestaurants: async () => {
+    const response = await api.get('/api/v1/public/restaurants');
+    return response.data;
+  },
+
+  getAdminRestaurants: async () => {
+    const response = await api.get('/api/v1/restaurants');
+    return response.data;
+  },
+
+  createRestaurant: async (restaurantData) => {
+    const response = await api.post('/api/v1/restaurants', restaurantData);
+    return response.data;
+  },
+
+  getRestaurant: async (restaurantId) => {
+    const response = await api.get(`/api/v1/restaurants/${restaurantId}`);
+    return response.data;
+  },
+
+  updateRestaurant: async (restaurantId, updateData) => {
+    const response = await api.patch(`/api/v1/restaurants/${restaurantId}`, updateData);
+    return response.data;
+  },
+
+  deleteRestaurant: async (restaurantId) => {
+    const response = await api.delete(`/api/v1/restaurants/${restaurantId}`);
+    return response.data;
+  },
+};
+
+export const tableService = {
+  getTables: async (params = {}) => {
+    const response = await api.get('/api/v1/tables', { params });
+    return response.data;
+  },
+  
+  updateTable: async (tableId, tableData) => {
+    const response = await api.patch(`/api/v1/tables/${tableId}`, tableData);
+    return response.data;
+  },
+
+  createTable: async (tableData) => {
+    const response = await api.post('/api/v1/tables', tableData);
+    return response.data;
+  },
+
+  deleteTable: async (tableId) => {
+    const response = await api.delete(`/api/v1/tables/${tableId}`);
+    return response.data;
+  },
+};
+
+export const menuService = {
+  getItems: async (params = {}) => {
+    const response = await api.get('/api/v1/menu/items', { params });
+    return response.data;
+  },
+
+  getCategories: async (params = {}) => {
+    const response = await api.get('/api/v1/menu/categories', { params });
+    return response.data;
+  },
+
+  createItem: async (itemData) => {
+    const response = await api.post('/api/v1/menu/items', itemData);
+    return response.data;
+  },
+
+  updateItem: async (itemId, itemData) => {
+    const response = await api.patch(`/api/v1/menu/items/${itemId}`, itemData);
+    return response.data;
+  },
+
+  generateImage: async (itemId) => {
+    const response = await api.post(`/api/v1/menu/items/${itemId}/generate-image`);
+    return response.data;
+  },
+
+  deleteItem: async (itemId) => {
+    const response = await api.delete(`/api/v1/menu/items/${itemId}`);
+    return response.data;
+  },
+
+  uploadImage: async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.post('/api/v1/menu/upload-image', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+};
+
+export const orderService = {
+  getLiveOrders: async (params = {}) => {
+    const response = await api.get('/api/v1/orders/live', { params });
+    return response.data;
+  },
+
+  getAllOrders: async (params = {}) => {
+    const response = await api.get('/api/v1/orders', { params });
+    return response.data;
+  },
+
+  updateOrderStatus: async (orderId, status) => {
+    const response = await api.patch(`/api/v1/orders/${orderId}/status`, { status });
+    return response.data;
+  },
+
+  updateOrderPaymentStatus: async (orderId, payment_status) => {
+    const response = await api.patch(`/api/v1/orders/${orderId}/payment-status`, { payment_status });
+    return response.data;
+  },
+};
+
+export const inventoryService = {
+  getInventory: async (params = {}) => {
+    const response = await api.get('/api/v1/inventory', { params });
+    return response.data;
+  },
+
+  updateInventory: async (inventoryId, data) => {
+    const response = await api.patch(`/api/v1/inventory/${inventoryId}`, data);
+    return response.data;
+  },
+
+  createItem: async (itemData) => {
+    const response = await api.post('/api/v1/inventory', itemData);
+    return response.data;
+  },
+
+  scanInventory: async (formData) => {
+    try {
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${API_BASE_URL}/api/v1/inventory/scan`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        const error = new Error('Scan failed');
+        error.response = { data };
+        throw error;
+      }
+      return data;
+    } catch (e) {
+      if (e.response) throw e;
+      const error = new Error('Network error during scan');
+      error.response = { data: { detail: e.message } };
+      throw error;
+    }
+  },
+
+  bulkUpdateInventory: async (items) => {
+    const response = await api.post('/api/v1/inventory/bulk', items);
+    return response.data;
+  },
+
+  deleteItem: async (inventoryId) => {
+    const response = await api.delete(`/api/v1/inventory/${inventoryId}`);
+    return response.data;
+  },
+};
+
+export const managerService = {
+  getManagers: async () => {
+    const response = await api.get('/api/v1/managers');
+    return response.data;
+  },
+
+  createManager: async (managerData) => {
+    const response = await api.post('/api/v1/managers', managerData);
+    return response.data;
+  },
+
+  updateManager: async (managerId, updateData) => {
+    const response = await api.patch(`/api/v1/managers/${managerId}`, updateData);
+    return response.data;
+  },
+
+  deleteManager: async (managerId) => {
+    const response = await api.delete(`/api/v1/managers/${managerId}`);
+    return response.data;
+  },
+};
+
+export const waiterService = {
+  getWaiters: async (restaurantId = null) => {
+    const params = restaurantId && restaurantId !== 'ALL' ? { restaurant_id: restaurantId } : {};
+    const response = await api.get('/api/v1/waiters', {
+      params,
+      _skipRestaurantInjection: true,
+    });
+    return response.data;
+  },
+
+  approveWaiter: async (waiterId, restaurantId) => {
+    const response = await api.patch(`/api/v1/waiters/${waiterId}/approve`, {
+      restaurant_id: parseInt(restaurantId, 10),
+    });
+    return response.data;
+  },
+
+  createWaiter: async ({ name, phone, password, restaurant_id }) => {
+    const regRes = await api.post('/api/v1/auth/waiter/register', {
+      name,
+      phone,
+      password,
+      confirm_password: password,
+    });
+    if (restaurant_id && regRes.data?.waiter_id) {
+      await api.patch(`/api/v1/waiters/${regRes.data.waiter_id}/approve`, {
+        restaurant_id: parseInt(restaurant_id, 10),
+      });
+    }
+    return regRes.data;
+  },
+
+  updateWaiter: async (waiterId, updateData) => {
+    const response = await api.patch(`/api/v1/waiters/${waiterId}`, updateData);
+    return response.data;
+  },
+
+  deleteWaiter: async (waiterId) => {
+    const response = await api.delete(`/api/v1/waiters/${waiterId}`);
+    return response.data;
+  },
+};
+
+export const reportsService = {
+  getReports: async (params = {}) => {
+    const response = await api.get('/api/v1/reports', { params });
+    return response.data;
+  },
+  getHourlyReport: async (params = {}) => {
+    const response = await api.get('/api/v1/reports/hourly', { params });
+    return response.data;
+  },
+  getItemWiseReport: async (params = {}) => {
+    const response = await api.get('/api/v1/reports/items', { params });
+    return response.data;
+  },
+  getConsumptionReport: async (date) => {
+    const response = await api.get('/api/v1/reports/consumption', { params: { report_date: date } });
+    return response.data;
+  },
+  getMobileAppReport: async (params = {}) => {
+    const response = await api.get('/api/v1/reports/mobile-app', { params });
+    return response.data;
+  },
+  getCashierReport: async (params = {}) => {
+    const response = await api.get('/api/v1/reports/cashier', { params });
+    return response.data;
+  },
+  getTotalSalesReport: async (params = {}) => {
+    const response = await api.get('/api/v1/reports/total-sales', { params });
+    return response.data;
+  },
+};
+
+export const recipeService = {
+  getRecipes: async (menuItemId = null) => {
+    const params = menuItemId ? { menu_item_id: menuItemId } : {};
+    const response = await api.get('/api/v1/recipes', { params });
+    return response.data;
+  },
+
+  updateRecipe: async (payload) => {
+    const response = await api.post('/api/v1/recipes', payload);
+    return response.data;
+  },
+};
+
+export const cateringAdminService = {
+  getPackages: async (params = {}) => {
+    const response = await api.get('/api/v1/admin/catering/packages', { params });
+    return response.data;
+  },
+
+  getPublicPackages: async (params = {}) => {
+    const response = await api.get('/api/v1/public/catering/packages', { params });
+    return response.data;
+  },
+
+  getPublicPackageItems: async (packageCode) => {
+    const response = await api.get(`/api/v1/public/catering/packages/${encodeURIComponent(packageCode)}/items`);
+    return response.data;
+  },
+
+  getPackage: async (packageCode, params = {}) => {
+    const response = await api.get(`/api/v1/admin/catering/packages/${encodeURIComponent(packageCode)}`, { params });
+    return response.data;
+  },
+
+  createPackage: async (payload) => {
+    const response = await api.post('/api/v1/admin/catering/packages', payload);
+    return response.data;
+  },
+
+  updatePackage: async (packageCode, payload) => {
+    const response = await api.put(`/api/v1/admin/catering/packages/${encodeURIComponent(packageCode)}`, payload);
+    return response.data;
+  },
+
+  togglePackageAvailability: async (packageCode, isAvailable) => {
+    const response = await api.patch(`/api/v1/admin/catering/packages/${encodeURIComponent(packageCode)}/availability`, {
+      is_available: isAvailable
+    });
+    return response.data;
+  },
+
+  deletePackage: async (packageCode) => {
+    const response = await api.delete(`/api/v1/admin/catering/packages/${encodeURIComponent(packageCode)}`);
+    return response.data;
+  },
+
+  getOrders: async (params = {}) => {
+    const response = await api.get('/api/v1/admin/catering/orders', { params });
+    return response.data;
+  },
+
+  getOrderDetail: async (orderId) => {
+    const response = await api.get(`/api/v1/admin/catering/orders/${orderId}`);
+    return response.data;
+  },
+
+  updateOrderStatus: async (orderId, orderStatus) => {
+    const response = await api.patch(`/api/v1/admin/catering/orders/${orderId}/status`, {
+      order_status: orderStatus
+    });
+    return response.data;
+  },
+
+  getCateringReports: async (params = {}) => {
+    const response = await api.get('/api/v1/admin/catering/reports', { params });
+    return response.data;
+  }
+};
+
+export const dataManagementService = {
+  getPreview: async (month, restaurantId = null) => {
+    const params = { month };
+    if (restaurantId) {
+      params.restaurant_id = restaurantId;
+    }
+    const response = await api.get('/api/v1/admin/data-management/preview', { params });
+    return response.data;
+  },
+
+  executeDeletion: async (payload) => {
+    const response = await api.post('/api/v1/admin/data-management/delete', payload);
+    return response.data;
+  }
+};
+
+export default api;
+
