@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ChevronRight, LogOut } from 'lucide-react';
 import RestaurantBG from '../assets/restaurant_bg.png';
-import MaitreDLogoDark from '../assets/maitred_logo_dark.png';
+import MaitreDLogo from '../assets/maitred_logo.png';
 import MaitreDChef from '../assets/maitred_chef.png';
 
 const RoleSelection = () => {
@@ -198,14 +198,7 @@ const RoleSelection = () => {
         </button>
       </div>
 
-      <div className="page-footer-banner" style={{ marginTop: '24px' }}>
-        <img
-          src={MaitreDChef}
-          alt="MaitreD Mascot"
-          className="mascot-image"
-          style={{ width: '130px', height: 'auto', opacity: 0.9, filter: 'drop-shadow(0 4px 14px rgba(0,0,0,0.5))' }}
-        />
-      </div>
+
     </div>
   );
 };

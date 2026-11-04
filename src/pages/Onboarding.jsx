@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { restaurantService } from '../services/api';
 import { ChevronRight, AlertCircle, Loader, Eye, EyeOff } from 'lucide-react';
 import RestaurantBG from '../assets/restaurant_bg.png';
-import MaitreDLogoDark from '../assets/maitred_logo_dark.png';
+import MaitreDLogo from '../assets/maitred_logo.png';
 import MaitreDChef from '../assets/maitred_chef.png';
 
 const Onboarding = () => {
@@ -229,16 +229,38 @@ const Onboarding = () => {
         }}
       >
         <div className="role-selection-content" style={{ maxWidth: '480px', width: '100%' }}>
-          <div className="hero-title-block" style={{ paddingBottom: '16px' }}>
+          <div className="hero-title-block" style={{ paddingBottom: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <img
-              src={MaitreDLogoDark}
-              alt="MaitreD"
+              src={MaitreDChef}
+              alt="MaitreD Chef Mascot"
+              style={{
+                width: '110px',
+                height: 'auto',
+                marginBottom: '8px',
+                filter: 'drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45))'
+              }}
+            />
+            <div
+              style={{
+                color: '#ffffff',
+                fontSize: '24px',
+                fontWeight: '700',
+                letterSpacing: '-0.3px',
+                marginBottom: '8px',
+                textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)'
+              }}
+            >
+              Welcome To
+            </div>
+            <img
+              src={MaitreDLogo}
+              alt="maitreD"
               className="hero-title-image"
               style={{
-                maxWidth: '260px',
+                maxWidth: '240px',
                 width: '100%',
                 height: 'auto',
-                filter: 'drop-shadow(0 8px 24px rgba(223, 155, 52, 0.3))',
+                filter: 'drop-shadow(0 4px 20px rgba(223, 155, 52, 0.35))',
                 marginBottom: '10px'
               }}
             />
@@ -325,14 +347,7 @@ const Onboarding = () => {
           </div>
         </div>
 
-        <div className="page-footer-banner" style={{ marginTop: '24px' }}>
-          <img
-            src={MaitreDChef}
-            alt="MaitreD Mascot"
-            className="mascot-image"
-            style={{ width: '130px', height: 'auto', opacity: 0.9, filter: 'drop-shadow(0 4px 14px rgba(0,0,0,0.5))' }}
-          />
-        </div>
+
       </div>
     );
   }
@@ -354,16 +369,38 @@ const Onboarding = () => {
       }}
     >
       <div className="login-content" style={{ maxWidth: '440px', width: '100%' }}>
-        <div className="hero-title-block" style={{ paddingBottom: '16px' }}>
+        <div className="hero-title-block" style={{ paddingBottom: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <img
-            src={MaitreDLogoDark}
-            alt="MaitreD"
+            src={MaitreDChef}
+            alt="MaitreD Chef Mascot"
+            style={{
+              width: '100px',
+              height: 'auto',
+              marginBottom: '6px',
+              filter: 'drop-shadow(0 6px 16px rgba(0, 0, 0, 0.45))'
+            }}
+          />
+          <div
+            style={{
+              color: '#ffffff',
+              fontSize: '22px',
+              fontWeight: '700',
+              letterSpacing: '-0.3px',
+              marginBottom: '6px',
+              textShadow: '0 2px 8px rgba(0, 0, 0, 0.5)'
+            }}
+          >
+            Welcome To
+          </div>
+          <img
+            src={MaitreDLogo}
+            alt="maitreD"
             className="hero-title-image"
             style={{
-              maxWidth: '240px',
+              maxWidth: '220px',
               width: '100%',
               height: 'auto',
-              filter: 'drop-shadow(0 8px 24px rgba(223, 155, 52, 0.3))',
+              filter: 'drop-shadow(0 4px 20px rgba(223, 155, 52, 0.35))',
               marginBottom: '8px'
             }}
           />
@@ -674,14 +711,7 @@ const Onboarding = () => {
         </button>
       </div>
 
-      <div className="page-footer-banner" style={{ marginTop: '24px' }}>
-        <img
-          src={MaitreDChef}
-          alt="MaitreD Mascot"
-          className="mascot-image"
-          style={{ width: '130px', height: 'auto', opacity: 0.9, filter: 'drop-shadow(0 4px 14px rgba(0,0,0,0.5))' }}
-        />
-      </div>
+
     </div>
   );
 };
