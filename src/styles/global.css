@@ -417,9 +417,7 @@ body,
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: radial-gradient(circle at center, rgba(10, 10, 14, 0.45) 0%, rgba(6, 6, 8, 0.75) 100%);
   pointer-events: none;
 }
 
@@ -700,9 +698,7 @@ body,
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.58);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
+  background: radial-gradient(circle at center, rgba(10, 10, 14, 0.45) 0%, rgba(6, 6, 8, 0.75) 100%);
   pointer-events: none;
 }
 
@@ -1461,8 +1457,8 @@ a:hover {
     top: 24px;
     right: 20px;
     background: rgba(255, 107, 53, 0.2);
-    color: #ff6b35;
-    border: 1px solid #ff6b35;
+    color: #DF9B34;
+    border: 1px solid #DF9B34;
     padding: 4px 10px;
     border-radius: 12px;
     font-size: 11px;
@@ -1563,7 +1559,7 @@ a:hover {
 
   /* Role Selection Mobile Overrides */
   .role-selection-container {
-    background-image: linear-gradient(180deg, #0f1c13 0%, #060a08 100%), url('../assets/restaurant_bg.png') !important;
+    background-image: linear-gradient(180deg, rgba(10, 10, 14, 0.55) 0%, rgba(6, 6, 8, 0.78) 100%), url('../assets/restaurant_bg.png') !important;
   }
 
   .btn-role {
@@ -1573,11 +1569,11 @@ a:hover {
 
   .btn-role.active {
     background: linear-gradient(90deg, rgba(255, 107, 53, 0.15) 0%, rgba(255, 107, 53, 0.05) 100%) !important;
-    border-color: #ff6b35 !important;
+    border-color: #DF9B34 !important;
   }
 
   .btn-role-icon {
-    background: #ff6b35 !important;
+    background: #DF9B34 !important;
     color: white !important;
     border: none !important;
   }

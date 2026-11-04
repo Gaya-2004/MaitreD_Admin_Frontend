@@ -54,9 +54,11 @@ const RoleSelection = () => {
     <div
       className="role-selection-container"
       style={{
-        backgroundImage: `linear-gradient(180deg, rgba(14, 14, 18, 0.88) 0%, rgba(8, 8, 12, 0.96) 100%), url(${RestaurantBG})`,
+        backgroundImage: `linear-gradient(180deg, rgba(10, 10, 14, 0.52) 0%, rgba(6, 6, 8, 0.78) 100%), url(${RestaurantBG})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
