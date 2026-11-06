@@ -62,14 +62,24 @@ const ReportView = ({ type, onBack }) => {
             onClick={onBack}
             style={{
               background: 'var(--surface)',
-              border: '1px solid var(--border)',
+              border: '1px solid rgba(223, 155, 52, 0.25)',
               borderRadius: '8px',
               width: '40px',
               height: '40px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              cursor: 'pointer'
+              cursor: 'pointer',
+              color: '#1C1917',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#DF9B34';
+              e.currentTarget.style.color = '#DF9B34';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(223, 155, 52, 0.25)';
+              e.currentTarget.style.color = '#1C1917';
             }}
           >
             <ArrowLeft size={20} />
@@ -90,8 +100,8 @@ const ReportView = ({ type, onBack }) => {
               onChange={(e) => setSelectedDate(e.target.value)}
               style={{
                 padding: '10px 16px',
-                borderRadius: '6px',
-                border: '1px solid var(--border)',
+                borderRadius: '8px',
+                border: '1px solid rgba(223, 155, 52, 0.3)',
                 background: 'var(--surface)',
                 color: 'black',
                 fontWeight: '500',
@@ -103,13 +113,14 @@ const ReportView = ({ type, onBack }) => {
               alignItems: 'center', 
               gap: '8px', 
               padding: '10px 16px', 
-              borderRadius: '6px',
-              background: '#f3f4f6',
-              border: '1px solid #111',
-              color: '#111',
-              fontWeight: '500',
+              borderRadius: '8px',
+              background: 'linear-gradient(135deg, #E5A84B 0%, #DF9B34 50%, #C58326 100%)',
+              border: 'none',
+              color: '#ffffff',
+              fontWeight: '700',
               cursor: 'pointer',
-              boxShadow: '1px 1px 0px #111'
+              boxShadow: '0 3px 10px rgba(223, 155, 52, 0.35)',
+              transition: 'all 0.2s ease'
             }}>
               <Printer size={18} /> Print Receipt
             </button>
@@ -118,17 +129,17 @@ const ReportView = ({ type, onBack }) => {
 
         {/* Dashboard Cards */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-          <div style={{ background: 'var(--surface)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+          <div style={{ background: 'var(--surface)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(223, 155, 52, 0.2)', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)' }}>
             <h3 style={{ color: 'var(--text-secondary)', fontSize: '13px', margin: '0 0 8px 0' }}>Total Sales</h3>
             <p style={{ fontSize: '28px', fontWeight: '700', margin: '0', color: 'black' }}>₹{reportData.total_sales.toFixed(2)}</p>
           </div>
           {type === 'item' && (
             <>
-              <div style={{ background: 'var(--surface)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+              <div style={{ background: 'var(--surface)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(223, 155, 52, 0.2)', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)' }}>
                 <h3 style={{ color: 'var(--text-secondary)', fontSize: '13px', margin: '0 0 8px 0' }}>Total Items Types Sold</h3>
                 <p style={{ fontSize: '28px', fontWeight: '700', margin: '0', color: 'black' }}>{reportData.items.length}</p>
               </div>
-              <div style={{ background: 'var(--surface)', padding: '20px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+              <div style={{ background: 'var(--surface)', padding: '20px', borderRadius: '12px', border: '1px solid rgba(223, 155, 52, 0.2)', boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)' }}>
                 <h3 style={{ color: 'var(--text-secondary)', fontSize: '13px', margin: '0 0 8px 0' }}>Total Quantity Sold</h3>
                 <p style={{ fontSize: '28px', fontWeight: '700', margin: '0', color: 'black' }}>
                   {reportData.items.reduce((acc, curr) => acc + curr.qty, 0).toFixed(0)}

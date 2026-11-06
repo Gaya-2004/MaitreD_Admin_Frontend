@@ -58,9 +58,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
       return {
         title: 'Cashier Sales & Order History',
         badgeText: '(C) Cashier Sales Only',
-        badgeBg: '#fff7ed',
-        badgeColor: '#c2410c',
-        badgeBorder: '#fed7aa',
+        badgeBg: 'rgba(223, 155, 52, 0.12)',
+        badgeColor: '#DF9B34',
+        badgeBorder: 'rgba(223, 155, 52, 0.35)',
         icon: CreditCard,
         csvPrefix: 'Cashier_Sales_Report',
         receiptTitle: 'CASHIER SALES REPORT (C)',
@@ -71,9 +71,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
       return {
         title: 'Mobile App Sales & Order History',
         badgeText: '(M) Mobile App Sales Only',
-        badgeBg: '#dcfce7',
-        badgeColor: '#15803d',
-        badgeBorder: '#86efac',
+        badgeBg: 'rgba(197, 131, 38, 0.12)',
+        badgeColor: '#C58326',
+        badgeBorder: 'rgba(197, 131, 38, 0.35)',
         icon: Smartphone,
         csvPrefix: 'Mobile_App_Sales_Report',
         receiptTitle: 'MOBILE APP SALES REPORT (M)',
@@ -83,9 +83,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
     return {
       title: 'Total Sales & Consolidated Order History',
       badgeText: 'All Income (C + M)',
-      badgeBg: '#ffedd5',
-      badgeColor: '#ea580c',
-      badgeBorder: '#fed7aa',
+      badgeBg: 'rgba(223, 155, 52, 0.15)',
+      badgeColor: '#DF9B34',
+      badgeBorder: 'rgba(223, 155, 52, 0.35)',
       icon: TrendingUp,
       csvPrefix: 'Total_Consolidated_Sales_Report',
       receiptTitle: 'TOTAL CONSOLIDATED SALES REPORT (C + M)',
@@ -234,9 +234,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
           borderRadius: '12px',
           fontSize: '11px',
           fontWeight: '800',
-          background: '#fff7ed',
-          color: '#c2410c',
-          border: '1px solid #fed7aa',
+          background: 'rgba(223, 155, 52, 0.12)',
+          color: '#DF9B34',
+          border: '1px solid rgba(223, 155, 52, 0.35)',
           whiteSpace: 'nowrap'
         }}>
           (C) Cashier
@@ -252,9 +252,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
         borderRadius: '12px',
         fontSize: '11px',
         fontWeight: '800',
-        background: '#dcfce7',
-        color: '#15803d',
-        border: '1px solid #86efac',
+        background: 'rgba(197, 131, 38, 0.12)',
+        color: '#C58326',
+        border: '1px solid rgba(197, 131, 38, 0.35)',
         whiteSpace: 'nowrap'
       }}>
         (M) Mobile
@@ -317,9 +317,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
           borderRadius: '12px',
           fontSize: '11px',
           fontWeight: '600',
-          background: 'rgba(255, 140, 66, 0.12)',
-          color: '#ea580c',
-          border: '1px solid rgba(255, 140, 66, 0.3)'
+          background: 'rgba(180, 83, 9, 0.12)',
+          color: '#B45309',
+          border: '1px solid rgba(180, 83, 9, 0.3)'
         }}>
           <Bike size={12} /> Delivery
         </span>
@@ -335,9 +335,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
           borderRadius: '12px',
           fontSize: '11px',
           fontWeight: '600',
-          background: 'rgba(45, 122, 74, 0.12)',
-          color: '#2d7a4a',
-          border: '1px solid rgba(45, 122, 74, 0.3)'
+          background: 'rgba(197, 131, 38, 0.12)',
+          color: '#C58326',
+          border: '1px solid rgba(197, 131, 38, 0.3)'
         }}>
           <ShoppingBag size={12} /> Takeaway
         </span>
@@ -352,9 +352,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
         borderRadius: '12px',
         fontSize: '11px',
         fontWeight: '600',
-        background: 'rgba(255, 140, 66, 0.12)',
-        color: '#ea580c',
-        border: '1px solid rgba(255, 140, 66, 0.3)'
+        background: 'rgba(223, 155, 52, 0.12)',
+        color: '#DF9B34',
+        border: '1px solid rgba(223, 155, 52, 0.3)'
       }}>
         <Utensils size={12} /> Dine-In
       </span>
@@ -423,28 +423,28 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
       value: `₹${(reportData?.total_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       subtitle: 'All amounts income (C + M)',
       icon: IndianRupee,
-      color: '#ff8c42'
+      color: 'linear-gradient(135deg, #E5A84B 0%, #DF9B34 100%)'
     },
     {
       label: 'Cashier POS Sales (C)',
       value: `₹${(reportData?.cashier_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       subtitle: `${reportData?.cashier_orders_count || 0} orders via Cashier`,
       icon: CreditCard,
-      color: '#ea580c'
+      color: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)'
     },
     {
       label: 'Mobile App Sales (M)',
       value: `₹${(reportData?.mobile_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       subtitle: `${reportData?.mobile_orders_count || 0} orders via Mobile App`,
       icon: Smartphone,
-      color: '#2d7a4a'
+      color: 'linear-gradient(135deg, #C58326 0%, #B45309 100%)'
     },
     {
       label: 'Total Orders / Items Sold',
       value: `${reportData?.total_orders || 0} Orders`,
       subtitle: `${(reportData?.items || []).reduce((acc, i) => acc + (i.qty || 0), 0)} items sold`,
       icon: FileSpreadsheet,
-      color: '#0284c7'
+      color: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
     }
   ] : mode === 'CASHIER' ? [
     {
@@ -452,28 +452,28 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
       value: `₹${(reportData?.total_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       subtitle: 'Cashier POS orders only (C)',
       icon: IndianRupee,
-      color: '#ea580c'
+      color: 'linear-gradient(135deg, #E5A84B 0%, #DF9B34 100%)'
     },
     {
       label: 'Fulfilled Cashier Orders',
       value: reportData?.total_orders ?? 0,
       subtitle: 'Completed / Paid orders',
       icon: CreditCard,
-      color: '#2d7a4a'
+      color: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)'
     },
     {
       label: 'Total Cashier Records',
       value: reportData?.orders?.length ?? (reportData?.total_orders ?? 0),
       subtitle: 'All order records today',
       icon: FileSpreadsheet,
-      color: '#ff8c42'
+      color: 'linear-gradient(135deg, #C58326 0%, #B45309 100%)'
     },
     {
       label: 'Total Qty Sold',
       value: (reportData?.items || []).reduce((acc, i) => acc + (i.qty || 0), 0).toFixed(0),
       subtitle: 'Individual item portions',
       icon: Clock,
-      color: '#f4a261'
+      color: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
     }
   ] : [
     {
@@ -481,28 +481,28 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
       value: `₹${(reportData?.total_sales || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`,
       subtitle: 'Customer mobile app orders (M)',
       icon: IndianRupee,
-      color: '#ff8c42'
+      color: 'linear-gradient(135deg, #E5A84B 0%, #DF9B34 100%)'
     },
     {
       label: 'Fulfilled Mobile Orders',
       value: reportData?.total_orders ?? 0,
       subtitle: 'Completed / Paid orders',
       icon: Smartphone,
-      color: '#2d7a4a'
+      color: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)'
     },
     {
       label: 'Total Mobile Records',
       value: reportData?.orders?.length ?? (reportData?.total_orders ?? 0),
       subtitle: 'All customer records today',
       icon: FileSpreadsheet,
-      color: '#ea580c'
+      color: 'linear-gradient(135deg, #C58326 0%, #B45309 100%)'
     },
     {
       label: 'Total Qty Sold',
       value: (reportData?.items || []).reduce((acc, i) => acc + (i.qty || 0), 0).toFixed(0),
       subtitle: 'Individual item portions',
       icon: Clock,
-      color: '#f4a261'
+      color: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)'
     }
   ];
 
@@ -519,7 +519,7 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
             onClick={onBack}
             style={{
               background: 'var(--surface)',
-              border: '1px solid var(--border)',
+              border: '1px solid rgba(223, 155, 52, 0.25)',
               borderRadius: '8px',
               width: '40px',
               height: '40px',
@@ -527,7 +527,17 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
               alignItems: 'center',
               justifyContent: 'center',
               cursor: 'pointer',
-              flexShrink: 0
+              flexShrink: 0,
+              color: '#1C1917',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#DF9B34';
+              e.currentTarget.style.color = '#DF9B34';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = 'rgba(223, 155, 52, 0.25)';
+              e.currentTarget.style.color = '#1C1917';
             }}
           >
             <ArrowLeft size={20} />
@@ -571,7 +581,7 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                 style={{
                   padding: '9px 14px',
                   borderRadius: '8px',
-                  border: '1px solid var(--border)',
+                  border: '1px solid rgba(223, 155, 52, 0.3)',
                   background: 'var(--surface)',
                   color: 'black',
                   fontWeight: '500',
@@ -585,12 +595,13 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                 style={{
                   padding: '9px 12px',
                   borderRadius: '8px',
-                  border: '1px solid var(--border)',
-                  background: selectedDate === 'all' ? '#FFF5E5' : 'var(--surface)',
+                  border: selectedDate === 'all' ? '1px solid #DF9B34' : '1px solid rgba(223, 155, 52, 0.25)',
+                  background: selectedDate === 'all' ? 'rgba(223, 155, 52, 0.15)' : 'var(--surface)',
                   color: selectedDate === 'all' ? '#DF9B34' : 'var(--text-secondary)',
                   fontWeight: '700',
                   fontSize: '12px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease'
                 }}
               >
                 {selectedDate === 'all' ? 'All Dates (Active)' : 'All Dates'}
@@ -605,16 +616,24 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                padding: '9px 16px',
+                padding: '9px 18px',
                 borderRadius: '8px',
-                background: '#16a34a',
-                border: '1px solid #15803d',
+                background: 'linear-gradient(135deg, #E5A84B 0%, #DF9B34 50%, #C58326 100%)',
+                border: 'none',
                 color: 'white',
-                fontWeight: '600',
+                fontWeight: '700',
                 fontSize: '13px',
                 cursor: 'pointer',
-                boxShadow: '0 2px 4px rgba(22, 163, 74, 0.25)',
-                transition: 'all 0.15s ease'
+                boxShadow: '0 3px 10px rgba(223, 155, 52, 0.35)',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 5px 14px rgba(223, 155, 52, 0.45)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 3px 10px rgba(223, 155, 52, 0.35)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
               title="Download Orders as CSV Report"
             >
@@ -632,12 +651,21 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                 padding: '9px 16px',
                 borderRadius: '8px',
                 background: 'var(--surface)',
-                border: '1px solid var(--border)',
-                color: '#111',
+                border: '1px solid rgba(223, 155, 52, 0.25)',
+                color: '#1C1917',
                 fontWeight: '600',
                 fontSize: '13px',
                 cursor: 'pointer',
-                boxShadow: '0 1px 2px rgba(0,0,0,0.05)'
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#DF9B34';
+                e.currentTarget.style.color = '#DF9B34';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'rgba(223, 155, 52, 0.25)';
+                e.currentTarget.style.color = '#1C1917';
               }}
             >
               <Printer size={16} /> Print Report
@@ -661,7 +689,8 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                   background: 'var(--surface)',
                   padding: '18px',
                   borderRadius: '12px',
-                  border: '1px solid var(--border)',
+                  border: '1px solid rgba(223, 155, 52, 0.2)',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '10px'
@@ -675,7 +704,8 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  color: 'white'
+                  color: 'white',
+                  boxShadow: '0 2px 6px rgba(223, 155, 52, 0.25)'
                 }}>
                   <Icon size={18} />
                 </div>
@@ -701,7 +731,8 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
         <div style={{
           background: 'var(--surface)',
           borderRadius: '12px',
-          border: '1px solid var(--border)',
+          border: '1px solid rgba(223, 155, 52, 0.2)',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
           padding: '20px 24px',
           marginBottom: '24px'
         }}>
@@ -717,28 +748,31 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
               {
                 key: 'DINE_IN',
                 label: 'Dine-In',
-                color: '#ea580c',
-                bgLight: 'rgba(255, 140, 66, 0.08)',
-                borderCol: 'rgba(255, 140, 66, 0.25)',
+                color: '#DF9B34',
+                gradient: 'linear-gradient(135deg, #E5A84B 0%, #DF9B34 100%)',
+                bgLight: 'rgba(223, 155, 52, 0.08)',
+                borderCol: 'rgba(223, 155, 52, 0.25)',
                 icon: Utensils,
               },
               {
                 key: 'TAKEAWAY',
                 label: 'Takeaway',
-                color: '#2d7a4a',
-                bgLight: 'rgba(45, 122, 74, 0.08)',
-                borderCol: 'rgba(45, 122, 74, 0.25)',
+                color: '#C58326',
+                gradient: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
+                bgLight: 'rgba(197, 131, 38, 0.08)',
+                borderCol: 'rgba(197, 131, 38, 0.25)',
                 icon: ShoppingBag,
               },
               {
                 key: 'DELIVERY',
                 label: 'Delivery',
-                color: '#ea580c',
-                bgLight: 'rgba(255, 140, 66, 0.08)',
-                borderCol: 'rgba(255, 140, 66, 0.25)',
+                color: '#B45309',
+                gradient: 'linear-gradient(135deg, #D97706 0%, #B45309 100%)',
+                bgLight: 'rgba(180, 83, 9, 0.08)',
+                borderCol: 'rgba(180, 83, 9, 0.25)',
                 icon: Bike,
               }
-            ].map(({ key, label, color, bgLight, borderCol, icon: TypeIcon }) => {
+            ].map(({ key, label, color, gradient, bgLight, borderCol, icon: TypeIcon }) => {
               const breakdown = reportData?.order_type_breakdown?.[key] || { count: 0, sales: 0.0 };
               const count = breakdown.count || 0;
               const sales = breakdown.sales || 0.0;
@@ -763,12 +797,13 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                     width: '40px',
                     height: '40px',
                     borderRadius: '8px',
-                    background: color,
+                    background: gradient || color,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     color: 'white',
-                    flexShrink: 0
+                    flexShrink: 0,
+                    boxShadow: '0 2px 6px rgba(223, 155, 52, 0.25)'
                   }}>
                     <TypeIcon size={20} />
                   </div>
@@ -794,7 +829,8 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
         <div style={{
           background: 'var(--surface)',
           borderRadius: '12px',
-          border: '1px solid var(--border)',
+          border: '1px solid rgba(223, 155, 52, 0.2)',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
           overflow: 'hidden',
           marginBottom: '32px'
         }}>
@@ -817,9 +853,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                     fontWeight: '700',
                     padding: '2px 8px',
                     borderRadius: '10px',
-                    background: 'rgba(255, 140, 66, 0.1)',
-                    color: '#ea580c',
-                    border: '1px solid rgba(255, 140, 66, 0.25)'
+                    background: 'rgba(223, 155, 52, 0.12)',
+                    color: '#DF9B34',
+                    border: '1px solid rgba(223, 155, 52, 0.3)'
                   }}>
                     {filteredOrders.length} {filteredOrders.length === 1 ? 'Order' : 'Orders'}
                   </span>
@@ -841,12 +877,12 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                   display: 'flex',
                   alignItems: 'center',
                   background: 'white',
-                  border: '1px solid var(--border)',
+                  border: '1px solid rgba(223, 155, 52, 0.3)',
                   borderRadius: '8px',
                   padding: '6px 12px',
                   minWidth: '220px'
                 }}>
-                  <Search size={15} color="#888" style={{ marginRight: '6px' }} />
+                  <Search size={15} color="#DF9B34" style={{ marginRight: '6px' }} />
                   <input
                     id="report-search-input"
                     type="text"
@@ -880,11 +916,11 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                     style={{
                       padding: '8px 12px',
                       borderRadius: '8px',
-                      border: '1px solid #fed7aa',
-                      background: '#fff7ed',
+                      border: '1px solid rgba(223, 155, 52, 0.35)',
+                      background: 'rgba(223, 155, 52, 0.08)',
                       fontSize: '12px',
                       fontWeight: '700',
-                      color: '#c2410c',
+                      color: '#DF9B34',
                       cursor: 'pointer'
                     }}
                   >
@@ -902,7 +938,7 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                   style={{
                     padding: '8px 12px',
                     borderRadius: '8px',
-                    border: '1px solid var(--border)',
+                    border: '1px solid rgba(223, 155, 52, 0.25)',
                     background: 'white',
                     fontSize: '12px',
                     color: 'black',
@@ -926,7 +962,7 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                   style={{
                     padding: '8px 12px',
                     borderRadius: '8px',
-                    border: '1px solid var(--border)',
+                    border: '1px solid rgba(223, 155, 52, 0.25)',
                     background: 'white',
                     fontSize: '12px',
                     color: 'black',
@@ -947,7 +983,7 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                   style={{
                     padding: '8px 12px',
                     borderRadius: '8px',
-                    border: '1px solid var(--border)',
+                    border: '1px solid rgba(223, 155, 52, 0.25)',
                     background: 'white',
                     fontSize: '12px',
                     color: 'black',
@@ -966,25 +1002,25 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '950px' }}>
               <thead>
-                <tr style={{ background: '#f8fafc', borderBottom: '1px solid var(--border)' }}>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Order ID</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Source</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Customer Name</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Phone No</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Type</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Ordered Items</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Date & Time</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Payment</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)' }}>Status</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)', textAlign: 'right' }}>Total (₹)</th>
-                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: 'var(--text-secondary)', textAlign: 'center' }}>Details</th>
+                <tr style={{ background: 'rgba(223, 155, 52, 0.05)', borderBottom: '1px solid rgba(223, 155, 52, 0.2)' }}>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Order ID</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Source</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Customer Name</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Phone No</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Type</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Ordered Items</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Date & Time</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Payment</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917' }}>Status</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917', textAlign: 'right' }}>Total (₹)</th>
+                  <th style={{ padding: '12px 18px', fontSize: '12px', fontWeight: '700', color: '#1C1917', textAlign: 'center' }}>Details</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredOrders.length === 0 ? (
                   <tr>
                     <td colSpan="11" style={{ padding: '48px 20px', textAlign: 'center', color: 'var(--text-secondary)' }}>
-                      <AlertCircle size={28} style={{ margin: '0 auto 8px', color: '#9ca3af' }} />
+                      <AlertCircle size={28} style={{ margin: '0 auto 8px', color: '#DF9B34' }} />
                       <p style={{ margin: 0, fontWeight: '600' }}>No orders found matching the filter criteria.</p>
                       <p style={{ margin: '4px 0 0 0', fontSize: '12px' }}>Try switching dates or clearing the search query.</p>
                     </td>
@@ -997,11 +1033,11 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                         borderBottom: '1px solid var(--border)',
                         transition: 'background 0.15s ease'
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.background = '#fcfcfc')}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(223, 155, 52, 0.04)')}
                       onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                     >
                       {/* Order ID */}
-                      <td style={{ padding: '14px 18px', fontSize: '13px', fontWeight: '700', color: '#ff6b35', whiteSpace: 'nowrap' }}>
+                      <td style={{ padding: '14px 18px', fontSize: '13px', fontWeight: '700', color: '#DF9B34', whiteSpace: 'nowrap' }}>
                         <div>{order.order_id || `ORD-${order.id}`}</div>
                         {order.bill_no && (
                           <div style={{ fontSize: '11px', color: '#6b7280', fontWeight: '500' }}>
@@ -1022,9 +1058,9 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                             width: '24px',
                             height: '24px',
                             borderRadius: '50%',
-                            background: '#fff7ed',
-                            color: '#ea580c',
-                            border: '1px solid #fed7aa',
+                            background: 'rgba(223, 155, 52, 0.15)',
+                            color: '#DF9B34',
+                            border: '1px solid rgba(223, 155, 52, 0.3)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -1093,17 +1129,24 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                         <button
                           onClick={() => setSelectedOrder(order)}
                           style={{
-                            border: '1px solid var(--border)',
+                            border: '1px solid rgba(223, 155, 52, 0.3)',
                             background: 'white',
                             borderRadius: '6px',
-                            padding: '6px 10px',
+                            padding: '6px 12px',
                             cursor: 'pointer',
-                            color: '#475569',
+                            color: '#DF9B34',
                             display: 'inline-flex',
                             alignItems: 'center',
                             gap: '4px',
                             fontSize: '11px',
-                            fontWeight: '600'
+                            fontWeight: '700',
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background = 'rgba(223, 155, 52, 0.1)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = 'white';
                           }}
                           title="View Order Details"
                         >
@@ -1205,7 +1248,7 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
 
               <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '14px', fontWeight: '700' }}>Grand Total</span>
-                <span style={{ fontSize: '18px', fontWeight: '800', color: '#ff6b35' }}>₹{Number(selectedOrder.total_amount || 0).toFixed(2)}</span>
+                <span style={{ fontSize: '18px', fontWeight: '800', color: '#DF9B34' }}>₹{Number(selectedOrder.total_amount || 0).toFixed(2)}</span>
               </div>
             </div>
 
@@ -1213,14 +1256,15 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
               <button
                 onClick={() => setSelectedOrder(null)}
                 style={{
-                  padding: '8px 16px',
+                  padding: '9px 18px',
                   borderRadius: '8px',
                   border: 'none',
-                  background: '#ff6b35',
+                  background: 'linear-gradient(135deg, #E5A84B 0%, #DF9B34 50%, #C58326 100%)',
                   color: 'white',
                   fontWeight: '700',
                   fontSize: '12px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(223, 155, 52, 0.3)'
                 }}
               >
                 Close
