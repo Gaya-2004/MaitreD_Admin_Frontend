@@ -7,6 +7,8 @@ import { fetchCategories, fetchItems, formatMenuData, placeOrder } from '../serv
 import '../styles/pages.css'
 import agentwaiterLogoImg from '../assets/images/agentwaiter_logo.png'
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 function Agent() {
   const navigate = useNavigate()
   const { language, t } = useLanguage()
@@ -335,7 +337,7 @@ function Agent() {
 
     try {
       // Calling our internal backend proxy instead of Google directly
-      const apiUrl = '/api/chat'
+      const apiUrl = `${API_BASE}/api/chat`
 
       const apiMessages = updatedMessages
         .filter(msg => msg.content && typeof msg.content === 'string')
@@ -605,7 +607,7 @@ function Agent() {
                           <div className="corner bl"></div>
                           <div className="corner br"></div>
 
-                          <img src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=dataudipi@upi%26pn=DataUdipi%26am=${msg.finalTotal ? msg.finalTotal.toFixed(2) : '0.00'}%26cu=INR`} alt="Payment QR Code" />
+                          <img src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=maitred@upi%26pn=MaitreD%26am=${msg.finalTotal ? msg.finalTotal.toFixed(2) : '0.00'}%26cu=INR`} alt="Payment QR Code" />
                         </div>
 
                         <p className="scan-text" style={{ marginTop: '15px', color: '#ff3b00', fontWeight: 600 }}>{t('scanToPay')}</p>

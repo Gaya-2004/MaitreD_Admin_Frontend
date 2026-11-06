@@ -132,8 +132,9 @@ const TableManagement = () => {
               display: 'flex', alignItems: 'center', gap: '8px',
               padding: '10px 16px', borderRadius: '8px',
               border: 'none',
-              background: '#ff5a36', color: '#fff',
-              fontWeight: '600', fontSize: '14px', cursor: 'pointer'
+              background: '#DF9B34', color: '#1A1918',
+              fontWeight: '700', fontSize: '14px', cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(223, 155, 52, 0.25)'
             }}>
             <Plus size={16} />
             Add Table
@@ -143,26 +144,26 @@ const TableManagement = () => {
 
       {/* Stats Cards Desktop */}
       <div className="grid-responsive desktop-only" style={{ marginBottom: '32px' }}>
-        <div style={{ background: '#fff0ec', borderRadius: '16px', padding: '24px' }}>
-          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#ff5a36', marginBottom: '4px' }}>{occupiedCount}</h3>
-          <p style={{ fontSize: '15px', color: '#888', fontWeight: '500' }}>Occupied</p>
+        <div style={{ background: '#FDF2E2', border: '1px solid #F6DEC2', borderRadius: '16px', padding: '24px' }}>
+          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#B45309', marginBottom: '4px' }}>{occupiedCount}</h3>
+          <p style={{ fontSize: '15px', color: '#78716C', fontWeight: '500' }}>Occupied</p>
         </div>
-        <div style={{ background: '#e8fdf2', borderRadius: '16px', padding: '24px' }}>
-          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#00a36c', marginBottom: '4px' }}>{vacantCount}</h3>
-          <p style={{ fontSize: '15px', color: '#888', fontWeight: '500' }}>Vacant</p>
+        <div style={{ background: '#FFF5E5', border: '1px solid rgba(223, 155, 52, 0.3)', borderRadius: '16px', padding: '24px' }}>
+          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#DF9B34', marginBottom: '4px' }}>{vacantCount}</h3>
+          <p style={{ fontSize: '15px', color: '#78716C', fontWeight: '500' }}>Vacant</p>
         </div>
-        <div style={{ background: '#f0f5ff', borderRadius: '16px', padding: '24px' }}>
-          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#3b82f6', marginBottom: '4px' }}>{reservedCount}</h3>
-          <p style={{ fontSize: '15px', color: '#888', fontWeight: '500' }}>Reserved</p>
+        <div style={{ background: '#EFF6FF', border: '1px solid #BFDBFE', borderRadius: '16px', padding: '24px' }}>
+          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#2563EB', marginBottom: '4px' }}>{reservedCount}</h3>
+          <p style={{ fontSize: '15px', color: '#78716C', fontWeight: '500' }}>Reserved</p>
         </div>
-        <div style={{ background: '#f5f5f5', borderRadius: '16px', padding: '24px' }}>
-          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#666', marginBottom: '4px' }}>{inactiveCount}</h3>
-          <p style={{ fontSize: '15px', color: '#888', fontWeight: '500' }}>Inactive</p>
+        <div style={{ background: '#FFFFFF', border: '1px solid #EAE7E0', borderRadius: '16px', padding: '24px' }}>
+          <h3 style={{ fontSize: '32px', fontWeight: '700', color: '#78716C', marginBottom: '4px' }}>{inactiveCount}</h3>
+          <p style={{ fontSize: '15px', color: '#78716C', fontWeight: '500' }}>Inactive</p>
         </div>
       </div>
 
       {/* Mobile Live Floor & Search */}
-      <div className="mobile-only-orders" style={{ background: 'linear-gradient(135deg, #ff6b35, #ff4b2b)', borderRadius: '24px', padding: '24px', color: 'white', marginBottom: '24px', position: 'relative', overflow: 'hidden' }}>
+      <div className="mobile-only-orders" style={{ background: 'linear-gradient(135deg, #DF9B34, #C58326)', borderRadius: '24px', padding: '24px', color: 'white', marginBottom: '24px', position: 'relative', overflow: 'hidden' }}>
         <h3 style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '1px', marginBottom: '16px', opacity: 0.9 }}>LIVE FLOOR</h3>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -201,9 +202,9 @@ const TableManagement = () => {
           <input type="text" placeholder="Find a table or order" style={{ border: 'none', outline: 'none', marginLeft: '8px', fontSize: '13px', width: '100%' }} />
         </div>
         <div className="scroll-x" style={{ display: 'flex', gap: '12px', paddingBottom: '8px' }}>
-          <button onClick={() => setActiveFilter('All')} style={{ padding: '6px 16px', borderRadius: '20px', border: activeFilter === 'All' ? 'none' : '1px solid #ddd', background: activeFilter === 'All' ? '#ff6b35' : 'white', color: activeFilter === 'All' ? 'white' : '#666', fontSize: '12px', fontWeight: '600', whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.2s' }}>All {total}</button>
-          <button onClick={() => setActiveFilter('Occupied')} style={{ padding: '6px 16px', borderRadius: '20px', border: activeFilter === 'Occupied' ? 'none' : '1px solid #ddd', background: activeFilter === 'Occupied' ? '#ff6b35' : 'white', color: activeFilter === 'Occupied' ? 'white' : '#666', fontSize: '12px', fontWeight: '600', whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.2s' }}>Occupied {occupiedCount}</button>
-          <button onClick={() => setActiveFilter('Vacant')} style={{ padding: '6px 16px', borderRadius: '20px', border: activeFilter === 'Vacant' ? 'none' : '1px solid #ddd', background: activeFilter === 'Vacant' ? '#ff6b35' : 'white', color: activeFilter === 'Vacant' ? 'white' : '#666', fontSize: '12px', fontWeight: '600', whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.2s' }}>Vacant {vacantCount}</button>
+          <button onClick={() => setActiveFilter('All')} style={{ padding: '6px 16px', borderRadius: '20px', border: activeFilter === 'All' ? 'none' : '1px solid #ddd', background: activeFilter === 'All' ? '#DF9B34' : 'white', color: activeFilter === 'All' ? '#1A1918' : '#666', fontSize: '12px', fontWeight: '700', whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.2s' }}>All {total}</button>
+          <button onClick={() => setActiveFilter('Occupied')} style={{ padding: '6px 16px', borderRadius: '20px', border: activeFilter === 'Occupied' ? 'none' : '1px solid #ddd', background: activeFilter === 'Occupied' ? '#DF9B34' : 'white', color: activeFilter === 'Occupied' ? '#1A1918' : '#666', fontSize: '12px', fontWeight: '700', whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.2s' }}>Occupied {occupiedCount}</button>
+          <button onClick={() => setActiveFilter('Vacant')} style={{ padding: '6px 16px', borderRadius: '20px', border: activeFilter === 'Vacant' ? 'none' : '1px solid #ddd', background: activeFilter === 'Vacant' ? '#DF9B34' : 'white', color: activeFilter === 'Vacant' ? '#1A1918' : '#666', fontSize: '12px', fontWeight: '700', whiteSpace: 'nowrap', cursor: 'pointer', transition: 'all 0.2s' }}>Vacant {vacantCount}</button>
         </div>
       </div>
 
@@ -232,26 +233,29 @@ const TableManagement = () => {
           const isReserved = table.is_active && table.status === 'Reserved' && !table.current_order_id;
           const isVacant = table.is_active && !isOccupied && !isReserved;
 
-          let cardBg = '#ffffff';
-          let borderColor = '#f0f0f0';
-          let statusColor = '#888';
+          let cardBg = '#FFFFFF';
+          let borderColor = '#EAE7E0';
+          let statusColor = '#78716C';
           let displayStatus = 'Inactive';
-          let pillBg = '#f5f5f5';
+          let pillBg = '#F8F7F4';
 
           if (isOccupied) {
-            borderColor = '#ff6b35';
-            statusColor = 'white';
-            pillBg = '#ff6b35';
+            cardBg = '#FDF2E2';
+            borderColor = '#F6DEC2';
+            statusColor = '#B45309';
+            pillBg = '#FEF3C7';
             displayStatus = 'Occupied';
           } else if (isReserved) {
-            borderColor = '#3b82f6';
-            statusColor = 'white';
-            pillBg = '#3b82f6';
+            cardBg = '#EFF6FF';
+            borderColor = '#BFDBFE';
+            statusColor = '#2563EB';
+            pillBg = '#EFF6FF';
             displayStatus = 'Reserved';
           } else if (isVacant) {
-            borderColor = '#10B981';
-            statusColor = 'white';
-            pillBg = '#10B981';
+            cardBg = '#FFFFFF';
+            borderColor = 'rgba(223, 155, 52, 0.28)';
+            statusColor = '#DF9B34';
+            pillBg = '#FFF5E5';
             displayStatus = 'Vacant';
           }
 
@@ -314,7 +318,7 @@ const TableManagement = () => {
                   {displayStatus}
                 </div>
                 {table.qr_code && (
-                  <button onClick={() => openModal(table)} style={{ background: 'none', border: 'none', padding: 0, color: '#ff6b35', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: '700' }}>
+                  <button onClick={() => openModal(table)} style={{ background: 'none', border: 'none', padding: 0, color: '#DF9B34', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: '700' }}>
                      <QrCode size={12} /> View QR
                   </button>
                 )}
@@ -328,7 +332,7 @@ const TableManagement = () => {
                 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                   <label style={{ display: 'flex', alignItems: 'center', gap: '4px', cursor: 'pointer', margin: 0 }}>
-                    <div style={{ position: 'relative', width: '28px', height: '16px', background: table.is_active ? '#10B981' : '#E5E7EB', borderRadius: '8px', transition: 'background 0.2s', flexShrink: 0 }}>
+                    <div style={{ position: 'relative', width: '28px', height: '16px', background: table.is_active ? '#DF9B34' : '#E5E7EB', borderRadius: '8px', transition: 'background 0.2s', flexShrink: 0 }}>
                       <div style={{ position: 'absolute', top: '2px', left: table.is_active ? '14px' : '2px', width: '12px', height: '12px', background: 'white', borderRadius: '50%', transition: 'left 0.2s' }} />
                     </div>
                     <input 
@@ -435,7 +439,7 @@ const TableManagement = () => {
                 </button>
                 <button 
                   type="submit"
-                  style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#ff5a36', color: 'white', fontWeight: '600', cursor: 'pointer' }}
+                  style={{ flex: 1, padding: '12px', borderRadius: '8px', border: 'none', background: '#DF9B34', color: '#1A1918', fontWeight: '700', cursor: 'pointer' }}
                 >
                   {editingTable ? 'Save Changes' : 'Create Table'}
                 </button>

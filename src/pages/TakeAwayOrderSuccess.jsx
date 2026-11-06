@@ -63,7 +63,7 @@ const TakeAwayOrderSuccess = () => {
 
     const checkStatus = async () => {
       try {
-        const res = await fetch(`/api/orders/${activeOrderId}`);
+        const res = await fetch(`${API_BASE}/api/orders/${activeOrderId}`);
         if (!res.ok) return;
         const data = await res.json();
         if (isMounted) {

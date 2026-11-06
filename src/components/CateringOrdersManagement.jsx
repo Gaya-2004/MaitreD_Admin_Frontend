@@ -120,7 +120,7 @@ const CateringOrdersManagement = () => {
       case 'PREPARING':
         return { bg: '#FAF5FF', text: '#7C3AED', border: '#E9D5FF', label: 'Preparing' };
       case 'READY':
-        return { bg: '#FFF7ED', text: '#EA580C', border: '#FED7AA', label: 'Ready for Service' };
+        return { bg: '#FFF5E5', text: '#DF9B34', border: '#FDE68A', label: 'Ready for Service' };
       case 'COMPLETED':
         return { bg: '#ECFDF5', text: '#059669', border: '#A7F3D0', label: 'Service Completed' };
       case 'CANCELLED':
@@ -145,7 +145,7 @@ const CateringOrdersManagement = () => {
       
       {/* Header */}
       <div style={{ marginBottom: '24px' }}>
-        <div style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1px', color: '#EA580C', textTransform: 'uppercase', marginBottom: '6px' }}>
+        <div style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1px', color: '#DF9B34', textTransform: 'uppercase', marginBottom: '6px' }}>
           CATERING / MANAGEMENT
         </div>
         <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#111827', margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>
@@ -168,7 +168,7 @@ const CateringOrdersManagement = () => {
           <div style={{ fontSize: '24px', fontWeight: '800', color: '#111827' }}>
             {reportsLoading ? '...' : reports?.total_orders ?? 0}
           </div>
-          <div style={{ fontSize: '11px', color: '#10B981', marginTop: '4px', fontWeight: '600' }}>
+          <div style={{ fontSize: '11px', color: '#DF9B34', marginTop: '4px', fontWeight: '700' }}>
             {reports?.upcoming_events ?? 0} upcoming events
           </div>
         </div>
@@ -195,7 +195,7 @@ const CateringOrdersManagement = () => {
 
         <div style={{ backgroundColor: '#FFFFFF', padding: '18px 20px', borderRadius: '14px', border: '1px solid #E5E7EB', boxShadow: '0 1px 2px rgba(0,0,0,0.03)' }}>
           <div style={{ fontSize: '12px', fontWeight: '600', color: '#6B7280', marginBottom: '4px' }}>Outstanding Receivables</div>
-          <div style={{ fontSize: '24px', fontWeight: '800', color: '#EA580C' }}>
+          <div style={{ fontSize: '24px', fontWeight: '800', color: '#DF9B34' }}>
             ₹{reportsLoading ? '...' : (reports?.outstanding_receivables ?? 0).toLocaleString()}
           </div>
           <div style={{ fontSize: '11px', color: '#D97706', marginTop: '4px' }}>
@@ -302,7 +302,7 @@ const CateringOrdersManagement = () => {
       {/* Confirmed Orders Table */}
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '260px' }}>
-          <RefreshCw className="animate-spin" size={28} color="#EA580C" />
+          <RefreshCw className="animate-spin" size={28} color="#DF9B34" />
         </div>
       ) : filteredOrders.length === 0 ? (
         <div style={{
@@ -382,7 +382,7 @@ const CateringOrdersManagement = () => {
                       <div style={{ fontWeight: '700', color: '#059669' }}>
                         ₹{Math.round(order.paid_amount).toLocaleString()} paid
                       </div>
-                      <div style={{ fontSize: '11px', color: order.balance_amount > 0 ? '#EA580C' : '#6B7280' }}>
+                      <div style={{ fontSize: '11px', color: order.balance_amount > 0 ? '#DF9B34' : '#6B7280' }}>
                         {order.balance_amount > 0 ? `₹${Math.round(order.balance_amount).toLocaleString()} due` : 'Fully settled'}
                       </div>
                     </td>
@@ -419,9 +419,9 @@ const CateringOrdersManagement = () => {
                       <button
                         onClick={() => openOrderDetail(order.id)}
                         style={{
-                          backgroundColor: '#FFF7ED',
-                          color: '#EA580C',
-                          border: '1px solid #FED7AA',
+                          backgroundColor: '#FFF5E5',
+                          color: '#DF9B34',
+                          border: '1px solid #FDE68A',
                           borderRadius: '6px',
                           padding: '6px 12px',
                           fontSize: '12px',
@@ -517,7 +517,7 @@ const CateringOrdersManagement = () => {
             {/* Content */}
             {detailLoading || !orderDetail ? (
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '360px' }}>
-                <RefreshCw className="animate-spin" size={28} color="#EA580C" />
+                <RefreshCw className="animate-spin" size={28} color="#DF9B34" />
               </div>
             ) : (
               <div style={{ flex: 1, overflowY: 'auto', padding: '24px' }}>
@@ -579,7 +579,7 @@ const CateringOrdersManagement = () => {
                 <div style={{ backgroundColor: '#FFFFFF', padding: '16px', borderRadius: '12px', border: '1px solid #E5E7EB', marginBottom: '24px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                     <div>
-                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#EA580C', textTransform: 'uppercase', marginBottom: '2px' }}>
+                      <div style={{ fontSize: '11px', fontWeight: '800', color: '#DF9B34', textTransform: 'uppercase', marginBottom: '2px' }}>
                         SELECTED PACKAGE
                       </div>
                       <h3 style={{ fontSize: '16px', fontWeight: '800', color: '#111827', margin: 0 }}>
@@ -698,7 +698,7 @@ const CateringOrdersManagement = () => {
 
                     <div>
                       <span style={{ fontSize: '11px', color: '#6B7280' }}>Outstanding Balance</span>
-                      <div style={{ fontSize: '18px', fontWeight: '800', color: orderDetail.financials.balance_amount > 0 ? '#EA580C' : '#059669' }}>
+                      <div style={{ fontSize: '18px', fontWeight: '800', color: orderDetail.financials.balance_amount > 0 ? '#DF9B34' : '#059669' }}>
                         ₹{Math.round(orderDetail.financials.balance_amount).toLocaleString()}
                       </div>
                     </div>

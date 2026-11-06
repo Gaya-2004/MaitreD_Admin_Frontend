@@ -1,13 +1,13 @@
 :root {
-  --bg-main: #f9fafb;
+  --bg-main: #F8F7F4;
   --bg-surface: #ffffff;
-  --border-color: #e5e7eb;
-  --text-main: #111827;
-  --text-muted: #6b7280;
+  --border-color: #EAE7E0;
+  --text-main: #1C1917;
+  --text-muted: #78716C;
   --text-light: #9ca3af;
-  --accent-color: #1f2937;
-  --accent-hover: #374151;
-  --status-green: #10b981;
+  --accent-color: #DF9B34;
+  --accent-hover: #C58326;
+  --status-green: #16A34A;
   --font-family: 'Inter', sans-serif;
 }
 

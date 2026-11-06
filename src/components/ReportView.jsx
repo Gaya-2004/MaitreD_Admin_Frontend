@@ -197,7 +197,7 @@ const ReportView = ({ type, onBack }) => {
           
           <div style={{ textAlign: 'center', marginBottom: '16px' }}>
             <h1 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 4px 0', textTransform: 'uppercase' }}>
-              {reportData.restaurant?.name || 'DATAUDIPI HOTEL'}
+              {reportData.restaurant?.name || 'MAITRED GOURMET BISTRO'}
             </h1>
             <p style={{ margin: '0 0 2px 0', textTransform: 'uppercase' }}>
               {reportData.restaurant?.address || 'MUGALIVAKKAM, CHENNAI'}

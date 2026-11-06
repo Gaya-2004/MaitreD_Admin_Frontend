@@ -586,8 +586,8 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
                   padding: '9px 12px',
                   borderRadius: '8px',
                   border: '1px solid var(--border)',
-                  background: selectedDate === 'all' ? '#FFF7ED' : 'var(--surface)',
-                  color: selectedDate === 'all' ? '#EA580C' : 'var(--text-secondary)',
+                  background: selectedDate === 'all' ? '#FFF5E5' : 'var(--surface)',
+                  color: selectedDate === 'all' ? '#DF9B34' : 'var(--text-secondary)',
                   fontWeight: '700',
                   fontSize: '12px',
                   cursor: 'pointer'
@@ -1245,7 +1245,7 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
         }}>
           <div style={{ textAlign: 'center', marginBottom: '12px' }}>
             <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 4px 0', textTransform: 'uppercase' }}>
-              {reportData?.restaurant?.name || 'DATAUDIPI HOTEL'}
+              {reportData?.restaurant?.name || 'MAITRED GOURMET BISTRO'}
             </h1>
             <p style={{ margin: '0 0 2px 0', textTransform: 'uppercase' }}>
               {reportData?.restaurant?.address || 'MUGALIVAKKAM, CHENNAI'}

@@ -63,7 +63,7 @@ export const translations = {
     ingredients: "Ingredients",
     quantity: "Quantity",
     addToCart: "Add to Cart",
-    copyright: "© 2024 Data Udipi Restaurant. All rights reserved.",
+    copyright: "© 2024 MaitreD Restaurant. All rights reserved.",
     'Breakfast & Dinner': 'Breakfast & Dinner',
     'B&D Specials': 'B&D Specials',
     'Evening Snacks': 'Evening Snacks',

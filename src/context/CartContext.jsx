@@ -38,12 +38,13 @@ export const CartProvider = ({ children }) => {
 
   const [carts, setCarts] = useState(() => {
     localStorage.removeItem('udipi_carts_v2');
-    const saved = sessionStorage.getItem('udipi_carts_session_v1');
+    localStorage.removeItem('maitred_carts_v2');
+    const saved = sessionStorage.getItem('maitred_carts_session_v1') || sessionStorage.getItem('udipi_carts_session_v1');
     return saved ? JSON.parse(saved) : { dinein: [], takeaway: [] };
   });
 
   useEffect(() => {
-    sessionStorage.setItem('udipi_carts_session_v1', JSON.stringify(carts));
+    sessionStorage.setItem('maitred_carts_session_v1', JSON.stringify(carts));
   }, [carts]);
 
   const cart = carts[cartKey] || [];

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import '../styles/components.css'
-import dataudipiTitleImg from '../assets/images/Dataudupi-Title.png'
+import maitredTitleImg from '../assets/images/maitred_logo.png'
 import udupiBannerImg from '../assets/images/udupi-banner.png'
 
 function Header({ tableNumber = '06', showFullHeader = false, useTitleImage = false, showDateTime = true, hideTableIndicator = false, onTableClick }) {
@@ -67,8 +67,8 @@ function Header({ tableNumber = '06', showFullHeader = false, useTitleImage = fa
         style={{ cursor: 'pointer' }}
       >
         <img
-          src={shouldUseTitleImage ? dataudipiTitleImg : udupiBannerImg}
-          alt="Data Udipi Logo"
+          src={shouldUseTitleImage ? maitredTitleImg : udupiBannerImg}
+          alt="MaitreD Logo"
           className={shouldUseTitleImage ? "title-image-header" : "banner-image"}
         />
       </div>

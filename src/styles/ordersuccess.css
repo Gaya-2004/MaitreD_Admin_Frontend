@@ -131,7 +131,7 @@
   padding: 6px 10px;
   border-radius: 999px;
   background: #fff5f2;
-  color: #ff4500;
+  color: #DF9B34;
   border: 1px solid rgba(255, 69, 0, 0.25);
   font-weight: 900;
   font-size: 12px;
@@ -220,7 +220,7 @@
 }
 
 .os-home-btn {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
   box-shadow: 0 6px 24px rgba(255, 78, 0, 0.3);
 }
@@ -259,10 +259,10 @@
 
 /* ── Transaction Failure Styling ── */
 .os-checkmark.failed .os-check-circle.failed {
-  stroke: #ff3b30;
+  stroke: #DF9B34;
 }
 .os-checkmark.failed .os-check-path.failed {
-  stroke: #ff3b30;
+  stroke: #DF9B34;
 }
 .os-home-btn.failed-btn {
   background: #777;
@@ -334,7 +334,7 @@
 }
 
 .os-live-badge {
-  background: #ff3b30;
+  background: #DF9B34;
   color: #fff;
   font-size: 11px;
   font-weight: 800;
@@ -382,7 +382,7 @@
 
 .os-progress-bar {
   height: 100%;
-  background: #ff4e00;
+  background: #DF9B34;
   border-radius: 3px;
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -439,7 +439,7 @@
 }
 
 .os-timeline-step.active .os-step-icon {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
   box-shadow: 0 0 0 4px rgba(255, 78, 0, 0.2);
 }
@@ -449,7 +449,7 @@
   top: 12px;
   left: 23px;
   width: 3px;
-  background: #ff4e00;
+  background: #DF9B34;
   z-index: 1;
   transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -629,7 +629,7 @@
 }
 
 .os-back-link:hover {
-  color: #ff4e00;
+  color: #DF9B34;
 }
 
 /* Toast */
@@ -638,7 +638,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0.9);
-  background: #ff3b30;
+  background: #DF9B34;
   color: #fff;
   padding: 20px 24px;
   border-radius: 12px;

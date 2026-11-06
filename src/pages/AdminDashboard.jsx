@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 import VoiceWidget from '../components/VoiceWidget';
 import AddressAutocomplete from '../components/AddressAutocomplete';
-import DataudipiTitle from '../assets/Dataudupi-Title.png';
+import MaitreDLogo from '../assets/maitred_logo.png';
 import DataManagement from '../components/DataManagement';
 import { restaurantService, tableService, reportsService, managerService, waiterService } from '../services/api';
 import {
@@ -42,12 +42,16 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
+import { getTimeBasedGreeting, getUserRoleTitle } from '../utils/greeting';
 
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('dashboard');
+
+  const userRole = getUserRoleTitle(user);
+  const timeGreeting = getTimeBasedGreeting();
   const [tables, setTables] = useState([]);
   const [tablesLoading, setTablesLoading] = useState(true);
   const [tablesError, setTablesError] = useState(null);
@@ -253,7 +257,7 @@ const AdminDashboard = () => {
       value: hotels.length.toString(),
       change: 'Active on platform',
       icon: Building2,
-      color: '#ff8c42',
+      color: '#DF9B34',
     },
     {
       label: 'Active Managers',
@@ -267,7 +271,7 @@ const AdminDashboard = () => {
       value: '₹' + (reports?.summary?.today_revenue?.value || 0).toLocaleString(),
       change: reports?.summary?.today_revenue?.change || '0%',
       icon: DollarSign,
-      color: '#ff8c42',
+      color: '#DF9B34',
     },
     {
       label: 'Active Tables',
@@ -283,7 +287,7 @@ const AdminDashboard = () => {
       label: 'Today\'s Platform Revenue',
       value: '₹' + (reports?.summary?.today_revenue?.value || 0).toLocaleString(),
       change: reports?.summary?.today_revenue?.change || '0%',
-      color: '#ff8c42',
+      color: '#DF9B34',
       icon: '₹',
     },
     {
@@ -297,7 +301,7 @@ const AdminDashboard = () => {
       label: 'Avg. Order Value',
       value: '₹' + Math.round(reports?.summary?.avg_order_value?.value || 0).toLocaleString(),
       change: reports?.summary?.avg_order_value?.change || '0%',
-      color: '#ff8c42',
+      color: '#DF9B34',
       icon: '💳',
     },
     {
@@ -314,7 +318,7 @@ const AdminDashboard = () => {
     name: pm.name,
     value: pm.value,
     percentage: ((pm.value || 0) / paymentTotal) * 100,
-    color: ['#ff8c42', '#2d7a4a', '#ff6b6b', '#6b7280'][idx % 4]
+    color: ['#DF9B34', '#2d7a4a', '#ff6b6b', '#6b7280'][idx % 4]
   })) || [];
 
   const topHotels = (reports?.top_hotels || []).map((hotel) => ({
@@ -664,7 +668,7 @@ const AdminDashboard = () => {
         {/* Logo */}
         <div className="sidebar-logo">
           {sidebarOpen && (
-            <img src={DataudipiTitle} alt="Data Udipi" className="logo-title-image" />
+            <img src={MaitreDLogo} alt="MaitreD" className="logo-title-image" style={{ height: '36px', objectFit: 'contain' }} />
           )}
           <div className="logo-symbol">ADMIN</div>
 
@@ -692,7 +696,7 @@ const AdminDashboard = () => {
                       position: sidebarOpen ? 'static' : 'absolute',
                       top: sidebarOpen ? 'auto' : '6px',
                       right: sidebarOpen ? 'auto' : '6px',
-                      background: '#ff6b35',
+                      background: '#DF9B34',
                       color: 'white',
                       fontSize: '11px',
                       fontWeight: '700',
@@ -713,7 +717,7 @@ const AdminDashboard = () => {
         {/* Footer */}
         <div className="sidebar-footer">
           <p>
-            Powered by Data Udipi
+            Powered by MaitreD
           </p>
           <button
             onClick={handleLogout}
@@ -731,10 +735,10 @@ const AdminDashboard = () => {
         {/* Mobile Header (Visible only on small screens via CSS) */}
         <div className="admin-header-mobile">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '24px' }}>
-            <img src={DataudipiTitle} alt="Data Udipi" style={{ height: '24px' }} />
-            <div className="admin-header-badge" style={{ position: 'static' }}>ADMIN</div>
+            <img src={MaitreDLogo} alt="MaitreD" style={{ height: '28px', objectFit: 'contain' }} />
+            <div className="admin-header-badge" style={{ position: 'static' }}>{userRole.toUpperCase()}</div>
           </div>
-          <h1>{activePage === 'dashboard' ? 'Dashboard' :
+          <h1>{activePage === 'dashboard' ? `${timeGreeting}! ${userRole}` :
             activePage === 'hotels' ? 'Hotels & Venues' :
               activePage === 'managers' ? 'Managers' :
                 activePage === 'waiters' ? 'Waiters & Staff' :
@@ -759,7 +763,7 @@ const AdminDashboard = () => {
               {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             <div className="admin-header-title">
-              <h1>Super Admin Dashboard</h1>
+              <h1>{timeGreeting}! {userRole}</h1>
               <p>Platform-wide overview and management</p>
             </div>
           </div>
@@ -831,7 +835,7 @@ const AdminDashboard = () => {
                       onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)'}
                     >
                       <div style={{ flex: 2, display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#ff6b35', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: '14px', flexShrink: 0 }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#DF9B34', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700', fontSize: '14px', flexShrink: 0 }}>
                           {idx + 1}
                         </div>
                         <div>
@@ -1027,7 +1031,7 @@ const AdminDashboard = () => {
                       <div style={{ padding: '20px' }}>
                         {/* Top row: Icon, Actions, Active Pill */}
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                          <div style={{ width: '40px', height: '40px', background: '#ff8c42', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
+                          <div style={{ width: '40px', height: '40px', background: '#DF9B34', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
                             <Building2 size={20} />
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -1054,7 +1058,7 @@ const AdminDashboard = () => {
                             <p style={{ margin: 0, fontSize: '11px', color: '#888' }}>Orders</p>
                           </div>
                           <div style={{ textAlign: 'center' }}>
-                            <p style={{ margin: '0 0 4px', fontSize: '14px', fontWeight: '700', color: '#ff6b35' }}>₹{(hotel.revenue || 0).toLocaleString()}</p>
+                            <p style={{ margin: '0 0 4px', fontSize: '14px', fontWeight: '700', color: '#DF9B34' }}>₹{(hotel.revenue || 0).toLocaleString()}</p>
                             <p style={{ margin: 0, fontSize: '11px', color: '#888' }}>Revenue</p>
                           </div>
                         </div>
@@ -1354,7 +1358,7 @@ const AdminDashboard = () => {
                       .toUpperCase()
                       .slice(0, 2);
 
-                    const colors = ['#ff8c42', '#2d7a4a', '#0066cc', '#9933cc', '#ff6b6b', '#4ecdc4'];
+                    const colors = ['#DF9B34', '#2d7a4a', '#0066cc', '#9933cc', '#ff6b6b', '#4ecdc4'];
                     const colorIndex = manager.id % colors.length;
                     const bgColor = colors[colorIndex];
 
@@ -1438,7 +1442,7 @@ const AdminDashboard = () => {
 
                         {/* Assigned Hotel Card Block */}
                         <div style={{ background: '#f8f9fa', borderRadius: '8px', padding: '12px', display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                          <Building2 size={18} color="#ff8c42" />
+                          <Building2 size={18} color="#DF9B34" />
                           <p style={{ margin: 0, color: '#333', fontSize: '13px', fontWeight: '600' }}>
                             {manager.restaurant_name || 'No Hotel Assigned'}
                           </p>
@@ -1768,7 +1772,7 @@ const AdminDashboard = () => {
                         width: '32px',
                         height: '32px',
                         borderRadius: '50%',
-                        background: pendingWaiters.length > 0 ? '#ff922b' : '#64748b',
+                        background: pendingWaiters.length > 0 ? '#DF9B34' : '#64748b',
                         color: 'white',
                         display: 'flex',
                         alignItems: 'center',
@@ -1791,7 +1795,7 @@ const AdminDashboard = () => {
                   {pendingWaiters.length > 0 && (
                     <span
                       style={{
-                        background: '#ff922b',
+                        background: '#DF9B34',
                         color: 'white',
                         borderRadius: '12px',
                         padding: '4px 10px',
@@ -1826,13 +1830,13 @@ const AdminDashboard = () => {
                               {w.name}
                             </h4>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#666', fontSize: '13px' }}>
-                              <Phone size={14} color="#ff8c42" />
+                              <Phone size={14} color="#DF9B34" />
                               <span>{w.phone ? `+91 ${w.phone}` : 'No phone'}</span>
                             </div>
                           </div>
                           <span
                             style={{
-                              background: '#fff3bf',
+                              background: '#FFF5E5',
                               color: '#d9480f',
                               fontSize: '10px',
                               fontWeight: '700',
@@ -2004,7 +2008,7 @@ const AdminDashboard = () => {
                         .toUpperCase()
                         .slice(0, 2);
 
-                      const colors = ['#2d7a4a', '#ff8c42', '#0066cc', '#9933cc', '#ff6b6b', '#4ecdc4'];
+                      const colors = ['#2d7a4a', '#DF9B34', '#0066cc', '#9933cc', '#ff6b6b', '#4ecdc4'];
                       const bgColor = colors[waiter.id % colors.length];
 
                       return (
@@ -2111,7 +2115,7 @@ const AdminDashboard = () => {
                             }}
                           >
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                              <Building2 size={16} color="#ff8c42" />
+                              <Building2 size={16} color="#DF9B34" />
                               <span style={{ color: '#333', fontSize: '13px', fontWeight: '600' }}>
                                 {waiter.restaurant_name || 'Unassigned'}
                               </span>
@@ -2124,7 +2128,7 @@ const AdminDashboard = () => {
                               style={{
                                 background: 'transparent',
                                 border: 'none',
-                                color: '#ff8c42',
+                                color: '#DF9B34',
                                 fontSize: '12px',
                                 fontWeight: '600',
                                 cursor: 'pointer',
@@ -2489,14 +2493,14 @@ const AdminDashboard = () => {
                           />
                           <Tooltip 
                             contentStyle={{ background: '#FFF', borderRadius: '12px', border: 'none', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}
-                            itemStyle={{ color: '#ff8c42', fontWeight: 700 }}
+                            itemStyle={{ color: '#DF9B34', fontWeight: 700 }}
                             labelStyle={{ color: 'var(--text-secondary)', marginBottom: '4px' }}
                             formatter={(value) => [`₹${value.toLocaleString()}`, 'Revenue']}
                             cursor={{ fill: 'rgba(255, 140, 66, 0.04)' }}
                           />
                           <Bar 
                             dataKey="revenue" 
-                            fill="#ff8c42" 
+                            fill="#DF9B34" 
                             radius={[6, 6, 0, 0]}
                             barSize={32}
                           />
@@ -2577,7 +2581,7 @@ const AdminDashboard = () => {
                         <td className="desktop-only" style={{ padding: '18px 0', textAlign: 'right', fontSize: '14px', color: '#2d7a4a', fontWeight: '700' }}>{row.growth}</td>
                         <td style={{ padding: '18px 0', textAlign: 'right' }}>
                           <div style={{ width: '100px', height: '10px', borderRadius: '999px', background: '#f4f4f6', marginLeft: 'auto' }}>
-                            <div style={{ width: `${Math.min(Math.max(parseInt(row.growth.replace('+', '').replace('%', '')), 0), 100)}%`, height: '100%', borderRadius: '999px', background: '#ff8c42' }} />
+                            <div style={{ width: `${Math.min(Math.max(parseInt(row.growth.replace('+', '').replace('%', '')), 0), 100)}%`, height: '100%', borderRadius: '999px', background: '#DF9B34' }} />
                           </div>
                         </td>
                       </tr>
@@ -2604,7 +2608,7 @@ const AdminDashboard = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '8px',
-                    background: '#ff6b35',
+                    background: '#DF9B34',
                     color: 'white',
                     padding: '10px 20px',
                     borderRadius: '24px',
@@ -2625,7 +2629,7 @@ const AdminDashboard = () => {
                 {/* Profile Card */}
                 <div style={{ background: 'white', padding: '24px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid rgba(15, 23, 42, 0.08)', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.03)' }}>
                   <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ff6b35', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#DF9B34', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold' }}>
                       SA
                     </div>
                     <div>
@@ -2635,7 +2639,7 @@ const AdminDashboard = () => {
                   </div>
                   <button
                     onClick={handleLogout}
-                    style={{ background: '#fff0ec', color: '#ff6b35', border: 'none', padding: '8px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+                    style={{ background: '#FFF5E5', color: '#DF9B34', border: 'none', padding: '8px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
                   >
                     Sign out
                   </button>
@@ -2644,7 +2648,7 @@ const AdminDashboard = () => {
                 {/* General Section */}
                 <div style={{ background: '#FFFFFF', borderRadius: '16px', padding: '24px', border: '1px solid rgba(15, 23, 42, 0.08)', boxShadow: '0 4px 20px rgba(15, 23, 42, 0.03)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#ff6b35', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: '#DF9B34', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Globe size={20} />
                     </div>
                     <h2 style={{ fontSize: '18px', fontWeight: '700', margin: 0 }}>General</h2>
@@ -2730,7 +2734,7 @@ const AdminDashboard = () => {
                         <h4 style={{ fontSize: '14px', fontWeight: '600', marginBottom: '4px', margin: 0, color: '#111827' }}>Daily Backups</h4>
                         <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0 }}>Schedule automatic database backups</p>
                       </div>
-                      <div style={{ width: '44px', height: '24px', background: '#ff6b35', borderRadius: '12px', position: 'relative', cursor: 'pointer' }}>
+                      <div style={{ width: '44px', height: '24px', background: '#DF9B34', borderRadius: '12px', position: 'relative', cursor: 'pointer' }}>
                         <div style={{ width: '20px', height: '20px', background: 'white', borderRadius: '50%', position: 'absolute', top: '2px', left: '22px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }} />
                       </div>
                     </div>
@@ -2778,7 +2782,7 @@ const AdminDashboard = () => {
                     position: 'absolute',
                     top: '2px',
                     right: '18px',
-                    background: '#ff6b35',
+                    background: '#DF9B34',
                     color: 'white',
                     fontSize: '10px',
                     fontWeight: '700',

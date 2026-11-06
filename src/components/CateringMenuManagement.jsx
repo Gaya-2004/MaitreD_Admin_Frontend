@@ -332,7 +332,7 @@ const CateringMenuManagement = () => {
       {/* Breadcrumb & Header matching wireframe */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
         <div>
-          <div style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1px', color: '#EA580C', textTransform: 'uppercase', marginBottom: '6px' }}>
+          <div style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1px', color: '#DF9B34', textTransform: 'uppercase', marginBottom: '6px' }}>
             CATERING / PACKAGES
           </div>
           <h1 style={{ fontSize: '28px', fontWeight: '800', color: '#111827', margin: '0 0 6px 0', letterSpacing: '-0.5px' }}>
@@ -349,19 +349,25 @@ const CateringMenuManagement = () => {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '8px',
-            backgroundColor: '#EA580C',
+            backgroundColor: '#DF9B34',
             color: '#FFFFFF',
             border: 'none',
             borderRadius: '10px',
             padding: '12px 20px',
             fontSize: '14px',
-            fontWeight: '600',
+            fontWeight: '700',
             cursor: 'pointer',
-            boxShadow: '0 2px 8px rgba(234, 88, 12, 0.25)',
+            boxShadow: '0 4px 12px rgba(223, 155, 52, 0.3)',
             transition: 'all 0.2s ease'
           }}
-          onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#C2410C'}
-          onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#EA580C'}
+          onMouseOver={(e) => {
+            e.currentTarget.style.backgroundColor = '#C58326';
+            e.currentTarget.style.boxShadow = '0 6px 16px rgba(223, 155, 52, 0.45)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.backgroundColor = '#DF9B34';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(223, 155, 52, 0.3)';
+          }}
         >
           <Plus size={18} strokeWidth={2.5} />
           <span>Create package</span>
@@ -390,9 +396,9 @@ const CateringMenuManagement = () => {
                 borderRadius: '24px',
                 fontSize: '13px',
                 fontWeight: isActive ? '700' : '500',
-                backgroundColor: isActive ? '#FFF7ED' : '#F9FAFB',
-                color: isActive ? '#EA580C' : '#4B5563',
-                border: isActive ? '1.5px solid #EA580C' : '1px solid #E5E7EB',
+                backgroundColor: isActive ? '#FFF5E5' : '#F9FAFB',
+                color: isActive ? '#DF9B34' : '#4B5563',
+                border: isActive ? '1.5px solid #DF9B34' : '1px solid #E5E7EB',
                 cursor: 'pointer',
                 transition: 'all 0.15s ease'
               }}
@@ -400,7 +406,7 @@ const CateringMenuManagement = () => {
               <span>{tab.label}</span>
               <span style={{ 
                 fontSize: '11px', 
-                backgroundColor: isActive ? '#EA580C' : '#E5E7EB', 
+                backgroundColor: isActive ? '#DF9B34' : '#E5E7EB', 
                 color: isActive ? '#FFFFFF' : '#4B5563', 
                 borderRadius: '12px', 
                 padding: '1px 6px',
@@ -501,7 +507,7 @@ const CateringMenuManagement = () => {
       {/* Package Cards Grid matching wireframe */}
       {loading ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '240px' }}>
-          <RefreshCw className="animate-spin" size={28} color="#EA580C" />
+          <RefreshCw className="animate-spin" size={28} color="#DF9B34" />
         </div>
       ) : filteredPackages.length === 0 ? (
         <div style={{
@@ -517,15 +523,19 @@ const CateringMenuManagement = () => {
           <button
             onClick={openCreateModal}
             style={{
-              backgroundColor: '#EA580C',
+              backgroundColor: '#DF9B34',
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '8px',
-              padding: '8px 16px',
+              padding: '10px 18px',
               fontSize: '13px',
-              fontWeight: '600',
-              cursor: 'pointer'
+              fontWeight: '700',
+              cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(223, 155, 52, 0.25)',
+              transition: 'all 0.2s ease'
             }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#C58326'}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#DF9B34'}
           >
             + Create package
           </button>
@@ -569,11 +579,11 @@ const CateringMenuManagement = () => {
                       width: '40px',
                       height: '40px',
                       borderRadius: '10px',
-                      backgroundColor: '#FFF7ED',
+                      backgroundColor: '#FFF5E5',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#EA580C'
+                      color: '#DF9B34'
                     }}>
                       <Package size={22} strokeWidth={2} />
                     </div>
@@ -599,7 +609,7 @@ const CateringMenuManagement = () => {
                         width: '6px',
                         height: '6px',
                         borderRadius: '50%',
-                        backgroundColor: isAvailable ? '#10B981' : '#F59E0B'
+                        backgroundColor: isAvailable ? '#DF9B34' : '#9CA3AF'
                       }} />
                       <span>{isAvailable ? 'Available' : 'Draft'}</span>
                     </button>
@@ -681,7 +691,7 @@ const CateringMenuManagement = () => {
                       style={{
                         backgroundColor: 'transparent',
                         border: 'none',
-                        color: '#EA580C',
+                        color: '#DF9B34',
                         fontSize: '13px',
                         fontWeight: '700',
                         cursor: 'pointer',
@@ -894,7 +904,7 @@ const CateringMenuManagement = () => {
                     id="pkg_availability"
                     checked={formData.is_available}
                     onChange={(e) => setFormData({ ...formData, is_available: e.target.checked })}
-                    style={{ width: '16px', height: '16px', accentColor: '#EA580C', cursor: 'pointer' }}
+                    style={{ width: '16px', height: '16px', accentColor: '#DF9B34', cursor: 'pointer' }}
                   />
                   <label htmlFor="pkg_availability" style={{ fontSize: '13px', fontWeight: '600', color: '#374151', cursor: 'pointer' }}>
                     Available for Booking
@@ -918,9 +928,9 @@ const CateringMenuManagement = () => {
                     type="button"
                     onClick={handleAddItemRow}
                     style={{
-                      backgroundColor: '#FFF7ED',
-                      color: '#EA580C',
-                      border: '1px solid #FDBA74',
+                      backgroundColor: '#FFF5E5',
+                      color: '#DF9B34',
+                      border: '1px solid #FDE68A',
                       borderRadius: '8px',
                       padding: '6px 12px',
                       fontSize: '12px',
@@ -992,7 +1002,7 @@ const CateringMenuManagement = () => {
                                 type="checkbox"
                                 checked={item.is_swappable}
                                 onChange={(e) => handleItemFieldChange(idx, 'is_swappable', e.target.checked)}
-                                style={{ accentColor: '#EA580C', cursor: 'pointer' }}
+                                style={{ accentColor: '#DF9B34', cursor: 'pointer' }}
                               />
                             </td>
                             <td style={{ padding: '8px 12px', textAlign: 'center' }}>
@@ -1000,7 +1010,7 @@ const CateringMenuManagement = () => {
                                 type="checkbox"
                                 checked={item.is_removable}
                                 onChange={(e) => handleItemFieldChange(idx, 'is_removable', e.target.checked)}
-                                style={{ accentColor: '#EA580C', cursor: 'pointer' }}
+                                style={{ accentColor: '#DF9B34', cursor: 'pointer' }}
                               />
                             </td>
                             <td style={{ padding: '8px 12px' }}>
@@ -1079,13 +1089,16 @@ const CateringMenuManagement = () => {
                     padding: '9px 22px',
                     borderRadius: '8px',
                     border: 'none',
-                    backgroundColor: '#EA580C',
+                    backgroundColor: '#DF9B34',
                     color: '#FFFFFF',
                     fontSize: '13px',
                     fontWeight: '700',
                     cursor: submitting ? 'not-allowed' : 'pointer',
-                    boxShadow: '0 2px 6px rgba(234, 88, 12, 0.25)'
+                    boxShadow: '0 4px 12px rgba(223, 155, 52, 0.3)',
+                    transition: 'all 0.2s ease'
                   }}
+                  onMouseOver={(e) => !submitting && (e.currentTarget.style.backgroundColor = '#C58326')}
+                  onMouseOut={(e) => !submitting && (e.currentTarget.style.backgroundColor = '#DF9B34')}
                 >
                   {submitting ? 'Saving...' : editingPackage ? 'Update Package' : 'Create Package'}
                 </button>

@@ -5,6 +5,8 @@ import { useCart } from '../context/CartContext';
 
 import '../styles/payment.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -97,7 +99,7 @@ const Payment = () => {
       };
 
       try {
-        const res = await fetch(`/api/orders`, {
+        const res = await fetch(`${API_BASE}/api/orders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderData)
@@ -161,7 +163,7 @@ const Payment = () => {
 
     try {
       // 1. Create order in our DB first
-      const orderRes = await fetch(`/api/orders`, {
+      const orderRes = await fetch(`${API_BASE}/api/orders`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
@@ -186,14 +188,14 @@ const Payment = () => {
       // 3. Fetch Razorpay Key ID and Create Razorpay order on backend
       let razorpayKeyId = '';
       try {
-        const keyRes = await fetch(`/api/razorpay-key`);
+        const keyRes = await fetch(`${API_BASE}/api/razorpay-key`);
         const keyData = await keyRes.json();
         razorpayKeyId = keyData.key_id;
       } catch (keyErr) {
         console.error('Failed to fetch Razorpay key from backend:', keyErr);
       }
 
-      const rzpOrderRes = await fetch(`/api/create-razorpay-order`, {
+      const rzpOrderRes = await fetch(`${API_BASE}/api/create-razorpay-order`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ amount: total })
@@ -213,7 +215,7 @@ const Payment = () => {
         key: razorpayKeyId,
         amount: rzpOrder.success ? rzpOrder.order.amount : total * 100,
         currency: rzpOrder.success ? rzpOrder.order.currency : 'INR',
-        name: 'Data Udipi',
+        name: 'MaitreD',
         description: 'Food Order Payment',
         image: '',
         ...(rzpOrder.success && { order_id: rzpOrder.order.id }),
@@ -252,7 +254,7 @@ const Payment = () => {
   };
 
   // UPI payment string (not used for display anymore but kept for any other references if needed)
-  const upiQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=dataudipi@upi%26pn=DataUdipi%26am=${total.toFixed(2)}%26cu=INR`;
+  const upiQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=maitred@upi%26pn=MaitreD%26am=${total.toFixed(2)}%26cu=INR`;
 
   return (
     <div className="payment-page">

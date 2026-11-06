@@ -41,7 +41,7 @@ const ActiveOrderBanner = () => {
       bottom: '100px', // Above the AIAssistant bubble and mobile navigation
       left: '50%',
       transform: 'translateX(-50%)',
-      backgroundColor: '#ff4e00',
+      backgroundColor: '#DF9B34',
       color: 'white',
       padding: '12px 24px',
       borderRadius: '50px',
@@ -57,7 +57,7 @@ const ActiveOrderBanner = () => {
       <span><i className="fa-solid fa-bell"></i> You have an active order ({activeOrderId})</span>
       <button style={{
         background: 'white',
-        color: '#ff4e00',
+        color: '#DF9B34',
         border: 'none',
         padding: '6px 12px',
         borderRadius: '20px',

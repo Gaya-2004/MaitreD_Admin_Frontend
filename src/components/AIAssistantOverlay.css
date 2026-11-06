@@ -99,7 +99,7 @@
 }
 
 .ai-trigger-btn.move-mode {
-  border: 3px solid #ff4e00;
+  border: 3px solid #DF9B34;
   box-shadow: 0 0 20px rgba(255, 78, 0, 0.4);
   animation: aiMovePulse 1.5s infinite;
 }
@@ -123,7 +123,7 @@
   top: -25px;
   left: 50%;
   transform: translateX(-50%);
-  background: #ff4e00;
+  background: #DF9B34;
   color: white;
   font-size: 10px;
   font-weight: 800;
@@ -257,7 +257,7 @@
 .ai-wave-line {
   width: 3px;
   height: 18px;
-  background: linear-gradient(to top, #ff4e00, #ff9050);
+  background: linear-gradient(to top, #DF9B34, #F7C873);
   border-radius: 2px;
   animation: aiWave 0.8s infinite alternate ease-in-out;
 }
@@ -428,12 +428,12 @@
 .ai-action-pill-original:hover {
   transform: translateX(3px);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  border-color: #ffd5c5;
-  background: #fff9f7;
+  border-color: #FFE7C2;
+  background: #FFFBF5;
 }
 
 .ai-action-icon-wrap {
-  background: #ff4e00;
+  background: #DF9B34;
   color: white;
   width: 26px;
   height: 26px;
@@ -457,7 +457,7 @@
   display: flex;
   align-items: center;
   background: #fff;
-  border: 1.5px solid #ff4e00;
+  border: 1.5px solid #DF9B34;
   border-radius: 50px;
   padding: 6px 8px;
   box-shadow: 0 4px 18px rgba(255, 78, 0, 0.12);
@@ -484,7 +484,7 @@
   height: 38px;
   border-radius: 50%;
   border: none;
-  background: #ff4e00;
+  background: #DF9B34;
   color: white;
   cursor: pointer;
   display: flex;
@@ -501,7 +501,7 @@
 }
 
 .ai-mic-small.listening {
-  background: #ff4e00;
+  background: #DF9B34;
   color: white;
   animation: aiMicPulse 1.5s infinite;
 }
@@ -576,9 +576,9 @@
 }
 
 .ai-tab-btn.active {
-  background: #ff4e00;
+  background: #DF9B34;
   color: white;
-  border-color: #ff4e00;
+  border-color: #DF9B34;
   box-shadow: 0 4px 12px rgba(255, 78, 0, 0.2);
 }
 
@@ -660,7 +660,7 @@
 .ai-card-price {
   font-size: 13px;
   /* Reduced from 14px */
-  color: #ff4e00;
+  color: #DF9B34;
   font-weight: 800;
   margin: 0;
 }
@@ -681,7 +681,7 @@
 .ai-card-total-val {
   font-size: 16px;
   /* Reduced from 18px */
-  color: #ff4e00;
+  color: #DF9B34;
   font-weight: 800;
   margin: 0;
   line-height: 1;
@@ -713,7 +713,7 @@
 }
 
 .ai-card-stepper button:last-child {
-  background: #ff4e00;
+  background: #DF9B34;
   color: white;
 }
 
@@ -869,7 +869,7 @@
 .ai-voice-wave-symbol .wave-bar {
   width: 3px;
   height: 16px;
-  background: #ff4e00;
+  background: #DF9B34;
   border-radius: 3px;
   animation: waveBarBounce 0.8s ease-in-out infinite alternate;
 }
@@ -897,7 +897,7 @@
 
 /* Trigger button pulsing animation while listening */
 .ai-trigger-btn.is-listening {
-  border: 2px solid #ff4e00;
+  border: 2px solid #DF9B34;
   box-shadow: 0 0 0 0 rgba(255, 78, 0, 0.7);
   animation: triggerListeningPulse 1.4s infinite cubic-bezier(0.66, 0, 0, 1);
 }
@@ -910,8 +910,8 @@
 
 .listening-wave-bubble {
   background: #fff;
-  border: 1.5px solid #ff4e00 !important;
-  color: #ff4e00 !important;
+  border: 1.5px solid #DF9B34 !important;
+  color: #DF9B34 !important;
   font-weight: 600;
   display: flex;
   align-items: center;

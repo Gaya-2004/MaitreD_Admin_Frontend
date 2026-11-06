@@ -91,21 +91,22 @@
 }
 
 .add-btn {
-    background: linear-gradient(135deg, var(--primary-green) 0%, #1a5a1e 100%);
+    background: linear-gradient(135deg, #DF9B34 0%, #C58326 100%);
     border: none;
-    color: white;
+    color: #1A1918;
     padding: 10px 25px;
     border-radius: 25px;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
     font-family: sans-serif;
+    box-shadow: 0 2px 8px rgba(223, 155, 52, 0.3);
 }
 
 .add-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(47, 136, 44, 0.4);
+    box-shadow: 0 4px 14px rgba(223, 155, 52, 0.45);
 }
 
 /* Packages Grid */
@@ -256,7 +257,7 @@
 }
 
 .mascot-badge {
-    background: #ff4e00;
+    background: #DF9B34;
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -355,7 +356,7 @@
 
 .user-icon {
     margin-left: 15px;
-    background: #ff4e00;
+    background: #DF9B34;
     color: white;
     font-size: 1.2rem;
 }
@@ -402,7 +403,7 @@
 }
 
 .listening-indicator .dot.red {
-    background: #ff4e00;
+    background: #DF9B34;
 }
 
 .listening-indicator .dot.gray {
@@ -440,7 +441,7 @@
 }
 
 .mic-btn {
-    background: #ff4e00;
+    background: #DF9B34;
     border: none;
     width: 45px;
     height: 45px;
@@ -614,9 +615,9 @@
 
 /* ACTIVE */
 .menu-card.active {
-    background: #ff3b00;
+    background: #DF9B34;
     color: white;
-    border-color: #ff3b00;
+    border-color: #DF9B34;
 }
 
 /* IMAGE */
@@ -707,12 +708,12 @@
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
-.bg-\[\#FF3400\] { background-color: #FF3400; }
-.border-\[\#FF3400\] { border-color: #FF3400; }
+.bg-\[\#DF9B34\] { background-color: #DF9B34; }
+.border-\[\#DF9B34\] { border-color: #DF9B34; }
 .bg-\[\#F8F8F8\] { background-color: #F8F8F8; }
 .border-\[\#E4E4E4\] { border-color: #E4E4E4; }
 
-.hover\:border-\[\#FF3400\]:hover { border-color: #FF3400; }
+.hover\:border-\[\#DF9B34\]:hover { border-color: #DF9B34; }
 .hover\:shadow-md:hover { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
 
 /* Menu List Header & Title */
@@ -788,7 +789,7 @@
 .menu-item-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    border-color: #ff4e0022;
+    border-color: #DF9B3422;
 }
 
 .menu-item-header {
@@ -875,13 +876,13 @@
 .menu-item-price {
     font-size: 1.4rem;
     font-weight: 800;
-    color: #ff4e00;
+    color: #DF9B34;
 }
 
 .add-btn {
     width: 40px;
     height: 40px;
-    background: #ff4e00;
+    background: #DF9B34;
     color: white;
     border: none;
     border-radius: 12px;
@@ -953,13 +954,13 @@
 }
 
 .cat-pill:hover {
-    border-color: #ff4e00;
+    border-color: #DF9B34;
 }
 
 .cat-pill.active {
-    background: #ff4e00;
+    background: #DF9B34;
     color: white;
-    border-color: #ff4e00;
+    border-color: #DF9B34;
     box-shadow: 0 4px 10px rgba(255, 78, 0, 0.3);
 }
 
@@ -1065,7 +1066,7 @@
 
 .dinein-badge.ni {
     background: rgba(255, 90, 0, 0.6);
-    color: #ffe0c8;
+    color: #FFF5E5;
     border: 1px solid rgba(255, 90, 0, 0.5);
 }
 
@@ -1180,7 +1181,7 @@
   transform: translateX(-50%) translateY(150%);
   width: 95%;
   max-width: 500px;
-  background: linear-gradient(90deg, #ff4e00, #ff1e1e);
+  background: linear-gradient(90deg, #DF9B34, #C58326);
   color: white;
   padding: 14px 20px;
   border-radius: 18px;
@@ -1209,7 +1210,7 @@
   width: 26px;
   height: 26px;
   background: white;
-  color: #ff4e00;
+  color: #DF9B34;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1317,7 +1318,7 @@
 }
 
 .qty-btn.plus {
-  background: #ff4e00;
+  background: #DF9B34;
   color: white;
 }
 
@@ -1550,7 +1551,7 @@
 }
 
 .co-qty {
-  color: #ff4e00;
+  color: #DF9B34;
   font-size: 12px;
   font-weight: 600;
   margin-top: 5px;
@@ -1686,7 +1687,7 @@
   position: absolute;
   width: 20px;
   height: 20px;
-  border: 4px solid #ff4e00;
+  border: 4px solid #DF9B34;
 }
 
 .qr-container .tl {

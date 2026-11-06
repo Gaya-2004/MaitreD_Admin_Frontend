@@ -90,9 +90,9 @@
 }
 
 .di-filter-btn.applied {
-  border-color: #ff4e00 !important;
-  color: #ff4e00 !important;
-  background: #fff5f0 !important;
+  border-color: #DF9B34 !important;
+  color: #DF9B34 !important;
+  background: #FFF5E5 !important;
 }
 
 .filter-active-dot {
@@ -101,7 +101,7 @@
   right: 4px;
   width: 8px;
   height: 8px;
-  background-color: #ff4e00;
+  background-color: #DF9B34;
   border-radius: 50%;
   border: 1.5px solid #ffffff;
 }
@@ -171,9 +171,9 @@
 }
 
 .di-tab.active {
-  background: #ff3400;
+  background: #DF9B34;
   color: #ffffff;
-  border-color: #ff3400;
+  border-color: #DF9B34;
   box-shadow: 0 4px 14px rgba(255, 52, 0, 0.3);
 }
 
@@ -293,7 +293,7 @@
 }
 
 .fg-tab.active {
-  background: #FF3400;
+  background: #DF9B34;
   color: white;
 }
 
@@ -352,7 +352,7 @@
 }
 
 .di-resizer-v:hover .di-resizer-handle {
-  background: #ff4e00;
+  background: #DF9B34;
   width: 80px;
 }
 
@@ -406,7 +406,7 @@
 }
 
 .di-manual-input:focus {
-  border-color: #ff4e00;
+  border-color: #DF9B34;
   background: #fff;
 }
 
@@ -563,7 +563,7 @@
 }
 
 .di-card:hover .di-card-banner {
-  background: linear-gradient(135deg, #ffede0 0%, #ffd8b8 100%);
+  background: linear-gradient(135deg, #FFF5E5 0%, #FFF5E5 100%);
 }
 
 .di-card-emoji {
@@ -694,7 +694,7 @@
 }
 
 .item-code-badge {
-  color: #ff3400;
+  color: #DF9B34;
   font-size: 11px;
   font-weight: 800;
   margin-right: 4px;
@@ -785,7 +785,7 @@
 }
 
 .fg-qty-btn.plus {
-  background: #FF3400;
+  background: #DF9B34;
   color: white;
   font-size: 16px;
   font-family: "Rubik", sans-serif;
@@ -843,12 +843,12 @@
 }
 
 .di-qty-btn.minus {
-  color: #ff3d00;
+  color: #DF9B34;
   background-color: #e0e0e0;
 }
 
 .di-qty-btn.plus {
-  background-color: #ff3d00;
+  background-color: #DF9B34;
   color: #fff;
 }
 
@@ -980,7 +980,7 @@
 }
 
 .di-sidebar-close:hover {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
 }
 
@@ -1068,9 +1068,9 @@
 }
 
 .di-cart-close:hover {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
-  border-color: #ff4e00;
+  border-color: #DF9B34;
 }
 
 .di-cart-order-id {
@@ -1107,9 +1107,9 @@
 }
 
 .di-ot-tab.active {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
-  border-color: #ff4e00;
+  border-color: #DF9B34;
   box-shadow: 0 6px 18px rgba(255, 78, 0, 0.25);
 }
 
@@ -1167,7 +1167,7 @@
 }
 
 .di-cart-remove-circle:hover {
-  background: #ff4e00;
+  background: #DF9B34;
 }
 
 /* ── Cart Item Body (3-column: thumb | details | right) ── */
@@ -1229,7 +1229,7 @@
 
 .di-cart-item-price {
   font-size: 1rem;
-  color: #ff4e00;
+  color: #DF9B34;
   font-weight: 800;
   margin: 4px 0 0;
 }
@@ -1253,7 +1253,7 @@
 
 .di-cart-total-amount {
   font-size: 1.5rem;
-  color: #ff4e00;
+  color: #DF9B34;
   font-weight: 800;
   margin: 0;
   line-height: 1.2;
@@ -1288,13 +1288,13 @@
 
 .di-cart-qty-btn.minus {
   background: #fff;
-  color: #ff4e00;
+  color: #DF9B34;
   border-radius: 6px;
-  border: 1px solid #ffe0d0;
+  border: 1px solid #FFF5E5;
 }
 
 .di-cart-qty-btn.plus {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
   border-radius: 6px;
 }
@@ -1330,7 +1330,7 @@
 }
 
 .di-cart-note-input:focus {
-  border-color: #ff4e00;
+  border-color: #DF9B34;
 }
 
 .di-cart-note-input::placeholder {
@@ -1350,8 +1350,8 @@
   width: 100%;
   height: 48px;
   background: #fff;
-  color: #ff4e00;
-  border: 1.5px solid #ff4e00;
+  color: #DF9B34;
+  border: 1.5px solid #DF9B34;
   border-radius: 16px;
   font-size: 1rem;
   font-weight: 700;
@@ -1364,7 +1364,7 @@
 }
 
 .di-add-more-btn:hover {
-  background: #fff5f0;
+  background: #FFF5E5;
 }
 
 
@@ -1531,7 +1531,7 @@
     width: 22px !important;
     height: 22px !important;
     font-size: 0.75rem !important;
-    background: #ff3400 !important;
+    background: #DF9B34 !important;
     color: white !important;
     border-radius: 50% !important;
     display: flex !important;
@@ -1614,7 +1614,7 @@
 
 .filter-opt-btn.selected {
   background: #f1f5f9;
-  color: #ff4e00;
+  color: #DF9B34;
   font-weight: 600;
 }
 
@@ -1691,7 +1691,7 @@
   }
 
   .di-tab.active {
-    background: #ff4e00 !important;
+    background: #DF9B34 !important;
     color: #ffffff !important;
     font-weight: 600 !important;
     box-shadow: none !important;

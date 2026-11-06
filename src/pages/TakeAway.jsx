@@ -7,6 +7,8 @@ import Header from '../components/Header'
 import '../styles/pages.css'
 import '../styles/dinein.css'
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 
 function MenuCard({ item, qty, onAdd, onInc, onDec, onUpdateQty, hasActiveOrder }) {
   const { t, language } = useLanguage()
@@ -158,10 +160,10 @@ export default function TakeAway() {
     // Fetch menu data from backend
     async function fetchMenuData() {
       try {
-        const catRes = await fetch('/api/v1/public/menu/categories');
+        const catRes = await fetch(`${API_BASE}/api/v1/public/menu/categories`);
         const dbCategories = await catRes.json();
         
-        const itemRes = await fetch('/api/v1/public/menu/items');
+        const itemRes = await fetch(`${API_BASE}/api/v1/public/menu/items`);
         const dbItems = await itemRes.json();
 
         const catIdMap = {};

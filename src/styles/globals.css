@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Rubik:wght@400;500;600&display=swap");
 
 :root {
-    --primary-orange: #FF5A00;
+    --primary-orange: #DF9B34;
     --primary-green: #2F882C;
     --dark-green: #0F5E16;
     --text-light: #F5F5F5;
@@ -9,7 +9,7 @@
     --glass-bg: rgba(255, 255, 255, 0.2);
     --glass-border: rgba(255, 255, 255, 0.4);
     --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.3);
-    --shadow-glow-orange: 0 0 15px rgba(255, 90, 0, 0.5);
+    --shadow-glow-orange: 0 0 15px rgba(223, 155, 52, 0.5);
 }
 
 * {

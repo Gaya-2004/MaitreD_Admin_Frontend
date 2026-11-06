@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, X, Send, Maximize2, Minimize2, MessageSquare, Volume2, VolumeX, Keyboard } from 'lucide-react';
 import api from '../services/api';
-import ChefMascot from '../assets/chef.png';
+import ChefMascot from '../assets/maitred_avatar.png';
+import { getTimeBasedGreeting } from '../utils/greeting';
 
 const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
   const propsRef = useRef({ onNavigate, onVoiceCommand });
@@ -24,7 +25,7 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
       {
         id: 1,
         role: 'assistant',
-        text: "I'm your assistant! Click the mic to talk, or just type a message.",
+        text: `${getTimeBasedGreeting()}! I'm your MaitreD assistant. Click the mic to talk, or just type a message.`,
       }
     ];
   });
@@ -430,7 +431,7 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
         {/* Header */}
         <div style={{
           padding: '16px 20px',
-          background: '#ff5722',
+          background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
           color: 'white',
           display: 'flex',
           justifyContent: 'space-between',
@@ -439,9 +440,9 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
           zIndex: 2
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src={ChefMascot} alt="Chef" style={{ width: '32px', height: '32px', background: 'white', borderRadius: '50%', padding: '2px' }} />
+            <img src={ChefMascot} alt="MaitreD" style={{ width: '32px', height: '32px', background: 'white', borderRadius: '50%', padding: '2px', objectFit: 'cover' }} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontWeight: '600', fontSize: '15px' }}>Voice Assistant</span>
+              <span style={{ fontWeight: '600', fontSize: '15px' }}>MaitreD Assistant</span>
               <span style={{ fontSize: '11px', opacity: 0.9 }}>
                 {isListening ? 'Listening...' : 'Muted'}
               </span>
@@ -467,12 +468,12 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
               <div key={msg.id} style={{ display: 'flex', gap: '10px', alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '85%' }}>
                 {msg.role === 'assistant' && (
                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', flexShrink: 0, marginTop: '4px' }}>
-                    <img src={ChefMascot} alt="Chef" style={{ width: '20px', height: '20px', borderRadius: '50%' }} />
+                    <img src={ChefMascot} alt="MaitreD" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
                   </div>
                 )}
 
                 <div style={{
-                  background: msg.role === 'user' ? '#ff5722' : 'white',
+                  background: msg.role === 'user' ? '#DF9B34' : 'white',
                   color: msg.role === 'user' ? 'white' : '#333',
                   padding: msg.text === "🎤 Audio Message" ? '8px 16px' : '12px 16px',
                   borderRadius: '16px',
@@ -505,7 +506,7 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
           {liveText && (
             <div style={{ display: 'flex', gap: '10px', alignSelf: 'flex-end', maxWidth: '85%', opacity: 0.8 }}>
               <div style={{
-                background: '#ff5722',
+                background: '#DF9B34',
                 color: 'white',
                 padding: '12px 16px',
                 borderRadius: '16px',
@@ -538,12 +539,12 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
           {isProcessing && (
             <div style={{ display: 'flex', gap: '10px', alignSelf: 'flex-start', maxWidth: '85%' }}>
               <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.05)', flexShrink: 0, marginTop: '4px' }}>
-                <img src={ChefMascot} alt="Chef" style={{ width: '20px', height: '20px', borderRadius: '50%' }} />
+                <img src={ChefMascot} alt="MaitreD" style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }} />
               </div>
               <div style={{ background: 'white', padding: '12px 16px', borderRadius: '16px', borderTopLeftRadius: '4px', display: 'flex', gap: '4px', alignItems: 'center' }}>
-                <span style={{ width: '6px', height: '6px', background: '#ff5722', borderRadius: '50%', animation: 'pulse 1s infinite alternate' }} />
-                <span style={{ width: '6px', height: '6px', background: '#ff5722', borderRadius: '50%', animation: 'pulse 1s infinite alternate 0.2s' }} />
-                <span style={{ width: '6px', height: '6px', background: '#ff5722', borderRadius: '50%', animation: 'pulse 1s infinite alternate 0.4s' }} />
+                <span style={{ width: '6px', height: '6px', background: '#DF9B34', borderRadius: '50%', animation: 'pulse 1s infinite alternate' }} />
+                <span style={{ width: '6px', height: '6px', background: '#DF9B34', borderRadius: '50%', animation: 'pulse 1s infinite alternate 0.2s' }} />
+                <span style={{ width: '6px', height: '6px', background: '#DF9B34', borderRadius: '50%', animation: 'pulse 1s infinite alternate 0.4s' }} />
               </div>
             </div>
           )}
@@ -559,8 +560,8 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
               width: '40px',
               height: '40px',
               borderRadius: '50%',
-              background: isVoiceMode ? 'rgba(255, 87, 34, 0.1)' : '#f1f1f1',
-              color: isVoiceMode ? '#ff5722' : '#666',
+              background: isVoiceMode ? 'rgba(223, 155, 52, 0.15)' : '#f1f1f1',
+              color: isVoiceMode ? '#DF9B34' : '#666',
               border: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -580,8 +581,8 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
               width: '40px',
               height: '40px',
               borderRadius: '50%',
-              background: !isSpeakerMuted ? 'rgba(255, 87, 34, 0.1)' : '#f1f1f1',
-              color: !isSpeakerMuted ? '#ff5722' : '#666',
+              background: !isSpeakerMuted ? 'rgba(223, 155, 52, 0.15)' : '#f1f1f1',
+              color: !isSpeakerMuted ? '#DF9B34' : '#666',
               border: 'none',
               display: 'flex',
               alignItems: 'center',
@@ -621,7 +622,7 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
                     key={i}
                     style={{
                       width: '3px',
-                      background: '#ff5722',
+                      background: '#DF9B34',
                       borderRadius: '2px',
                       height: `${Math.random() * 12 + 4}px`,
                       animation: `pulse ${Math.random() * 0.5 + 0.5}s infinite alternate`,
@@ -639,7 +640,7 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
               width: '40px',
               height: '40px',
               borderRadius: '50%',
-              background: (!isListening && inputText.trim()) || (isListening && liveText) ? '#0a8035' : '#e0e0e0',
+              background: (!isListening && inputText.trim()) || (isListening && liveText) ? 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)' : '#e0e0e0',
               color: 'white',
               border: 'none',
               display: 'flex',
@@ -647,6 +648,7 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
               justifyContent: 'center',
               cursor: (!isListening && inputText.trim()) || (isListening && liveText) ? 'pointer' : 'not-allowed',
               flexShrink: 0,
+              boxShadow: (!isListening && inputText.trim()) || (isListening && liveText) ? '0 2px 6px rgba(223, 155, 52, 0.3)' : 'none',
               transition: 'all 0.2s'
             }}
           >
@@ -671,8 +673,8 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
       >
         {/* Notification Toast if there's an unread message and collapsed (Optional enhancement) */}
         {!isExpanded && messages.length > 1 && isProcessing && (
-          <div style={{ background: 'white', padding: '12px 16px', borderRadius: '16px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', fontSize: '13px', fontWeight: '500', color: '#ff5722', display: 'flex', alignItems: 'center', gap: '8px', animation: 'fadeIn 0.3s ease' }}>
-            <span style={{ width: '6px', height: '6px', background: '#ff5722', borderRadius: '50%', animation: 'pulse 1s infinite alternate' }} /> Processing query...
+          <div style={{ background: 'white', padding: '12px 16px', borderRadius: '16px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', fontSize: '13px', fontWeight: '500', color: '#DF9B34', display: 'flex', alignItems: 'center', gap: '8px', animation: 'fadeIn 0.3s ease' }}>
+            <span style={{ width: '6px', height: '6px', background: '#DF9B34', borderRadius: '50%', animation: 'pulse 1s infinite alternate' }} /> Processing query...
           </div>
         )}
         {/* Hover Quote Tooltip */}
@@ -686,7 +688,7 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
           boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
           fontSize: '13px',
           fontWeight: '500',
-          color: '#ff5722',
+          color: '#DF9B34',
           whiteSpace: 'nowrap',
           opacity: showQuote ? 1 : 0,
           transform: showQuote ? 'translateX(0) translateY(0)' : 'translateX(10px) translateY(10px)',
@@ -730,16 +732,16 @@ const VoiceWidget = ({ onNavigate, onVoiceCommand }) => {
         >
           <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {isListening ? (
-              <div style={{ position: 'absolute', inset: '-4px', border: '3px solid #ff5722', borderRadius: '50%', animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite' }} />
+              <div style={{ position: 'absolute', inset: '-4px', border: '3px solid #DF9B34', borderRadius: '50%', animation: 'ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite' }} />
             ) : (
               <>
-                <div style={{ position: 'absolute', inset: '0px', borderRadius: '50%', border: '2px solid rgba(255, 87, 34, 0.4)', animation: 'ripple 2s linear infinite' }} />
-                <div style={{ position: 'absolute', inset: '0px', borderRadius: '50%', border: '2px solid rgba(255, 87, 34, 0.2)', animation: 'ripple 2s linear infinite 1s' }} />
+                <div style={{ position: 'absolute', inset: '0px', borderRadius: '50%', border: '2px solid rgba(223, 155, 52, 0.4)', animation: 'ripple 2s linear infinite' }} />
+                <div style={{ position: 'absolute', inset: '0px', borderRadius: '50%', border: '2px solid rgba(223, 155, 52, 0.2)', animation: 'ripple 2s linear infinite 1s' }} />
               </>
             )}
             <img
               src={ChefMascot}
-              alt="Voice Assistant"
+              alt="MaitreD Voice Assistant"
               style={{
                 width: '60px',
                 height: '60px',

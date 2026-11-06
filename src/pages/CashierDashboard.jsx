@@ -11,10 +11,14 @@ import api from '../services/api';
 import { toast } from '../components/Toast';
 import { LogOut } from 'lucide-react';
 import '../styles/cashier.css';
+import { getTimeBasedGreeting, getUserRoleTitle } from '../utils/greeting';
 
 function CashierDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+
+  const userRole = getUserRoleTitle(user);
+  const timeGreeting = getTimeBasedGreeting();
 
 
   const [menuItems, setMenuItems] = useState([]);
@@ -148,7 +152,7 @@ function CashierDashboard() {
           </head>
           <body>
             <div class="header">
-              <h1>${(data.restaurant && data.restaurant.name) || 'DATAUDIPI HOTEL'}</h1>
+              <h1>${(data.restaurant && data.restaurant.name) || 'MAITRED GOURMET BISTRO'}</h1>
               <p>${(data.restaurant && data.restaurant.address) || 'MUGALIVAKKAM, CHENNAI'}</p>
               <p>PH:${(data.restaurant && data.restaurant.phone) || '9597066563'} GSTIN: ${(data.restaurant && data.restaurant.gstin) || '33ADLPV4810B3ZQ'}</p>
               <h2 style="font-size: 14px; margin: 10px 0 5px 0;">${type === 'hourly' ? 'HOURLY REPORT' : 'ITEM WISE REPORT'}</h2>
@@ -199,7 +203,7 @@ function CashierDashboard() {
       hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
     });
 
-    const resName = restaurantData?.name || 'DATA UDIPI HOTEL';
+    const resName = restaurantData?.name || 'MAITRED GOURMET BISTRO';
     const resAddr = restaurantData?.address || 'M G R Nagar, Chennai';
     const resPhone = resName.toLowerCase().includes('mugalivakkam') ? '+91 95970 66563' : (restaurantData?.phone || '31595014');
 
@@ -358,7 +362,7 @@ function CashierDashboard() {
             timestamp: Date.now()
           };
           if (typeof BroadcastChannel !== 'undefined') {
-            const bc = new BroadcastChannel('udipi_kds_sync_channel');
+            const bc = new BroadcastChannel('maitred_kds_sync_channel');
             bc.postMessage(syncPing);
             bc.close();
           }
@@ -444,7 +448,7 @@ function CashierDashboard() {
       </div>
     `).join('');
 
-    const resName = restaurantData?.name || 'DATA UDIPI HOTEL';
+    const resName = restaurantData?.name || 'MAITRED GOURMET BISTRO';
     const resAddr = restaurantData?.address || 'M G R Nagar, Chennai';
     const resPhone = restaurantData?.phone || '31595014';
 
@@ -758,10 +762,10 @@ function CashierDashboard() {
       {/* Header */}
       <header className="header">
         <div className="header-left" style={{ flex: 1 }}>
-          <div className="logo-box">DU</div>
+          <div className="logo-box">MD</div>
           <div className="header-title-container">
-            <div className="header-title">Data Udipi Restaurant</div>
-            <div className="header-subtitle">Counter POS-Cashier</div>
+            <div className="header-title">MaitreD Restaurant</div>
+            <div className="header-subtitle">Counter POS · {timeGreeting}! {userRole}</div>
           </div>
         </div>
 

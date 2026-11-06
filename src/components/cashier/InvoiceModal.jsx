@@ -9,7 +9,7 @@ const InvoiceModal = ({ show, lastBillNo, lastOrderType, lastPaymentMethod, last
       backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
     }}>
       <div className="invoice-modal" style={{ backgroundColor: 'white', padding: '24px', width: '320px', fontFamily: 'monospace', color: 'black', borderRadius: '8px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}>
-        <h3 style={{ textAlign: 'center', marginBottom: '4px', fontSize: '18px' }}>{restaurantData?.name || 'DATA UDIPI HOTEL'}</h3>
+        <h3 style={{ textAlign: 'center', marginBottom: '4px', fontSize: '18px' }}>{restaurantData?.name || 'MAITRED GOURMET BISTRO'}</h3>
         <p style={{ textAlign: 'center', fontSize: '12px', margin: 0 }}>{restaurantData?.address || 'M G R Nagar, Chennai'}</p>
         <p style={{ textAlign: 'center', fontSize: '12px', marginBottom: '16px' }}>Phone: {restaurantData?.phone || '31595014'}</p>
 

@@ -22,7 +22,7 @@ import {
   Smartphone,
   Database,
 } from 'lucide-react';
-import DataudipiTitle from '../assets/Dataudupi-Title.png';
+import MaitreDLogo from '../assets/maitred_logo.png';
 import ChefMascot from '../assets/chef_mascot.png';
 import { orderService, inventoryService, menuService, tableService, reportsService } from '../services/api';
 import MenuManagement from '../components/MenuManagement';
@@ -40,6 +40,7 @@ import SettingsManagement from '../components/SettingsManagement';
 import ConsumptionReports from '../components/ConsumptionReports';
 import DataManagement from '../components/DataManagement';
 import VoiceWidget from '../components/VoiceWidget';
+import { getTimeBasedGreeting, getUserRoleTitle } from '../utils/greeting';
 
 const HotelManagerDashboard = () => {
   const { user, logout } = useAuth();
@@ -48,6 +49,9 @@ const HotelManagerDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activePage, setActivePage] = useState('dashboard');
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+
+  const userRole = getUserRoleTitle(user);
+  const timeGreeting = getTimeBasedGreeting();
 
   useEffect(() => {
     if (hotelId === 'consumption') {
@@ -199,8 +203,9 @@ const HotelManagerDashboard = () => {
         <div className="sidebar-logo">
           {sidebarOpen && (
             <img
-              src={DataudipiTitle}
-              alt="Data Udipi"
+              src={MaitreDLogo}
+              alt="MaitreD"
+              style={{ height: '36px', objectFit: 'contain' }}
               className="logo-title-image"
             />
           )}
@@ -230,7 +235,7 @@ const HotelManagerDashboard = () => {
         {/* Footer */}
         <div className="sidebar-footer">
           <p>
-            Powered by Data Udipi
+            Powered by MaitreD
           </p>
           <button
             onClick={handleLogout}
@@ -256,12 +261,12 @@ const HotelManagerDashboard = () => {
               .manager-header-mobile { display: flex !important; flex-direction: column; box-sizing: border-box; width: 100%; padding: 24px 24px 32px 24px; background: #0A0A0A; border-radius: 0 0 32px 32px; margin-bottom: -16px; position: sticky; top: 0; z-index: 100; }
               .manager-header-mobile-top { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 24px; }
               .manager-header-mobile img { height: 24px; }
-              .manager-header-mobile .badge { background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 12px; border-radius: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+              .manager-header-mobile .badge { background: rgba(223, 155, 52, 0.15); color: #DF9B34; border: 1px solid rgba(223, 155, 52, 0.3); padding: 4px 12px; border-radius: 16px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
             }
           `}</style>
           <div className="manager-header-mobile-top">
-            <img src={DataudipiTitle} alt="Data Udipi" />
-            <div className="badge">MANAGER</div>
+            <img src={MaitreDLogo} alt="MaitreD" style={{ height: '28px', objectFit: 'contain' }} />
+            <div className="badge">{userRole.toUpperCase()}</div>
           </div>
 
           {/* Header Content based on activePage */}
@@ -269,14 +274,14 @@ const HotelManagerDashboard = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%' }}>
               <div>
                 <h2 style={{ margin: '0 0 6px', fontSize: '24px', fontWeight: '800', color: '#fff' }}>
-                  Good Morning!
+                  {timeGreeting}!
                 </h2>
                 <p style={{ margin: 0, fontSize: '13px', color: '#999', fontWeight: '500' }}>
-                  {user?.name || 'Anand Sharma'} · {reports?.summary?.restaurant_name || 'Grand Udipi Palace'}
+                  {userRole} · {reports?.summary?.restaurant_name || 'MaitreD Bistro'}
                 </p>
               </div>
-              <span style={{ padding: '6px 12px', background: 'rgba(16, 185, 129, 0.15)', color: '#10B981', borderRadius: '16px', fontSize: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ width: '6px', height: '6px', background: '#10B981', borderRadius: '50%' }}></span>
+              <span style={{ padding: '6px 12px', background: 'rgba(223, 155, 52, 0.15)', color: '#DF9B34', borderRadius: '16px', fontSize: '12px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '6px', height: '6px', background: '#DF9B34', borderRadius: '50%' }}></span>
                 Open
               </span>
             </div>
@@ -320,7 +325,7 @@ const HotelManagerDashboard = () => {
                   {tables.filter(t => t.is_active && (t.status === 'Occupied' || t.current_order_id)).length} occupied • {tables.filter(t => t.is_active && t.status !== 'Occupied' && t.status !== 'Reserved' && !t.current_order_id).length} vacant • {tables.length} total
                 </p>
               </div>
-              <button onClick={() => window.dispatchEvent(new CustomEvent('open-add-table-modal'))} style={{ padding: '6px 16px', background: '#ff6b35', color: '#fff', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' }}>+ Table</button>
+              <button onClick={() => window.dispatchEvent(new CustomEvent('open-add-table-modal'))} style={{ padding: '6px 16px', background: '#DF9B34', color: '#1A1918', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}>+ Table</button>
             </div>
           )}
 
@@ -399,7 +404,7 @@ const HotelManagerDashboard = () => {
                   Manage your account preferences
                 </p>
               </div>
-              <button onClick={() => window.dispatchEvent(new CustomEvent('save-settings'))} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 16px', background: '#ff6b35', color: '#fff', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' }}>
+              <button onClick={() => window.dispatchEvent(new CustomEvent('save-settings'))} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 16px', background: '#DF9B34', color: '#1A1918', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }}>
                 <Save size={14} /> Save
               </button>
             </div>
@@ -417,7 +422,7 @@ const HotelManagerDashboard = () => {
               {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             <div className="admin-header-title">
-              <h1>Good Morning! {user?.name?.split(' ')[0]}</h1>
+              <h1>{timeGreeting}! {userRole}</h1>
               <p>Here's what's happening at your restaurant today</p>
             </div>
           </div>
@@ -438,19 +443,19 @@ const HotelManagerDashboard = () => {
                   const Icon = stat.icon;
                   let iconBg, iconColor, badgeBg, badgeColor, badgeText, outlineBorder;
                   if (idx === 0) {
-                    iconBg = '#FF4500'; iconColor = 'white'; badgeBg = '#10B981'; badgeColor = 'white'; badgeText = '↗ ' + stat.change.replace('+', '');
+                    iconBg = '#DF9B34'; iconColor = '#1A1918'; badgeBg = '#FFF5E5'; badgeColor = '#DF9B34'; badgeText = '↗ ' + stat.change.replace('+', '');
                   } else if (idx === 1) {
-                    iconBg = '#10B981'; iconColor = 'white'; badgeBg = '#10B981'; badgeColor = 'white'; badgeText = '↗ ' + stat.change.replace('+', '');
+                    iconBg = '#DF9B34'; iconColor = '#1A1918'; badgeBg = '#FFF5E5'; badgeColor = '#DF9B34'; badgeText = '↗ ' + stat.change.replace('+', '');
                   } else if (idx === 2) {
-                    iconBg = '#fff0ec'; iconColor = '#FF4500'; badgeBg = '#fff0ec'; badgeColor = '#FF4500'; badgeText = '↗ ' + stat.change;
+                    iconBg = '#FFF5E5'; iconColor = '#DF9B34'; badgeBg = '#FFF5E5'; badgeColor = '#DF9B34'; badgeText = '↗ ' + stat.change;
                     outlineBorder = 'none';
                   } else {
-                    iconBg = '#e6f4ea'; iconColor = '#10B981'; badgeBg = '#10B981'; badgeColor = 'white'; badgeText = '↗ ' + stat.change;
+                    iconBg = '#FFF5E5'; iconColor = '#DF9B34'; badgeBg = '#FFF5E5'; badgeColor = '#DF9B34'; badgeText = '↗ ' + stat.change;
                     outlineBorder = 'none';
                   }
 
                   return (
-                    <div key={idx} style={{ background: '#fff', borderRadius: '16px', padding: '16px', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
+                    <div key={idx} style={{ background: '#fff', borderRadius: '16px', padding: '16px', border: '1px solid #EAE7E0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
                         <div style={{ width: '32px', height: '32px', background: iconBg, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: iconColor, border: outlineBorder || 'none' }}>
                           <Icon size={16} />
@@ -469,8 +474,8 @@ const HotelManagerDashboard = () => {
               {/* Best Sellers Section */}
               <div className="best-sellers-container" style={{ display: 'flex', gap: '16px', overflowX: 'auto', paddingBottom: '8px', margin: '0 -24px', padding: '0 24px 8px 24px', msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
                 {bestSellersList.length === 0 ? null : bestSellersList.map((item, idx) => (
-                  <div key={idx} className="best-seller-card" style={{ minWidth: '240px', background: 'white', borderRadius: '24px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px', border: '1px solid #eee', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
-                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#FF4500', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0 }}>
+                  <div key={idx} className="best-seller-card" style={{ minWidth: '240px', background: 'white', borderRadius: '24px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px', border: '1px solid #EAE7E0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                    <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#DF9B34', color: '#1A1918', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0 }}>
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z" /></svg>
                     </div>
                     <div>
@@ -484,17 +489,17 @@ const HotelManagerDashboard = () => {
 
               {/* Staff Notifications */}
               {staffNotifications.length > 0 && (
-                <div style={{ background: '#fff0ec', border: '1px solid #ffd8cd', borderRadius: '12px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'flex-start', position: 'relative' }}>
-                  <div style={{ color: '#FF4500', marginTop: '2px' }}>
+                <div style={{ background: '#FFF5E5', border: '1px solid rgba(223, 155, 52, 0.3)', borderRadius: '12px', padding: '16px', display: 'flex', gap: '12px', alignItems: 'flex-start', position: 'relative' }}>
+                  <div style={{ color: '#DF9B34', marginTop: '2px' }}>
                     <AlertTriangle size={24} />
                   </div>
                   <div style={{ flex: 1, paddingRight: '60px' }}>
-                    <h4 style={{ margin: '0 0 6px', fontSize: '15px', fontWeight: '700', color: '#111' }}>Low Stock Alert <span style={{ color: '#F59E0B' }}>⚠️</span></h4>
+                    <h4 style={{ margin: '0 0 6px', fontSize: '15px', fontWeight: '700', color: '#111' }}>Low Stock Alert <span style={{ color: '#DF9B34' }}>⚠️</span></h4>
                     <p style={{ margin: 0, fontSize: '13px', color: '#666', lineHeight: '1.4' }}>
-                      {lowStockItems.length} items running low: <span style={{ color: '#FF4500', fontWeight: '600' }}>{lowStockItems.map(i => i.name).join(', ')}</span>
+                      {lowStockItems.length} items running low: <span style={{ color: '#DF9B34', fontWeight: '600' }}>{lowStockItems.map(i => i.name).join(', ')}</span>
                     </p>
                   </div>
-                  <div style={{ position: 'absolute', top: '24px', right: '16px', fontSize: '12px', fontWeight: '700', color: '#FF4500', cursor: 'pointer' }}>
+                  <div style={{ position: 'absolute', top: '24px', right: '16px', fontSize: '12px', fontWeight: '700', color: '#DF9B34', cursor: 'pointer' }}>
                     View All →
                   </div>
                 </div>
@@ -505,7 +510,7 @@ const HotelManagerDashboard = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <h2 style={{ fontSize: '18px', fontWeight: '800', margin: 0, color: '#111' }}>Recent Orders</h2>
-                    <span style={{ background: '#FF4500', color: 'white', padding: '2px 8px', borderRadius: '12px', fontSize: '10px', fontWeight: 'bold' }}>LIVE</span>
+                    <span style={{ background: '#DF9B34', color: '#1A1918', padding: '2px 8px', borderRadius: '12px', fontSize: '10px', fontWeight: 'bold' }}>LIVE</span>
                   </div>
                   <span style={{ fontSize: '12px', color: '#4B5563' }}>Updated just now</span>
                 </div>

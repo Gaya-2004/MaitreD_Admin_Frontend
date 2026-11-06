@@ -288,22 +288,22 @@ const MenuManagement = () => {
             setIsModalOpen(true);
           }}
           style={{
-            background: '#ff5722',
-            color: 'white',
+            background: '#DF9B34',
+            color: '#1A1918',
             border: 'none',
             borderRadius: '24px',
             padding: '10px 20px',
-            fontWeight: '600',
+            fontWeight: '700',
             fontSize: '14px',
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             cursor: 'pointer',
-            boxShadow: '0 4px 10px rgba(255, 87, 34, 0.2)',
+            boxShadow: '0 2px 8px rgba(223, 155, 52, 0.25)',
             transition: 'background 0.2s ease',
           }}
-          onMouseOver={(e) => e.currentTarget.style.background = '#e64a19'}
-          onMouseOut={(e) => e.currentTarget.style.background = '#ff5722'}
+          onMouseOver={(e) => e.currentTarget.style.background = '#C58326'}
+          onMouseOut={(e) => e.currentTarget.style.background = '#DF9B34'}
         >
           <Plus size={18} />
           Add Item
@@ -330,7 +330,7 @@ const MenuManagement = () => {
               transition: 'border-color 0.2s',
               boxSizing: 'border-box'
             }}
-            onFocus={(e) => e.target.style.borderColor = '#ff5722'}
+            onFocus={(e) => e.target.style.borderColor = '#DF9B34'}
             onBlur={(e) => e.target.style.borderColor = '#E5E7EB'}
           />
         </div>
@@ -339,10 +339,10 @@ const MenuManagement = () => {
           <button
             onClick={() => setSelectedRegion('All')}
             style={{
-              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap',
+              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
               border: selectedRegion === 'All' ? 'none' : '1px solid #E5E7EB',
-              background: selectedRegion === 'All' ? '#10B981' : 'white',
-              color: selectedRegion === 'All' ? 'white' : '#111'
+              background: selectedRegion === 'All' ? '#DF9B34' : 'white',
+              color: selectedRegion === 'All' ? '#1A1918' : '#666'
             }}
           >
             All Regions
@@ -350,10 +350,10 @@ const MenuManagement = () => {
           <button
             onClick={() => setSelectedRegion('South Indian')}
             style={{
-              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap',
+              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
               border: selectedRegion === 'South Indian' ? 'none' : '1px solid #E5E7EB',
-              background: selectedRegion === 'South Indian' ? '#10B981' : 'white',
-              color: selectedRegion === 'South Indian' ? 'white' : '#111'
+              background: selectedRegion === 'South Indian' ? '#DF9B34' : 'white',
+              color: selectedRegion === 'South Indian' ? '#1A1918' : '#666'
             }}
           >
             South Indian
@@ -361,10 +361,10 @@ const MenuManagement = () => {
           <button
             onClick={() => setSelectedRegion('North Indian')}
             style={{
-              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', whiteSpace: 'nowrap',
+              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
               border: selectedRegion === 'North Indian' ? 'none' : '1px solid #E5E7EB',
-              background: selectedRegion === 'North Indian' ? '#10B981' : 'white',
-              color: selectedRegion === 'North Indian' ? 'white' : '#111'
+              background: selectedRegion === 'North Indian' ? '#DF9B34' : 'white',
+              color: selectedRegion === 'North Indian' ? '#1A1918' : '#666'
             }}
           >
             North Indian
@@ -383,8 +383,8 @@ const MenuManagement = () => {
                 padding: '6px 16px',
                 borderRadius: '24px',
                 border: activeCategory === cat ? 'none' : '1px solid #E5E7EB',
-                background: activeCategory === cat ? '#FF5722' : 'white',
-                color: activeCategory === cat ? 'white' : '#111',
+                background: activeCategory === cat ? '#DF9B34' : 'white',
+                color: activeCategory === cat ? '#1A1918' : '#111',
                 fontSize: '13px',
                 fontWeight: '600',
                 cursor: 'pointer',
@@ -444,7 +444,7 @@ const MenuManagement = () => {
                     position: 'absolute',
                     top: '8px',
                     left: '8px',
-                    background: '#FF5722',
+                    background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
                     color: 'white',
                     padding: '4px 10px',
                     borderRadius: '12px',
@@ -453,7 +453,7 @@ const MenuManagement = () => {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '4px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                    boxShadow: '0 2px 6px rgba(223, 155, 52, 0.35)'
                   }}>
                     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0011 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 11-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 002.5 2.5z"/></svg> Popular
                   </div>
@@ -526,7 +526,7 @@ const MenuManagement = () => {
                 <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid #f5f5f5', paddingTop: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
-                      <div style={{ position: 'relative', width: '32px', height: '18px', background: item.is_available ? '#10B981' : '#E5E7EB', borderRadius: '9px', transition: 'background 0.2s', flexShrink: 0 }}>
+                      <div style={{ position: 'relative', width: '32px', height: '18px', background: item.is_available ? '#DF9B34' : '#E5E7EB', borderRadius: '9px', transition: 'background 0.2s', flexShrink: 0 }}>
                         <div style={{ position: 'absolute', top: '2px', left: item.is_available ? '16px' : '2px', width: '14px', height: '14px', background: 'white', borderRadius: '50%', transition: 'left 0.2s' }} />
                       </div>
                       <span style={{ fontSize: '11px', fontWeight: '700', color: '#111' }}>
@@ -590,7 +590,7 @@ const MenuManagement = () => {
           {/* Modal Container */}
           <div className="modal-content">
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '32px' }}>
-              <div style={{ background: '#ff5722', color: 'white', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ background: '#DF9B34', color: '#1A1918', width: '36px', height: '36px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {editingItem ? <Edit2 size={20} /> : <Plus size={20} />}
               </div>
               <h2 style={{ fontSize: '20px', fontWeight: '700', color: '#111827' }}>
@@ -869,10 +869,9 @@ const MenuManagement = () => {
                     padding: '14px',
                     borderRadius: '24px',
                     border: 'none',
-                    background: submitting ? '#ffb09c' : '#ff5722',
-                    color: 'white',
-                    fontSize: '15px',
-                    fontWeight: '600',
+                    background: submitting ? '#ECCB96' : '#DF9B34',
+                    color: '#1A1918',
+                    fontWeight: '700',
                     cursor: submitting ? 'not-allowed' : 'pointer'
                   }}
                 >

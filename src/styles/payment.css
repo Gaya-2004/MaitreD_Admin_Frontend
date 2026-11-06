@@ -105,16 +105,16 @@
   background: #f5f5f5;
 }
 .payment-method-card.selected {
-  border-color: #ff4500;
+  border-color: #DF9B34;
   background: #fff5f2;
-  box-shadow: 0 0 0 1px #ff4500;
+  box-shadow: 0 0 0 1px #DF9B34;
 }
 
 .pm-icon-wrap {
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #ff5a00, #ff3b00);
+  background: linear-gradient(135deg, #DF9B34, #C58326);
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -267,7 +267,7 @@
 .pm-qr-label {
   font-size: 14px;
   font-weight: 700;
-  color: #ff4e00;
+  color: #DF9B34;
   letter-spacing: 0.5px;
   margin: 0;
 }
@@ -537,9 +537,9 @@
 }
 
 .di-cart-close:hover {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
-  border-color: #ff4e00;
+  border-color: #DF9B34;
 }
 
 .di-cart-order-id {
@@ -575,9 +575,9 @@
 }
 
 .di-ot-tab.active {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
-  border-color: #ff4e00;
+  border-color: #DF9B34;
   box-shadow: 0 6px 18px rgba(255, 78, 0, 0.25);
 }
 
@@ -659,7 +659,7 @@
 
 .di-cart-item-price {
   font-size: 1rem;
-  color: #ff4e00;
+  color: #DF9B34;
   font-weight: 800;
   margin: 4px 0 0;
 }
@@ -676,7 +676,7 @@
 
 .di-cart-total-amount {
   font-size: 1.15rem;
-  color: #ff4e00;
+  color: #DF9B34;
   font-weight: 800;
 }
 
@@ -699,13 +699,13 @@
 
 .di-cart-qty-btn.minus {
   background: #fff;
-  color: #ff4e00;
+  color: #DF9B34;
   border-radius: 6px;
-  border: 1px solid #ffe0d0;
+  border: 1px solid #FFF5E5;
 }
 
 .di-cart-qty-btn.plus {
-  background: #ff4e00;
+  background: #DF9B34;
   color: #fff;
   border-radius: 6px;
 }
@@ -742,8 +742,8 @@
   width: 100%;
   height: 48px;
   background: #fff;
-  color: #ff4e00;
-  border: 1.5px solid #ff4e00;
+  color: #DF9B34;
+  border: 1.5px solid #DF9B34;
   border-radius: 16px;
   font-size: 1rem;
   font-weight: 700;
@@ -756,7 +756,7 @@
 }
 
 .di-add-more-btn:hover {
-  background: #fff5f0;
+  background: #FFF5E5;
 }
 
 
@@ -831,7 +831,7 @@
     width: 22px !important;
     height: 22px !important;
     font-size: 0.75rem !important;
-    background: #ff3400 !important;
+    background: #DF9B34 !important;
     color: white !important;
     border-radius: 50% !important;
     display: flex !important;

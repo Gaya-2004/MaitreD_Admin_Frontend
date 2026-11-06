@@ -9,6 +9,8 @@ import '../styles/pages.css'
 import '../styles/dinein.css'
 import '../styles/home.css'
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia && !navigator.mediaDevices.getUserMedia.isPatched) {
   const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
   navigator.mediaDevices.getUserMedia = async (constraints) => {
@@ -357,10 +359,10 @@ export default function DineIn() {
     // Fetch menu data from backend
     async function fetchMenuData() {
       try {
-        const catRes = await fetch('/api/v1/public/menu/categories');
+        const catRes = await fetch(`${API_BASE}/api/v1/public/menu/categories`);
         const dbCategories = await catRes.json();
 
-        const itemRes = await fetch('/api/v1/public/menu/items');
+        const itemRes = await fetch(`${API_BASE}/api/v1/public/menu/items`);
         const dbItems = await itemRes.json();
 
         const catIdMap = {};

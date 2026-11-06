@@ -139,11 +139,12 @@ const SettingsManagement = () => {
         style={{
           width: '44px',
           height: '24px',
-          background: checked ? '#ff6b35' : '#e5e7eb',
+          background: checked ? 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)' : '#e5e7eb',
           borderRadius: '12px',
           position: 'relative',
           cursor: 'pointer',
-          transition: 'background 0.3s'
+          transition: 'background 0.3s',
+          boxShadow: checked ? '0 1px 4px rgba(223, 155, 52, 0.3)' : 'none'
         }}
       >
         <div style={{
@@ -165,12 +166,22 @@ const SettingsManagement = () => {
     width: '100%',
     padding: '12px 16px',
     borderRadius: '8px',
-    border: '1px solid var(--border)',
-    background: 'transparent',
+    border: '1.5px solid #e5e7eb',
+    background: '#ffffff',
     fontSize: '14px',
-    color: '#0c0b0bff',
+    color: '#111827',
     outline: 'none',
-    transition: 'border-color 0.2s'
+    transition: 'border-color 0.2s, box-shadow 0.2s'
+  };
+
+  const handleInputFocus = (e) => {
+    e.target.style.borderColor = '#DF9B34';
+    e.target.style.boxShadow = '0 0 0 3px rgba(223, 155, 52, 0.15)';
+  };
+
+  const handleInputBlur = (e) => {
+    e.target.style.borderColor = '#e5e7eb';
+    e.target.style.boxShadow = 'none';
   };
 
   const labelStyle = {
@@ -203,15 +214,29 @@ const SettingsManagement = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            background: '#ff6b35',
+            background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
             color: 'white',
-            padding: '10px 20px',
+            padding: '10px 22px',
             borderRadius: '8px',
             fontWeight: '600',
             fontSize: '14px',
             cursor: saving ? 'not-allowed' : 'pointer',
             opacity: saving ? 0.7 : 1,
-            border: 'none'
+            border: 'none',
+            boxShadow: '0 2px 8px rgba(223, 155, 52, 0.3)',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            if (!saving) {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(223, 155, 52, 0.4)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!saving) {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(223, 155, 52, 0.3)';
+            }
           }}
         >
           {saving ? <Activity size={18} className="spin-animation" /> : <Save size={18} />}
@@ -226,17 +251,17 @@ const SettingsManagement = () => {
           {/* Profile Card */}
           <div style={{ background: 'white', padding: '24px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #eee', boxShadow: '0 4px 12px rgba(0,0,0,0.02)' }}>
             <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ff6b35', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', fontWeight: 'bold', boxShadow: '0 2px 8px rgba(223, 155, 52, 0.3)' }}>
                 AS
               </div>
               <div>
                 <h3 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: '700' }}>Anand Sharma</h3>
-                <p style={{ margin: 0, fontSize: '12px', color: '#888' }}>Manager - {settings.name || 'Grand Udipi Palace'}</p>
+                <p style={{ margin: 0, fontSize: '12px', color: '#888' }}>Manager - {settings.name || 'MaitreD Bistro'}</p>
               </div>
             </div>
             <button 
               onClick={handleLogout}
-              style={{ background: '#fff0ec', color: '#ff6b35', border: 'none', padding: '8px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
+              style={{ background: '#FFF5E5', color: '#DF9B34', border: '1px solid rgba(223, 155, 52, 0.3)', padding: '8px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', cursor: 'pointer' }}
             >
               Sign out
             </button>
@@ -255,7 +280,7 @@ const SettingsManagement = () => {
               <div style={{ padding: '16px', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span style={{ fontSize: '11px', color: '#888', marginBottom: '4px' }}>Email</span>
-                  <span style={{ fontSize: '14px', fontWeight: '500', color: '#111' }}>contact@dataudipi.com</span>
+                  <span style={{ fontSize: '14px', fontWeight: '500', color: '#111' }}>contact@maitred.com</span>
                 </div>
               </div>
               <div style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -307,7 +332,7 @@ const SettingsManagement = () => {
                 <span style={{ fontSize: '14px', color: '#888' }}>INR (₹)</span>
               </div>
               <div style={{ padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '14px', fontWeight: '500', color: '#ff6b35' }}>Help & Support</span>
+                <span style={{ fontSize: '14px', fontWeight: '500', color: '#DF9B34' }}>Help & Support</span>
               </div>
             </div>
           </div>
@@ -319,7 +344,7 @@ const SettingsManagement = () => {
         {/* Restaurant Information Card */}
         <div className="admin-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#ff6b35', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(223, 155, 52, 0.25)' }}>
               <Store size={20} />
             </div>
             <h2 style={{ fontSize: '18px', fontWeight: '700' }}>Restaurant Information</h2>
@@ -328,19 +353,19 @@ const SettingsManagement = () => {
           <div className="grid-responsive-2" style={{ gap: '20px' }}>
             <div>
               <label style={labelStyle}>Restaurant Name</label>
-              <input type="text" name="name" value={settings.name || ''} onChange={handleChange} style={inputStyle} placeholder="Data Udipi" />
+              <input type="text" name="name" value={settings.name || ''} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} placeholder="MaitreD" />
             </div>
             <div>
               <label style={labelStyle}>Phone</label>
-              <input type="text" name="phone" value={settings.phone || ''} onChange={handleChange} style={inputStyle} placeholder="support@dataudipi.com" />
+              <input type="text" name="phone" value={settings.phone || ''} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} placeholder="support@maitred.com" />
             </div>
             <div>
               <label style={labelStyle}>GST Number</label>
-              <input type="text" name="gst_number" value={settings.gst_number || ''} onChange={handleChange} style={inputStyle} placeholder="GSTIN" />
+              <input type="text" name="gst_number" value={settings.gst_number || ''} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} placeholder="GSTIN" />
             </div>
             <div style={{ gridColumn: '1 / -1' }}>
               <label style={labelStyle}>Address</label>
-              <input type="text" name="address" value={settings.address || ''} onChange={handleChange} style={inputStyle} placeholder="Asia/Kolkata (IST)" />
+              <input type="text" name="address" value={settings.address || ''} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} placeholder="Asia/Kolkata (IST)" />
             </div>
           </div>
         </div>
@@ -357,11 +382,11 @@ const SettingsManagement = () => {
           <div className="grid-responsive-2" style={{ gap: '20px' }}>
             <div>
               <label style={labelStyle}>Opening</label>
-              <input type="time" name="opening_time" value={settings.opening_time || ''} onChange={handleChange} style={inputStyle} />
+              <input type="time" name="opening_time" value={settings.opening_time || ''} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} />
             </div>
             <div>
               <label style={labelStyle}>Closing</label>
-              <input type="time" name="closing_time" value={settings.closing_time || ''} onChange={handleChange} style={inputStyle} />
+              <input type="time" name="closing_time" value={settings.closing_time || ''} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} />
             </div>
           </div>
         </div>
@@ -400,7 +425,7 @@ const SettingsManagement = () => {
         {/* Billing & Printing Card */}
         <div className="admin-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: '#ffaa71', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '36px', height: '36px', borderRadius: '8px', background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(223, 155, 52, 0.25)' }}>
               <Receipt size={20} />
             </div>
             <h2 style={{ fontSize: '18px', fontWeight: '700' }}>Billing & Printing</h2>
@@ -424,15 +449,15 @@ const SettingsManagement = () => {
           <div className="grid-responsive" style={{ gap: '20px' }}>
             <div>
               <label style={labelStyle}>Tax Rate (%)</label>
-              <input type="number" name="tax_rate" value={settings.tax_rate ?? 0} onChange={handleChange} style={inputStyle} min="0" step="0.1" />
+              <input type="number" name="tax_rate" value={settings.tax_rate ?? 0} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} min="0" step="0.1" />
             </div>
             <div>
               <label style={labelStyle}>Service Charge (%)</label>
-              <input type="number" name="service_charge" value={settings.service_charge ?? 0} onChange={handleChange} style={inputStyle} min="0" step="0.1" />
+              <input type="number" name="service_charge" value={settings.service_charge ?? 0} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} min="0" step="0.1" />
             </div>
             <div>
               <label style={labelStyle}>Packaging Charge (₹)</label>
-              <input type="number" name="packaging_charge" value={settings.packaging_charge ?? 0} onChange={handleChange} style={inputStyle} min="0" />
+              <input type="number" name="packaging_charge" value={settings.packaging_charge ?? 0} onChange={handleChange} onFocus={handleInputFocus} onBlur={handleInputBlur} style={inputStyle} min="0" />
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { restaurantService } from '../services/api';
+import { restaurantService, DUMMY_RESTAURANTS } from '../services/api';
 import { ChevronRight, AlertCircle, Loader, Eye, EyeOff } from 'lucide-react';
 import RestaurantBG from '../assets/restaurant_bg.png';
 import MaitreDLogo from '../assets/maitred_logo.png';
@@ -34,13 +34,14 @@ const Onboarding = () => {
 
   // Form states
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    restaurant_id: '',
+    name: 'MaitreD Manager',
+    email: 'manager@maitred.com',
+    password: 'password123',
+    confirmPassword: 'password123',
+    restaurant_id: 1,
+    restaurant_name: 'MaitreD Bistro',
   });
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState(DUMMY_RESTAURANTS);
   const [restaurantLoading, setRestaurantLoading] = useState(false);
 
   const roles = [
@@ -72,7 +73,16 @@ const Onboarding = () => {
     setSelectedRole(roleId);
     setError('');
     setSuccessMessage('');
-    setFormData({ name: '', email: '', password: '', confirmPassword: '', restaurant_id: '' });
+    const defaultName = roleId === 'super_admin' ? 'Super Admin' : roleId === 'cashier' ? 'Cashier Staff' : 'MaitreD Manager';
+    const defaultEmail = roleId === 'super_admin' ? 'admin@maitred.com' : roleId === 'cashier' ? 'cashier@maitred.com' : 'manager@maitred.com';
+    setFormData({
+      name: defaultName,
+      email: defaultEmail,
+      password: 'password123',
+      confirmPassword: 'password123',
+      restaurant_id: 1,
+      restaurant_name: 'MaitreD Bistro',
+    });
     setAuthMode('login');
     setStep('auth');
   };
@@ -86,10 +96,10 @@ const Onboarding = () => {
       setRestaurantLoading(true);
       try {
         const data = await restaurantService.getPublicRestaurants();
-        setRestaurants(data);
+        setRestaurants(data && data.length > 0 ? data : DUMMY_RESTAURANTS);
       } catch (err) {
-        console.error('Failed to load restaurants', err);
-        setError('Unable to load restaurant list. Please try again later.');
+        console.warn('Failed to load restaurants, falling back to dummy MaitreD restaurants:', err);
+        setRestaurants(DUMMY_RESTAURANTS);
       } finally {
         setRestaurantLoading(false);
       }
@@ -101,7 +111,7 @@ const Onboarding = () => {
   // Handle form changes
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    const parsedValue = name === 'restaurant_id' ? (value ? parseInt(value, 10) : '') : value;
+    const parsedValue = name === 'restaurant_id' ? (value ? parseInt(value, 10) : 1) : value;
     setFormData((prev) => ({ ...prev, [name]: parsedValue }));
     setError('');
   };
@@ -136,7 +146,9 @@ const Onboarding = () => {
         navigate('/manager-dashboard');
       }
     } catch (err) {
-      setError(err.response?.data?.detail || 'Login failed. Please try again.');
+      console.error('Login failed:', err);
+      const errorMsg = err.response?.data?.detail || err.message || 'Invalid email or password. Please try again.';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -183,19 +195,20 @@ const Onboarding = () => {
         formData.email,
         formData.password,
         roleParam,
-        (roleParam === 'HOTEL_ADMIN' || roleParam === 'CASHIER') ? formData.restaurant_id : null
+        (roleParam === 'HOTEL_ADMIN' || roleParam === 'CASHIER') ? (formData.restaurant_id || 1) : null
       );
-      setSuccessMessage('Signup done successfully. Please sign in to login.');
+      setSuccessMessage('Signup completed successfully! You can now log in.');
       setError('');
       setAuthMode('login');
       setFormData((prev) => ({
         ...prev,
-        password: '',
-        confirmPassword: '',
+        password: 'password123',
+        confirmPassword: 'password123',
       }));
     } catch (err) {
-      setSuccessMessage('');
-      setError(err.response?.data?.detail || 'Signup failed. Please try again.');
+      console.error('Signup server error:', err);
+      const errorMsg = err.response?.data?.detail || err.message || 'Signup failed. Please try again.';
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -452,62 +465,62 @@ const Onboarding = () => {
         )}
 
         {/* Tabs for Login/Signup */}
-        {selectedRole !== 'hotel_manager' && (
-          <div
+        <div
+          style={{
+            display: 'flex',
+            gap: '10px',
+            marginBottom: '24px',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            paddingBottom: '12px',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMode('login');
+              setError('');
+              setSuccessMessage('');
+            }}
             style={{
-              display: 'flex',
-              gap: '10px',
-              marginBottom: '24px',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              paddingBottom: '12px',
+              flex: 1,
+              padding: '12px',
+              background: authMode === 'login' ? 'rgba(223, 155, 52, 0.15)' : 'transparent',
+              border: 'none',
+              borderBottom: authMode === 'login' ? '2px solid #DF9B34' : 'none',
+              color: authMode === 'login' ? '#DF9B34' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600',
+              borderRadius: '8px 8px 0 0',
+              transition: 'all 0.3s ease',
             }}
           >
-            <button
-              onClick={() => {
-                setAuthMode('login');
-                setError('');
-                setSuccessMessage('');
-              }}
-              style={{
-                flex: 1,
-                padding: '12px',
-                background: authMode === 'login' ? 'rgba(223, 155, 52, 0.15)' : 'transparent',
-                border: 'none',
-                borderBottom: authMode === 'login' ? '2px solid #DF9B34' : 'none',
-                color: authMode === 'login' ? '#DF9B34' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '600',
-                borderRadius: '8px 8px 0 0',
-                transition: 'all 0.3s ease',
-              }}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => {
-                setAuthMode('signup');
-                setError('');
-                setSuccessMessage('');
-              }}
-              style={{
-                flex: 1,
-                padding: '12px',
-                background: authMode === 'signup' ? 'rgba(223, 155, 52, 0.15)' : 'transparent',
-                border: 'none',
-                borderBottom: authMode === 'signup' ? '2px solid #DF9B34' : 'none',
-                color: authMode === 'signup' ? '#DF9B34' : 'var(--text-secondary)',
-                cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: '600',
-                borderRadius: '8px 8px 0 0',
-                transition: 'all 0.3s ease',
-              }}
-            >
-              Sign Up
-            </button>
-          </div>
-        )}
+            Sign In
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMode('signup');
+              setError('');
+              setSuccessMessage('');
+            }}
+            style={{
+              flex: 1,
+              padding: '12px',
+              background: authMode === 'signup' ? 'rgba(223, 155, 52, 0.15)' : 'transparent',
+              border: 'none',
+              borderBottom: authMode === 'signup' ? '2px solid #DF9B34' : 'none',
+              color: authMode === 'signup' ? '#DF9B34' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontSize: '14px',
+              fontWeight: '600',
+              borderRadius: '8px 8px 0 0',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            Sign Up
+          </button>
+        </div>
 
         {/* Auth Form */}
         <form
@@ -566,30 +579,35 @@ const Onboarding = () => {
           </div>
 
           {/* Restaurant Selection */}
-          {authMode === 'signup' && (selectedRole === 'hotel_manager' || selectedRole === 'cashier') && (
+          {(selectedRole === 'hotel_manager' || selectedRole === 'cashier') && (
             <div className="form-group" style={{ marginBottom: '18px' }}>
-              <label className="form-label" style={{ color: '#d0d4e4', fontSize: '13px', fontWeight: '600' }}>Restaurant</label>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <label className="form-label" style={{ color: '#d0d4e4', fontSize: '13px', fontWeight: '600', margin: 0 }}>
+                  Restaurant Name
+                </label>
+                <span style={{ fontSize: '11px', color: '#DF9B34', fontWeight: '600' }}>
+                  Default: MaitreD Bistro
+                </span>
+              </div>
               <select
                 name="restaurant_id"
                 className="form-input"
-                value={formData.restaurant_id}
+                value={formData.restaurant_id || 1}
                 onChange={handleFormChange}
-                disabled={loading || restaurantLoading}
+                disabled={loading}
                 style={{
                   background: 'rgba(10, 10, 14, 0.85)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  border: '1px solid rgba(223, 155, 52, 0.35)',
                   borderRadius: '10px',
                   color: '#ffffff',
                 }}
               >
-                <option value="">Select a restaurant</option>
                 {restaurants.map((restaurant) => (
                   <option key={restaurant.id} value={restaurant.id}>
                     {restaurant.name}
                   </option>
                 ))}
               </select>
-              {restaurantLoading && <div className="input-note" style={{ color: '#DF9B34', fontSize: '12px', marginTop: '4px' }}>Loading restaurants…</div>}
             </div>
           )}
 

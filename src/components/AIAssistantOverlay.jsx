@@ -6,6 +6,8 @@ import './AIAssistantOverlay.css';
 import agentwaiterLogoImg from '../assets/images/agentwaiter_logo.png';
 import waiterImg from '../assets/images/waiter.png';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const findBestMenuItemMatch = (queryName, itemsList) => {
   if (!queryName || !itemsList || itemsList.length === 0) return null;
 
@@ -145,9 +147,9 @@ const AIAssistantOverlay = () => {
   useEffect(() => {
     async function fetchMenu() {
       try {
-        const catRes = await fetch('/api/v1/public/menu/categories');
+        const catRes = await fetch(`${API_BASE}/api/v1/public/menu/categories`);
         const dbCategories = await catRes.json();
-        const itemRes = await fetch('/api/v1/public/menu/items');
+        const itemRes = await fetch(`${API_BASE}/api/v1/public/menu/items`);
         const dbItems = await itemRes.json();
 
         const formattedCategories = [
@@ -216,7 +218,7 @@ const AIAssistantOverlay = () => {
       const timer = setTimeout(() => {
         const greeting = language === 'Tamil'
           ? "வணக்கம்! டேட்டா உடுப்பிக்கு உங்களை வரவேற்கிறோம். எங்களின் புதிய சைவ உணவுகளைப் பார்த்து மகிழுங்கள். உங்களுக்கு ஏதேனும் உதவி தேவைப்பட்டால் சொல்லுங்கள்."
-          : "Vanakkam! Welcome to Data Udipi. Explore our freshly prepared vegetarian dishes. Let me know if you need any help.";
+          : "Vanakkam! Welcome to MaitreD. Explore our freshly prepared dishes. Let me know if you need any help.";
         setMessages([{ role: 'model', content: greeting }]);
         sessionStorage.setItem('ai_has_greeted', 'true');
       }, 1500);
@@ -970,7 +972,7 @@ const AIAssistantOverlay = () => {
       };
 
       try {
-        const res = await fetch('/api/orders', {
+        const res = await fetch(`${API_BASE}/api/orders`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(orderPayload)
@@ -1207,7 +1209,7 @@ const AIAssistantOverlay = () => {
 
         if (lastOrderId) {
           try {
-            const res = await fetch(`/api/orders/${lastOrderId}`);
+            const res = await fetch(`${API_BASE}/api/orders/${lastOrderId}`);
             if (res.ok) {
               const data = await res.json();
               const status = data.order?.status || 'CONFIRMED';
@@ -1552,7 +1554,7 @@ const AIAssistantOverlay = () => {
         apiMessages.push({ role: 'user', parts: [{ text }] });
       }
 
-      const response = await fetch(`/api/chat`, {
+      const response = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2065,7 +2067,7 @@ const AIAssistantOverlay = () => {
           </div>
           <div className="ai-trigger-text-wrap">
             <span className="ai-trigger-title">
-              {language === 'Tamil' ? 'செஃப்பிடம் பேசுங்கள்' : 'Talk to Chef'}
+              {language === 'Tamil' ? 'செஃப்பிடம் பேசுங்கள்' : 'Talk to MaitreD'}
             </span>
             <span className="ai-trigger-subtitle">
               {language === 'Tamil' ? '⬇ பேச தட்டவும்' : '⬇ Tap to speak'}
@@ -2100,7 +2102,7 @@ const AIAssistantOverlay = () => {
                   style={{
                     padding: '6px 16px', borderRadius: '20px', border: 'none',
                     background: !isVoiceMode ? '#fff' : 'transparent',
-                    color: !isVoiceMode ? '#ff4e00' : '#fff',
+                    color: !isVoiceMode ? '#DF9B34' : '#fff',
                     fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s',
                     fontSize: '13px'
                   }}>
@@ -2110,7 +2112,7 @@ const AIAssistantOverlay = () => {
                   onClick={() => { setIsVoiceMode(true); }}
                   style={{
                     padding: '6px 16px', borderRadius: '20px', border: 'none',
-                    background: isVoiceMode ? '#ff4e00' : 'transparent',
+                    background: isVoiceMode ? '#DF9B34' : 'transparent',
                     color: '#fff',
                     fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s',
                     fontSize: '13px'
@@ -2170,7 +2172,7 @@ const AIAssistantOverlay = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: msg.role === 'user' ? '#ff4e00' : 'white',
+                    background: msg.role === 'user' ? '#DF9B34' : 'white',
                     boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
                     flexShrink: 0,
                     overflow: 'hidden'
@@ -2212,7 +2214,7 @@ const AIAssistantOverlay = () => {
                             </div>
                           ))}
                         </div>
-                        <div style={{ marginTop: '8px', color: '#ff4e00', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                        <div style={{ marginTop: '8px', color: '#DF9B34', fontSize: '12px', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '5px' }}>
                           <i className="fa-solid fa-arrow-left"></i> See menu list in the left column
                         </div>
                       </div>
@@ -2233,7 +2235,7 @@ const AIAssistantOverlay = () => {
               }}>
                 <div className="ai-msg-icon" style={{
                   width: '36px', height: '36px', borderRadius: '50%',
-                  background: '#ff4e00', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: '#DF9B34', display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 4px 10px rgba(0,0,0,0.1)', flexShrink: 0
                 }}>
                   <i className="fa-solid fa-microphone" style={{ color: 'white', fontSize: '14px' }}></i>
@@ -2266,8 +2268,8 @@ const AIAssistantOverlay = () => {
                 onClick={toggleListen}
                 style={{
                   width: '36px', height: '36px', borderRadius: '50%', border: 'none',
-                  background: isVoiceMode ? '#ffebee' : '#f0f0f0',
-                  color: isVoiceMode ? '#ff4e00' : '#666',
+                  background: isVoiceMode ? '#FFF5E5' : '#f0f0f0',
+                  color: isVoiceMode ? '#DF9B34' : '#666',
                   cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   transition: 'background 0.2s, color 0.2s'
                 }}
@@ -2288,8 +2290,8 @@ const AIAssistantOverlay = () => {
                 }}
                 style={{
                   width: '36px', height: '36px', borderRadius: '50%', border: 'none',
-                  background: isMuted ? '#f0f0f0' : '#ffebee',
-                  color: isMuted ? '#999' : '#ff4e00',
+                  background: isMuted ? '#f0f0f0' : '#FFF5E5',
+                  color: isMuted ? '#999' : '#DF9B34',
                   cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   transition: 'background 0.2s, color 0.2s'
                 }}
@@ -2300,7 +2302,7 @@ const AIAssistantOverlay = () => {
 
               {isListening ? (
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', padding: '0 8px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: '600', color: '#ff4e00' }}>Listening</span>
+                  <span style={{ fontSize: '13px', fontWeight: '600', color: '#DF9B34' }}>Listening</span>
                   {renderWaveSymbol(false)}
                 </div>
               ) : (
@@ -2323,7 +2325,7 @@ const AIAssistantOverlay = () => {
                 disabled={inputText.trim().length === 0}
                 style={{
                   width: '36px', height: '36px', borderRadius: '50%', border: 'none',
-                  background: inputText.trim().length > 0 ? '#ff4e00' : '#e0e0e0',
+                  background: inputText.trim().length > 0 ? '#DF9B34' : '#e0e0e0',
                   color: '#fff',
                   cursor: inputText.trim().length === 0 ? 'default' : 'pointer',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,

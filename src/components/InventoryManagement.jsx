@@ -227,14 +227,15 @@ const InventoryManagement = () => {
           <button
             onClick={() => setViewMode('date')}
             style={{
-              padding: '10px 16px',
+              padding: '10px 18px',
               borderRadius: '8px',
-              border: '1px solid #eaeaea',
-              background: viewMode === 'date' ? 'var(--primary)' : 'white',
-              color: viewMode === 'date' ? 'white' : '#333333',
+              border: viewMode === 'date' ? '1px solid #DF9B34' : '1px solid #e5e7eb',
+              background: viewMode === 'date' ? 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)' : '#ffffff',
+              color: viewMode === 'date' ? '#ffffff' : '#4b5563',
+              boxShadow: viewMode === 'date' ? '0 2px 8px rgba(223, 155, 52, 0.25)' : 'none',
               fontWeight: '600',
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'all 0.2s ease',
               fontSize: '14px'
             }}
           >
@@ -244,14 +245,15 @@ const InventoryManagement = () => {
           <button
             onClick={() => setViewMode('overall')}
             style={{
-              padding: '10px 16px',
+              padding: '10px 18px',
               borderRadius: '8px',
-              border: '1px solid #eaeaea',
-              background: viewMode === 'overall' ? 'var(--primary)' : 'white',
-              color: viewMode === 'overall' ? 'white' : '#333333',
+              border: viewMode === 'overall' ? '1px solid #DF9B34' : '1px solid #e5e7eb',
+              background: viewMode === 'overall' ? 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)' : '#ffffff',
+              color: viewMode === 'overall' ? '#ffffff' : '#4b5563',
+              boxShadow: viewMode === 'overall' ? '0 2px 8px rgba(223, 155, 52, 0.25)' : 'none',
               fontWeight: '600',
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              transition: 'all 0.2s ease',
               fontSize: '14px'
             }}
           >
@@ -266,13 +268,17 @@ const InventoryManagement = () => {
               style={{
                 padding: '9px 12px',
                 borderRadius: '8px',
-                border: '1px solid #eaeaea',
+                border: '1.5px solid #e5e7eb',
                 outline: 'none',
                 fontSize: '14px',
                 fontWeight: '500',
-                color: '#333333',
-                background: 'white'
+                color: '#1f2937',
+                background: '#ffffff',
+                cursor: 'pointer',
+                transition: 'border-color 0.2s'
               }}
+              onFocus={(e) => e.target.style.borderColor = '#DF9B34'}
+              onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
             />
           )}
 
@@ -281,9 +287,9 @@ const InventoryManagement = () => {
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('navigate-dashboard', { detail: { page: 'consumption' } }))}
             style={{
-              background: '#f9fafb',
-              color: '#333333',
-              border: '1px solid #eaeaea',
+              background: '#ffffff',
+              color: '#374151',
+              border: '1px solid #e5e7eb',
               padding: '10px 16px',
               borderRadius: '8px',
               fontSize: '14px',
@@ -292,10 +298,19 @@ const InventoryManagement = () => {
               alignItems: 'center',
               gap: '6px',
               cursor: 'pointer',
-              transition: 'all 0.2s'
+              transition: 'all 0.2s ease',
+              boxShadow: '0 1px 2px rgba(0,0,0,0.03)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#DF9B34';
+              e.currentTarget.style.background = '#FFFDF9';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#e5e7eb';
+              e.currentTarget.style.background = '#ffffff';
             }}
           >
-            <TrendingDown size={16} color="var(--primary)" />
+            <TrendingDown size={16} color="#DF9B34" />
             Consumption Reports
           </button>
 
@@ -304,8 +319,8 @@ const InventoryManagement = () => {
           <button
             onClick={() => setShowAddModal(true)}
             style={{
-              background: '#f5620cff',
-              color: 'white',
+              background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
+              color: '#ffffff',
               border: 'none',
               padding: '10px 20px',
               borderRadius: '8px',
@@ -315,6 +330,16 @@ const InventoryManagement = () => {
               alignItems: 'center',
               gap: '8px',
               cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(223, 155, 52, 0.3)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-1px)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(223, 155, 52, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(223, 155, 52, 0.3)';
             }}
           >
             <Plus size={18} />
@@ -324,9 +349,9 @@ const InventoryManagement = () => {
           <button
             onClick={() => setShowScanModal(true)}
             style={{
-              background: 'white',
-              color: '#f5620cff',
-              border: '1px solid #f5620cff',
+              background: '#ffffff',
+              color: '#DF9B34',
+              border: '1.5px solid #DF9B34',
               padding: '10px 20px',
               borderRadius: '8px',
               fontSize: '14px',
@@ -335,9 +360,19 @@ const InventoryManagement = () => {
               alignItems: 'center',
               gap: '8px',
               cursor: 'pointer',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#FFF5E5';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#ffffff';
+              e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
-            <Camera size={18} />
+            <Camera size={18} color="#DF9B34" />
             Scan Sheet
           </button>
         </div>
@@ -389,10 +424,19 @@ const InventoryManagement = () => {
             maxWidth: '400px',
             padding: '12px 16px 12px 48px',
             borderRadius: '24px',
-            border: '1px solid #eaeaea',
+            border: '1.5px solid #e5e7eb',
             fontSize: '14px',
             outline: 'none',
-            background: 'white'
+            background: 'white',
+            transition: 'border-color 0.2s, box-shadow 0.2s'
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = '#DF9B34';
+            e.target.style.boxShadow = '0 0 0 3px rgba(223, 155, 52, 0.15)';
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = '#e5e7eb';
+            e.target.style.boxShadow = 'none';
           }}
         />
       </div>
@@ -568,7 +612,18 @@ const InventoryManagement = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  style={{ padding: '10px 16px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', opacity: isSubmitting ? 0.7 : 1 }}
+                  style={{
+                    padding: '10px 18px',
+                    background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(223, 155, 52, 0.25)',
+                    opacity: isSubmitting ? 0.7 : 1
+                  }}
                 >
                   {isSubmitting ? 'Adding...' : 'Add Item'}
                 </button>
@@ -660,7 +715,18 @@ const InventoryManagement = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  style={{ padding: '10px 16px', background: 'var(--primary)', color: 'white', border: 'none', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', opacity: isSubmitting ? 0.7 : 1 }}
+                  style={{
+                    padding: '10px 18px',
+                    background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(223, 155, 52, 0.25)',
+                    opacity: isSubmitting ? 0.7 : 1
+                  }}
                 >
                   {isSubmitting ? 'Updating...' : 'Save Changes'}
                 </button>
@@ -789,13 +855,14 @@ const InventoryManagement = () => {
                     disabled={isScanning || !scanFiles.front}
                     style={{
                       padding: '12px 24px',
-                      background: 'var(--primary)',
+                      background: 'linear-gradient(135deg, #DF9B34 0%, #C58326 100%)',
                       color: 'white',
                       border: 'none',
                       borderRadius: '8px',
                       fontSize: '14px',
                       fontWeight: '600',
                       cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(223, 155, 52, 0.25)',
                       opacity: (isScanning || !scanFiles.front) ? 0.7 : 1,
                       display: 'flex',
                       alignItems: 'center',

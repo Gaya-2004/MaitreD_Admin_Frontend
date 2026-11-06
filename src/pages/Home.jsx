@@ -6,7 +6,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Html5Qrcode } from 'html5-qrcode'
 import '../styles/home.css'
-import dataudipiTitleImg from '../assets/images/Dataudupi-Title.png'
+import maitredTitleImg from '../assets/images/maitred_logo.png'
 import dineinLogoImg from '../assets/images/dinein-logo.png'
 import takeawayLogoImg from '../assets/images/takeaway-logo.png'
 
@@ -247,7 +247,7 @@ function Home() {
       <main className="main-content">
         <h2 className="welcome-text">{t('welcome')}</h2>
         <div className="main-title">
-          <img src={dataudipiTitleImg} alt="Data Udipi" className="title-image" />
+          <img src={maitredTitleImg} alt="MaitreD" className="title-image" style={{ maxHeight: '60px', objectFit: 'contain' }} />
         </div>
         <p className="subtitle">{t('excellence')}</p>
 

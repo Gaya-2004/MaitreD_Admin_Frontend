@@ -4,7 +4,7 @@ const LandingScreen = ({ setIsPosActive }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', justifyContent: 'center', alignItems: 'center', backgroundColor: 'var(--bg-main)' }}>
       <div style={{ padding: '40px', backgroundColor: 'white', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', textAlign: 'center', maxWidth: '400px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '8px' }}>DATA UDIPI HOTEL</h1>
+        <h1 style={{ fontSize: '24px', fontWeight: '800', color: 'var(--text-main)', marginBottom: '8px' }}>MAITRED GOURMET BISTRO</h1>
         <p style={{ color: 'var(--text-muted)', marginBottom: '32px' }}>Cashier POS System</p>
         
         <button 

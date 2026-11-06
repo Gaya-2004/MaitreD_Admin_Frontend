@@ -4,8 +4,8 @@ import { orderService } from '../services/api';
 import { kotAudio, ringKOTOrders, stopKOTRinging, unlockKOTAudio } from '../utils/kotAudio';
 
 const KDS_COLUMNS = [
-  { id: 'NEW', title: 'New Orders', icon: Clock, color: '#ff8c42', bg: 'rgba(255, 140, 66, 0.1)', iconBg: '#ff8c42', defaultBg: '#fff' },
-  { id: 'HISTORY', title: 'History', icon: CheckCircle2, color: '#2d7a4a', bg: 'rgba(45, 122, 74, 0.1)', iconBg: '#2d7a4a', defaultBg: '#fff' },
+  { id: 'NEW', title: 'New Orders', icon: Clock, color: '#DF9B34', bg: 'rgba(223, 155, 52, 0.12)', iconBg: '#DF9B34', defaultBg: '#fff' },
+  { id: 'HISTORY', title: 'History', icon: CheckCircle2, color: '#16A34A', bg: 'rgba(22, 163, 74, 0.12)', iconBg: '#16A34A', defaultBg: '#fff' },
 ];
 
 const isOrderInColumn = (order, columnId) => {
@@ -238,7 +238,7 @@ const OrdersManagement = () => {
     let channel = null;
     if (typeof BroadcastChannel !== 'undefined') {
       try {
-        channel = new BroadcastChannel('udipi_kds_sync_channel');
+        channel = new BroadcastChannel('maitred_kds_sync_channel');
         channel.onmessage = () => {
           fetchOrders();
         };
@@ -631,7 +631,7 @@ const OrdersManagement = () => {
             gap: '8px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
           }}>
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#2d7a4a' }}></div>
+            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#16A34A' }}></div>
             <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-dark)' }}>
               {filteredOrders.filter(o => o.status !== 'SERVED').length} Active Orders
             </span>
@@ -754,8 +754,8 @@ const OrdersManagement = () => {
       {/* Toggle View */}
       <style>{`
         @keyframes toggle-blink {
-          0%, 100% { opacity: 1; background-color: #ff6b35; color: white; transform: scale(1); }
-          50% { opacity: 0.9; background-color: #ff8c42; color: white; transform: scale(1.05); }
+          0%, 100% { opacity: 1; background-color: #DF9B34; color: #1A1918; transform: scale(1); }
+          50% { opacity: 0.9; background-color: #C58326; color: #1A1918; transform: scale(1.05); }
         }
         .blinking-badge {
           animation: toggle-blink 1.5s infinite ease-in-out;
@@ -1197,7 +1197,7 @@ const OrdersManagement = () => {
                     onMouseDown={(e) => e.stopPropagation()}
                     onTouchStart={(e) => e.stopPropagation()}
                     onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.order_id, 'PREPARING'); }}
-                    style={{ flex: 1.5, padding: '10px 0', background: '#ff6b35', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: '800', color: 'white', cursor: 'pointer', boxShadow: '0 2px 6px rgba(255,107,53,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
+                    style={{ flex: 1.5, padding: '10px 0', background: '#DF9B34', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: '800', color: '#1A1918', cursor: 'pointer', boxShadow: '0 2px 6px rgba(223,155,52,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
                   >
                     Accept & Start Preparing
                   </button>
@@ -1208,7 +1208,7 @@ const OrdersManagement = () => {
                     onMouseDown={(e) => e.stopPropagation()}
                     onTouchStart={(e) => e.stopPropagation()}
                     onClick={(e) => { e.stopPropagation(); updateOrderStatus(order.order_id, 'READY'); }}
-                    style={{ flex: 1.5, padding: '10px 0', background: '#16a34a', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: '800', color: 'white', cursor: 'pointer', boxShadow: '0 2px 6px rgba(22,163,74,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
+                    style={{ flex: 1.5, padding: '10px 0', background: '#DF9B34', border: 'none', borderRadius: '20px', fontSize: '12px', fontWeight: '800', color: '#1A1918', cursor: 'pointer', boxShadow: '0 2px 6px rgba(223,155,52,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
                   >
                     ✓ Mark Ready
                   </button>
@@ -1601,7 +1601,7 @@ const OrdersManagement = () => {
                             e.stopPropagation();
                             updateOrderStatus(order.order_id, 'PREPARING');
                           }} 
-                          style={{ flex: 1.5, padding: '10px 0', borderRadius: '24px', border: 'none', background: '#ff6b35', fontSize: '12px', fontWeight: '800', color: '#fff', cursor: 'pointer', boxShadow: '0 2px 6px rgba(255,107,53,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
+                          style={{ flex: 1.5, padding: '10px 0', borderRadius: '24px', border: 'none', background: '#DF9B34', fontSize: '12px', fontWeight: '800', color: '#1A1918', cursor: 'pointer', boxShadow: '0 2px 6px rgba(223,155,52,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
                         >
                           Accept & Start Preparing
                         </button>
@@ -1616,7 +1616,7 @@ const OrdersManagement = () => {
                             e.stopPropagation();
                             updateOrderStatus(order.order_id, 'READY');
                           }} 
-                          style={{ flex: 1.5, padding: '10px 0', borderRadius: '24px', border: 'none', background: '#16a34a', fontSize: '12px', fontWeight: '800', color: '#fff', cursor: 'pointer', boxShadow: '0 2px 6px rgba(22,163,74,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
+                          style={{ flex: 1.5, padding: '10px 0', borderRadius: '24px', border: 'none', background: '#DF9B34', fontSize: '12px', fontWeight: '800', color: '#1A1918', cursor: 'pointer', boxShadow: '0 2px 6px rgba(223,155,52,0.3)', touchAction: 'manipulation', userSelect: 'none' }}
                         >
                           ✓ Mark Ready
                         </button>
@@ -1851,8 +1851,8 @@ const OrdersManagement = () => {
                           alignItems: 'center',
                           gap: '5px',
                           padding: '4px 10px',
-                          background: isTicketCopied ? '#16a34a' : '#ff6b35',
-                          color: '#ffffff',
+                          background: isTicketCopied ? '#16a34a' : '#DF9B34',
+                          color: isTicketCopied ? '#ffffff' : '#1A1918',
                           border: 'none',
                           borderRadius: '6px',
                           fontSize: '11px',
@@ -1971,7 +1971,7 @@ const OrdersManagement = () => {
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
                 <button 
                   onClick={() => window.print()}
-                  style={{ flex: 1, padding: '12px', background: '#ff6b35', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                  style={{ flex: 1, padding: '12px', background: '#DF9B34', color: '#1A1918', border: 'none', borderRadius: '6px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                 >
                   🖨️ PRINT KOT
                 </button>

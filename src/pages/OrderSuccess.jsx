@@ -6,6 +6,8 @@ import { useCart } from '../context/CartContext';
 import { useLanguage } from '../context/LanguageContext';
 import '../styles/ordersuccess.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const OrderSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -60,7 +62,7 @@ const OrderSuccess = () => {
     if (!dbOrderId && tableNumber) {
       const fetchTableOrder = async () => {
         try {
-          const res = await fetch(`/api/v1/public/orders/table/${tableNumber}`);
+          const res = await fetch(`${API_BASE}/api/v1/public/orders/table/${tableNumber}`);
           if (res.ok) {
             const data = await res.json();
             setActiveOrderId(data.order_id);
@@ -83,7 +85,7 @@ const OrderSuccess = () => {
 
     const checkStatus = async () => {
       try {
-        const res = await fetch(`/api/orders/${activeOrderId}`);
+        const res = await fetch(`${API_BASE}/api/orders/${activeOrderId}`);
         if (!res.ok) return;
         const data = await res.json();
         if (isMounted) {
