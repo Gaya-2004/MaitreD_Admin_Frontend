@@ -57,19 +57,23 @@ const HotelManagerDashboard = () => {
     if (hotelId === 'consumption') {
       setActivePage('consumption');
       navigate('/manager-dashboard', { replace: true });
-      localStorage.removeItem('admin_selected_restaurant');
     } else if (hotelId && !isNaN(hotelId)) {
       localStorage.setItem('admin_selected_restaurant', hotelId);
-    } else {
-      localStorage.removeItem('admin_selected_restaurant');
+    } else if (user?.role === 'SUPER_ADMIN' || localStorage.getItem('user_role') === 'SUPER_ADMIN') {
+      if (!localStorage.getItem('admin_selected_restaurant')) {
+        localStorage.setItem('admin_selected_restaurant', '1');
+      }
     }
-  }, [hotelId, navigate]);
+  }, [hotelId, navigate, user]);
 
   useEffect(() => {
     return () => {
-      localStorage.removeItem('admin_selected_restaurant');
+      // Do not clear restaurant context if super admin to keep state across subpages
+      if (user?.role !== 'SUPER_ADMIN' && localStorage.getItem('user_role') !== 'SUPER_ADMIN') {
+        localStorage.removeItem('admin_selected_restaurant');
+      }
     };
-  }, []);
+  }, [user]);
 
   // Data states
   const [orders, setOrders] = useState([]);

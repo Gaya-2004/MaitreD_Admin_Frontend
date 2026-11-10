@@ -45,15 +45,20 @@ api.interceptors.request.use((config) => {
   }
 
   // Inject admin_selected_restaurant for super admin cross-hotel actions
-  const adminSelectedRestaurant = localStorage.getItem('admin_selected_restaurant');
+  const userRole = localStorage.getItem('user_role');
+  const adminSelectedRestaurant = localStorage.getItem('admin_selected_restaurant') || (userRole === 'SUPER_ADMIN' ? '1' : null);
   if (adminSelectedRestaurant && !config._skipRestaurantInjection) {
     if (config.method === 'get' || config.method === 'delete') {
-      config.params = { ...config.params, restaurant_id: adminSelectedRestaurant };
+      config.params = { restaurant_id: adminSelectedRestaurant, ...config.params };
     } else if (config.method === 'post' || config.method === 'patch' || config.method === 'put') {
       if (config.data && typeof config.data === 'object' && !(config.data instanceof FormData)) {
-        config.data.restaurant_id = parseInt(adminSelectedRestaurant);
+        if (!config.data.restaurant_id) {
+          config.data.restaurant_id = parseInt(adminSelectedRestaurant);
+        }
       } else if (config.data instanceof FormData) {
-        config.data.append('restaurant_id', adminSelectedRestaurant);
+        if (!config.data.has('restaurant_id')) {
+          config.data.append('restaurant_id', adminSelectedRestaurant);
+        }
       }
     }
   }
@@ -257,8 +262,11 @@ export const tableService = {
     return response.data;
   },
 
-  deleteTable: async (tableId) => {
-    const response = await api.delete(`/api/v1/tables/${tableId}`);
+  deleteTable: async (tableId, restaurantId = null) => {
+    const resId = restaurantId || localStorage.getItem('admin_selected_restaurant') || '1';
+    const response = await api.delete(`/api/v1/tables/${tableId}`, {
+      params: { restaurant_id: resId }
+    });
     return response.data;
   },
 };
