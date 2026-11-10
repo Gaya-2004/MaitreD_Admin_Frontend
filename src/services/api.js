@@ -44,9 +44,9 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // Inject admin_selected_restaurant for super admin cross-hotel actions
-  const userRole = localStorage.getItem('user_role');
-  const adminSelectedRestaurant = localStorage.getItem('admin_selected_restaurant') || (userRole === 'SUPER_ADMIN' ? '1' : null);
+  // Inject admin_selected_restaurant so a SUPER_ADMIN's writes target the hotel they opened.
+  // (Managers are pinned to their own hotel by the backend, regardless of this value.)
+  const adminSelectedRestaurant = localStorage.getItem('admin_selected_restaurant');
   if (adminSelectedRestaurant && !config._skipRestaurantInjection) {
     if (config.method === 'get' || config.method === 'delete') {
       config.params = { restaurant_id: adminSelectedRestaurant, ...config.params };
@@ -263,9 +263,9 @@ export const tableService = {
   },
 
   deleteTable: async (tableId, restaurantId = null) => {
-    const resId = restaurantId || localStorage.getItem('admin_selected_restaurant') || '1';
+    const resId = restaurantId || localStorage.getItem('admin_selected_restaurant');
     const response = await api.delete(`/api/v1/tables/${tableId}`, {
-      params: { restaurant_id: resId }
+      params: resId ? { restaurant_id: resId } : {}
     });
     return response.data;
   },

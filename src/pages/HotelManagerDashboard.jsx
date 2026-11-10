@@ -59,10 +59,9 @@ const HotelManagerDashboard = () => {
       navigate('/manager-dashboard', { replace: true });
     } else if (hotelId && !isNaN(hotelId)) {
       localStorage.setItem('admin_selected_restaurant', hotelId);
-    } else if (user?.role === 'SUPER_ADMIN' || localStorage.getItem('user_role') === 'SUPER_ADMIN') {
-      if (!localStorage.getItem('admin_selected_restaurant')) {
-        localStorage.setItem('admin_selected_restaurant', '1');
-      }
+    } else if (user?.role !== 'SUPER_ADMIN') {
+      // Managers are pinned to their own hotel server-side; clear any stale selection.
+      localStorage.removeItem('admin_selected_restaurant');
     }
   }, [hotelId, navigate, user]);
 

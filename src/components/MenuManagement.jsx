@@ -162,7 +162,15 @@ const MenuManagement = () => {
       closeModal();
     } catch (error) {
       console.error("Error saving item:", error);
-      alert("Failed to save menu item. Make sure you have the correct permissions.");
+      const status = error?.response?.status;
+      const detail = error?.response?.data?.detail;
+      if (status === 403) {
+        alert(`You don't have permission to do this: ${detail || 'access denied'}`);
+      } else if (status) {
+        alert(`Failed to save menu item (server error ${status}): ${typeof detail === 'string' ? detail : 'please try again or contact support.'}`);
+      } else {
+        alert("Failed to save menu item: could not reach the server (network/CORS).");
+      }
     } finally {
       setSubmitting(false);
     }
