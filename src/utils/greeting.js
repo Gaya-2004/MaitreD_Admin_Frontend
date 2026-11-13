@@ -2,6 +2,14 @@
  * Utility functions for dynamic time-based greetings and user role determination
  */
 
+export const cleanCategoryName = (name) => {
+  if (!name) return '';
+  return name
+    .replace(/\s*\((Mugalivakkam|MGR\s*Nagar|MaitreD|Branch|Outlet|Chennai|Porur|Tambaram)[^)]*\)/gi, '')
+    .replace(/^(mugalivakkam|mgrnagar)_/gi, '')
+    .trim();
+};
+
 export const getTimeBasedGreeting = () => {
   const hour = new Date().getHours();
   if (hour >= 4 && hour < 12) {

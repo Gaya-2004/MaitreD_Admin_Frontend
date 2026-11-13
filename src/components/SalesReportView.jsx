@@ -223,7 +223,10 @@ const SalesReportView = ({ mode = 'TOTAL', onBack }) => {
 
   // ── Badges ─────────────────────────────────────────────────────────────────
   const getSourceBadge = (order) => {
-    const isCashier = order.source === 'CASHIER' || (order.source_badge || '').includes('C');
+    const isMobile = order.source === 'MOBILE' || 
+                     order.order_source === 'CUSTOMER_APP' || 
+                     order.source_badge === '(M)';
+    const isCashier = !isMobile && (order.source === 'CASHIER' || order.order_source === 'CASHIER_POS' || (order.source_badge || '').includes('C'));
     if (isCashier) {
       return (
         <span style={{

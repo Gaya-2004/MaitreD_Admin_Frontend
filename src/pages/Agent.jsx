@@ -4,6 +4,7 @@ import { useLanguage } from '../context/LanguageContext'
 import { useCart } from '../context/CartContext'
 import Header from '../components/Header'
 import { fetchCategories, fetchItems, formatMenuData, placeOrder } from '../services/menuService'
+import { cleanCategoryName } from '../utils/greeting'
 import '../styles/pages.css'
 import agentwaiterLogoImg from '../assets/images/agentwaiter_logo.png'
 
@@ -648,9 +649,9 @@ function Agent() {
                           onClick={() => handleCategoryClick(cat)}
                         >
                           <div className="menu-img">
-                            {cat.image && <img src={cat.image} alt={cat.name} />}
+                            {cat.image && <img src={cat.image} alt={cleanCategoryName(cat.name)} />}
                           </div>
-                          <div className="menu-name">{t(cat.name)}</div>
+                          <div className="menu-name">{cleanCategoryName(t(cat.name))}</div>
                         </div>
                       ))}
                     </div>
@@ -663,14 +664,14 @@ function Agent() {
                             className={`cat-pill ${activeCategory === cat.id ? 'active' : ''}`}
                             onClick={() => handleCategoryClick(cat)}
                           >
-                            {cat.image && <img src={cat.image} alt={cat.name} className="cat-pill-img" />}
-                            <span>{cat.name}</span>
+                            {cat.image && <img src={cat.image} alt={cleanCategoryName(cat.name)} className="cat-pill-img" />}
+                            <span>{cleanCategoryName(cat.name)}</span>
                           </div>
                         ))}
                       </div>
                       <div className="menu-list-header">
                         <h3 className="menu-list-title">
-                          {menuCategories.find(c => c.id === activeCategory)?.name}
+                          {cleanCategoryName(menuCategories.find(c => c.id === activeCategory)?.name)}
                         </h3>
                         <button className="back-to-categories-btn" onClick={() => setViewMode('grid')}>
                           Back to Categories

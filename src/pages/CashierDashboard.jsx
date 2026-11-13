@@ -13,6 +13,13 @@ import { LogOut } from 'lucide-react';
 import '../styles/cashier.css';
 import { getTimeBasedGreeting, getUserRoleTitle } from '../utils/greeting';
 
+const cleanCategoryName = (name) => {
+  if (!name) return '';
+  return name
+    .replace(/\s*\([^)]*(mugalivakkam|mgr\s*nagar|maitred)[^)]*\)/gi, '')
+    .trim();
+};
+
 function CashierDashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -689,7 +696,17 @@ function CashierDashboard() {
     
     if (selectedRegion !== 'All') {
       const categoryObj = categories.find(c => c.id === item.category_id);
-      if (!categoryObj || categoryObj.description !== selectedRegion) return false;
+      if (selectedRegion === 'Non-Veg Varieties' || selectedRegion === 'Non-Veg') {
+        const isNonVeg = (item.food_type && item.food_type.toUpperCase() === 'NON_VEG') ||
+          (categoryObj && (
+            (categoryObj.description && /non[\s-]?veg/i.test(categoryObj.description)) ||
+            /non[\s-]?veg/i.test(categoryObj.name)
+          )) ||
+          /\b(chicken|mutton|fish|prawn|egg|crab|non[\s-]?veg)\b/i.test(item.name);
+        if (!isNonVeg) return false;
+      } else {
+        if (!categoryObj || categoryObj.description !== selectedRegion) return false;
+      }
     }
 
     const search = descriptionInput.trim().toLowerCase();
@@ -827,27 +844,21 @@ function CashierDashboard() {
           </div>
 
           <div className="region-filters" style={{ display: 'flex', gap: '8px', marginBottom: '12px', overflowX: 'auto', paddingBottom: '4px' }}>
-            <button
-              className={`cat-btn ${selectedRegion === 'All' ? 'active' : ''}`}
-              onClick={() => setSelectedRegion('All')}
-              style={{ fontWeight: '600' }}
-            >
-              All Regions
-            </button>
-            <button
-              className={`cat-btn ${selectedRegion === 'South Indian' ? 'active' : ''}`}
-              onClick={() => setSelectedRegion('South Indian')}
-              style={{ fontWeight: '600' }}
-            >
-              South Indian
-            </button>
-            <button
-              className={`cat-btn ${selectedRegion === 'North Indian' ? 'active' : ''}`}
-              onClick={() => setSelectedRegion('North Indian')}
-              style={{ fontWeight: '600' }}
-            >
-              North Indian
-            </button>
+            {[
+              { label: 'All Regions', val: 'All' },
+              { label: 'South Indian', val: 'South Indian' },
+              { label: 'North Indian', val: 'North Indian' },
+              { label: 'Non-Veg Varieties', val: 'Non-Veg Varieties' }
+            ].map((r) => (
+              <button
+                key={r.val}
+                className={`cat-btn ${selectedRegion === r.val ? 'active' : ''}`}
+                onClick={() => { setSelectedRegion(r.val); setSelectedCategoryId('All'); }}
+                style={{ fontWeight: '600' }}
+              >
+                {r.label}
+              </button>
+            ))}
           </div>
 
           <div className="category-filters">
@@ -858,14 +869,27 @@ function CashierDashboard() {
               All
             </button>
             {categories
-              .filter(cat => (selectedRegion === 'All' || cat.description === selectedRegion) && menuItems.some(item => item.category_id === cat.id))
+              .filter(cat => {
+                if (selectedRegion === 'All') return menuItems.some(item => item.category_id === cat.id);
+                if (selectedRegion === 'Non-Veg Varieties' || selectedRegion === 'Non-Veg') {
+                  return (
+                    (cat.description && /non[\s-]?veg/i.test(cat.description)) ||
+                    /non[\s-]?veg/i.test(cat.name) ||
+                    menuItems.some(item => item.category_id === cat.id && (
+                      (item.food_type && item.food_type.toUpperCase() === 'NON_VEG') ||
+                      /\b(chicken|mutton|fish|prawn|egg|crab|non[\s-]?veg)\b/i.test(item.name)
+                    ))
+                  );
+                }
+                return cat.description === selectedRegion && menuItems.some(item => item.category_id === cat.id);
+              })
               .map(cat => (
               <button
                 key={cat.id}
                 className={`cat-btn ${selectedCategoryId === cat.id ? 'active' : ''}`}
                 onClick={() => setSelectedCategoryId(cat.id)}
               >
-                {cat.name}
+                {cleanCategoryName(cat.name)}
               </button>
             ))}
           </div>

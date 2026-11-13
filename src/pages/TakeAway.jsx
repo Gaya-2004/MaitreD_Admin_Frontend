@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext'
 import { useCart } from '../context/CartContext'
 import Header from '../components/Header'
+import { cleanCategoryName } from '../utils/greeting'
 // Menu data is fetched directly below
 import '../styles/pages.css'
 import '../styles/dinein.css'
@@ -351,8 +352,8 @@ export default function TakeAway() {
           <div className="di-tabs-wrap">
             {menuCategories.map(cat => (
               <button key={cat.id} className={`di-tab ${activeCategory === cat.id ? 'active' : ''}`} onClick={() => setActiveCategory(cat.id)}>
-                {cat.image && <img src={cat.image} alt={t(cat.name)} className="di-tab-img" onError={e => { e.target.onerror = null; e.target.style.display = 'none'; }} />}
-                <span>{language === 'Tamil' && cat.tamilName ? cat.tamilName : t(cat.name)}</span>
+                {cat.image && <img src={cat.image} alt={cleanCategoryName(t(cat.name))} className="di-tab-img" onError={e => { e.target.onerror = null; e.target.style.display = 'none'; }} />}
+                <span>{language === 'Tamil' && cat.tamilName ? cat.tamilName : cleanCategoryName(t(cat.name))}</span>
               </button>
             ))}
           </div>
@@ -361,7 +362,7 @@ export default function TakeAway() {
         <div className="di-seg-bottom">
           <div className="di-section-header">
             <h2 className="di-section-title">
-              {t(menuCategories.find(c => c.id === activeCategory)?.name || 'Menu')}
+              {cleanCategoryName(t(menuCategories.find(c => c.id === activeCategory)?.name || 'Menu'))}
               <span className="di-section-count">{displayItems.length} {t('items')}</span>
             </h2>
           </div>

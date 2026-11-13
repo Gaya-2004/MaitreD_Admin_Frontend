@@ -1,3 +1,5 @@
+import { cleanCategoryName } from '../utils/greeting';
+
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export async function fetchCategories() {
@@ -34,7 +36,7 @@ export function formatMenuData(dbCategories, dbItems) {
     { id: 'all', name: 'All Menu', image: null },
     ...dbCategories.map(c => ({
       id: String(c.id),
-      name: c.name,
+      name: cleanCategoryName(c.name),
       image: c.image_url || null,
     })),
   ];

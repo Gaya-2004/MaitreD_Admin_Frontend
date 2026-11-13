@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Search, Plus, Star, Edit2, Trash2 } from 'lucide-react';
 import { menuService, rewriteImageUrl } from '../services/api';
 
+export const cleanCategoryName = (name) => {
+  if (!name) return '';
+  return name
+    .replace(/\s*\((Mugalivakkam|MGR\s*Nagar|MaitreD|Branch|Outlet|Chennai)[^)]*\)/gi, '')
+    .trim();
+};
+
 const MenuManagement = () => {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -214,18 +221,27 @@ const MenuManagement = () => {
                           (item.item_code && item.item_code.toLowerCase().includes(searchQuery.toLowerCase()));
     
     let matchesCategory = true;
-    let categoryObj = null;
+    const categoryObj = categories.find(c => c.id === item.category_id);
     if (activeCategory !== 'All') {
       const searchCat = activeCategory.toLowerCase();
-      categoryObj = categories.find(c => c.name.toLowerCase().includes(searchCat));
-      matchesCategory = categoryObj && item.category_id === categoryObj.id;
-    } else {
-      categoryObj = categories.find(c => c.id === item.category_id);
+      matchesCategory = categories.some(c => 
+        (cleanCategoryName(c.name).toLowerCase() === searchCat || c.name.toLowerCase().includes(searchCat)) &&
+        item.category_id === c.id
+      );
     }
     
     let matchesRegion = true;
     if (selectedRegion !== 'All') {
-      matchesRegion = categoryObj && categoryObj.description === selectedRegion;
+      if (selectedRegion === 'Non-Veg Varieties' || selectedRegion === 'Non-Veg') {
+        matchesRegion = (item.food_type && item.food_type.toUpperCase() === 'NON_VEG') ||
+          (categoryObj && (
+            (categoryObj.description && /non[\s-]?veg/i.test(categoryObj.description)) ||
+            /non[\s-]?veg/i.test(categoryObj.name)
+          )) ||
+          /\b(chicken|mutton|fish|prawn|egg|crab|non[\s-]?veg)\b/i.test(item.name);
+      } else {
+        matchesRegion = categoryObj && categoryObj.description === selectedRegion;
+      }
     }
     
     return matchesSearch && matchesCategory && matchesRegion;
@@ -344,66 +360,77 @@ const MenuManagement = () => {
         </div>
 
         <div className="region-filters" style={{ display: 'flex', gap: '8px', marginBottom: '12px', overflowX: 'auto', paddingBottom: '4px', msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
-          <button
-            onClick={() => setSelectedRegion('All')}
-            style={{
-              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
-              border: selectedRegion === 'All' ? 'none' : '1px solid #E5E7EB',
-              background: selectedRegion === 'All' ? '#DF9B34' : 'white',
-              color: selectedRegion === 'All' ? '#1A1918' : '#666'
-            }}
-          >
-            All Regions
-          </button>
-          <button
-            onClick={() => setSelectedRegion('South Indian')}
-            style={{
-              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
-              border: selectedRegion === 'South Indian' ? 'none' : '1px solid #E5E7EB',
-              background: selectedRegion === 'South Indian' ? '#DF9B34' : 'white',
-              color: selectedRegion === 'South Indian' ? '#1A1918' : '#666'
-            }}
-          >
-            South Indian
-          </button>
-          <button
-            onClick={() => setSelectedRegion('North Indian')}
-            style={{
-              padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
-              border: selectedRegion === 'North Indian' ? 'none' : '1px solid #E5E7EB',
-              background: selectedRegion === 'North Indian' ? '#DF9B34' : 'white',
-              color: selectedRegion === 'North Indian' ? '#1A1918' : '#666'
-            }}
-          >
-            North Indian
-          </button>
+          {[
+            { label: 'All Regions', val: 'All' },
+            { label: 'South Indian', val: 'South Indian' },
+            { label: 'North Indian', val: 'North Indian' },
+            { label: 'Non-Veg Varieties', val: 'Non-Veg Varieties' }
+          ].map((r) => {
+            const isSelected = selectedRegion === r.val;
+            return (
+              <button
+                key={r.val}
+                onClick={() => {
+                  setSelectedRegion(r.val);
+                  setActiveCategory('All');
+                }}
+                style={{
+                  padding: '6px 16px', borderRadius: '24px', fontSize: '13px', fontWeight: '700', cursor: 'pointer', whiteSpace: 'nowrap',
+                  border: isSelected ? 'none' : '1px solid #E5E7EB',
+                  background: isSelected ? '#DF9B34' : 'white',
+                  color: isSelected ? '#1A1918' : '#666',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {r.label}
+              </button>
+            );
+          })}
         </div>
 
         <div className="scroll-x menu-categories-scroll" style={{ display: 'flex', gap: '8px', paddingBottom: '4px', msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
-          {['All', ...categories
-            .filter(c => (selectedRegion === 'All' || c.description === selectedRegion) && items.some(item => item.category_id === c.id))
-            .map(c => c.name)]
-            .map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCategory(cat)}
-              style={{
-                padding: '6px 16px',
-                borderRadius: '24px',
-                border: activeCategory === cat ? 'none' : '1px solid #E5E7EB',
-                background: activeCategory === cat ? '#DF9B34' : 'white',
-                color: activeCategory === cat ? '#1A1918' : '#111',
-                fontSize: '13px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                flexShrink: 0,
-                transition: 'all 0.2s ease',
-              }}
-            >
-              {cat}
-            </button>
-          ))}
+          {(() => {
+            const visibleCats = categories
+              .filter(c => {
+                if (selectedRegion === 'All') return items.some(item => item.category_id === c.id);
+                if (selectedRegion === 'Non-Veg Varieties' || selectedRegion === 'Non-Veg') {
+                  return (
+                    (c.description && /non[\s-]?veg/i.test(c.description)) ||
+                    /non[\s-]?veg/i.test(c.name) ||
+                    items.some(item => item.category_id === c.id && (
+                      (item.food_type && item.food_type.toUpperCase() === 'NON_VEG') ||
+                      /\b(chicken|mutton|fish|prawn|egg|crab|non[\s-]?veg)\b/i.test(item.name)
+                    ))
+                  );
+                }
+                return c.description === selectedRegion && items.some(item => item.category_id === c.id);
+              })
+              .map(c => cleanCategoryName(c.name))
+              .filter(name => name.length > 0);
+            
+            const uniqueCats = ['All', ...Array.from(new Set(visibleCats))];
+            return uniqueCats.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                style={{
+                  padding: '6px 16px',
+                  borderRadius: '24px',
+                  border: activeCategory === cat ? 'none' : '1px solid #E5E7EB',
+                  background: activeCategory === cat ? '#DF9B34' : 'white',
+                  color: activeCategory === cat ? '#1A1918' : '#111',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  flexShrink: 0,
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                {cat}
+              </button>
+            ));
+          })()}
         </div>
       </div>
 
@@ -702,7 +729,7 @@ const MenuManagement = () => {
                   >
                     <option value="" disabled>Select a category</option>
                     {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                      <option key={cat.id} value={cat.id}>{cleanCategoryName(cat.name)}</option>
                     ))}
                   </select>
                 </div>

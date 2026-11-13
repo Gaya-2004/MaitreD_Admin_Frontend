@@ -5,6 +5,7 @@ import { useCart } from '../context/CartContext';
 import './AIAssistantOverlay.css';
 import agentwaiterLogoImg from '../assets/images/agentwaiter_logo.png';
 import waiterImg from '../assets/images/waiter.png';
+import { cleanCategoryName } from '../utils/greeting';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -154,7 +155,7 @@ const AIAssistantOverlay = () => {
 
         const formattedCategories = [
           { id: 'all', name: 'All Menu' },
-          ...dbCategories.map(c => ({ id: String(c.id), name: c.name }))
+          ...dbCategories.map(c => ({ id: String(c.id), name: cleanCategoryName(c.name) }))
         ];
 
         const formattedItems = dbItems.map(item => ({
@@ -2209,8 +2210,8 @@ const AIAssistantOverlay = () => {
                               textAlign: 'center',
                               border: '1px solid #eee'
                             }}>
-                              {cat.image && <img src={cat.image} alt={cat.name} style={{ width: '40px', height: '40px', borderRadius: '50%', marginBottom: '5px', objectFit: 'cover' }} />}
-                              <div style={{ fontSize: '12px', fontWeight: '600' }}>{cat.name}</div>
+                              {cat.image && <img src={cat.image} alt={cleanCategoryName(cat.name)} style={{ width: '40px', height: '40px', borderRadius: '50%', marginBottom: '5px', objectFit: 'cover' }} />}
+                              <div style={{ fontSize: '12px', fontWeight: '600' }}>{cleanCategoryName(cat.name)}</div>
                             </div>
                           ))}
                         </div>
